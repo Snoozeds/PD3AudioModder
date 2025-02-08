@@ -98,7 +98,7 @@ public class AudioConverter
         var processStartInfo = new ProcessStartInfo
         {
             FileName = ffmpegPath,
-            Arguments = $"-i \"{inputPath}\" -acodec pcm_s16le -ar 44100 -ac 2 \"{outputPath}\" -y",
+            Arguments = $"-i \"{inputPath}\" -acodec pcm_s16le -ar 48000 -ac 2 \"{outputPath}\" -y",
             RedirectStandardOutput = true,
             RedirectStandardError = true,
             UseShellExecute = false,
