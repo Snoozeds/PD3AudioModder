@@ -240,26 +240,32 @@ namespace PD3AudioModder
                 UpdateStatus("Replacing ubulk file with new WEM...");
                 File.Copy(wemPath, uploadedUbulkPath, true);
 
-                string exportFolderPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Export");
-                if (!Directory.Exists(exportFolderPath))
-                {
-                    Directory.CreateDirectory(exportFolderPath);
-                }
+                // Create timestamped export folder
+                string timestamp = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
+                string baseExportPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Export");
+                string timestampedExportPath = Path.Combine(baseExportPath, timestamp);
 
-                // Copy files to export folder
-                UpdateStatus("Copying files to export folder...");
-                CopyToExport(uploadedUbulkPath, exportFolderPath);
-                CopyToExport(uploadedUexpPath, exportFolderPath);
+                // Create export folders if they don't exist
+                if (!Directory.Exists(baseExportPath))
+                {
+                    Directory.CreateDirectory(baseExportPath);
+                }
+                Directory.CreateDirectory(timestampedExportPath);
+
+                // Copy files to timestamped export folder
+                UpdateStatus($"Copying files to export folder ({timestamp})...");
+                CopyToExport(uploadedUbulkPath, timestampedExportPath);
+                CopyToExport(uploadedUexpPath, timestampedExportPath);
                 if (uploadedUassetPath != null)
                 {
-                    CopyToExport(uploadedUassetPath, exportFolderPath);
+                    CopyToExport(uploadedUassetPath, timestampedExportPath);
                 }
                 else if (uploadedJsonPath != null)
                 {
-                    CopyToExport(uploadedJsonPath, exportFolderPath);
+                    CopyToExport(uploadedJsonPath, timestampedExportPath);
                 }
 
-                UpdateStatus("Conversion completed successfully! Files saved to Export folder.");
+                UpdateStatus($"Conversion completed successfully! Files saved to Export/{timestamp} folder.");
 
                 // Clean up temp files
                 try
