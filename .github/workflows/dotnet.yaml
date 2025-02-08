@@ -28,7 +28,8 @@ jobs:
       - name: Create ZIP file with EXE and DLLs (PowerShell)
         run: |
           $zipFile = "./output/PD3AudioModder.zip"
-          $filesToInclude = Get-ChildItem -Path "./output" -Filter "*.exe, *.dll"
+          $filesToInclude = Get-ChildItem -Path "./output" -Filter "*.exe" -Recurse
+          $filesToInclude += Get-ChildItem -Path "./output" -Filter "*.dll" -Recurse
           Compress-Archive -Path $filesToInclude -DestinationPath $zipFile
 
       - name: Upload Artifacts
