@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.10.34928.147
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PD3AudioModder", "PD3AudioModder.csproj", "{2A094CB3-1CF6-4B8A-AB81-2E6C93FB2E6C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2A094CB3-1CF6-4B8A-AB81-2E6C93FB2E6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A094CB3-1CF6-4B8A-AB81-2E6C93FB2E6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A094CB3-1CF6-4B8A-AB81-2E6C93FB2E6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A094CB3-1CF6-4B8A-AB81-2E6C93FB2E6C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B066B467-9D3E-4C59-89C4-D4157FC9B0C1}
+	EndGlobalSection
+EndGlobal

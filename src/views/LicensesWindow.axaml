@@ -1,0 +1,71 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="PD3AudioModder.LicensesWindow"
+        Title="Licenses"
+        Height="700" Width="800"
+        Background="#1B262C"
+		Icon="avares://PD3AudioModder/assets/icons/audio.ico"
+		WindowStartupLocation="CenterOwner">
+
+	<Border Padding="20" HorizontalAlignment="Center" VerticalAlignment="Center">
+		<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="15">
+			<TextBlock Text="Licenses for open-source code used:"
+                       FontSize="18"
+                       Foreground="#BBE1FA" HorizontalAlignment="Center" />
+			<TextBlock Text="wwise_pd3:"
+                       FontSize="14"
+                       Foreground="#BBE1FA" HorizontalAlignment="Center" />
+			<SelectableTextBlock FontSize="14" Foreground="#BBE1FA" HorizontalAlignment="Center">
+				<Run Text="MIT License" />
+				<LineBreak />
+				<Run Text="Copyright (c) 2025 HW12Dev and Moolah Modding" />
+				<LineBreak />
+				<LineBreak />
+				<Run Text="Permission is hereby granted, free of charge, to any person obtaining a copy" />
+				<LineBreak />
+				<Run Text="of this software and associated documentation files (the 'Software'), to deal" />
+				<LineBreak />
+				<Run Text="in the Software without restriction, including without limitation the rights" />
+				<LineBreak />
+				<Run Text="to use, copy, modify, merge, publish, distribute, sublicense, and/or sell" />
+				<LineBreak />
+				<Run Text="copies of the Software, and to permit persons to whom the Software is" />
+				<LineBreak />
+				<Run Text="furnished to do so, subject to the following conditions:" />
+				<LineBreak />
+				<LineBreak />
+				<Run Text="The above copyright notice and this permission notice shall be included" />
+				<LineBreak />
+				<Run Text="in all copies or substantial portions of the Software." />
+				<LineBreak />
+				<LineBreak />
+				<Run Text="THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR" />
+				<LineBreak />
+				<Run Text="IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY," />
+				<LineBreak />
+				<Run Text="FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE" />
+				<LineBreak />
+				<Run Text="AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER" />
+				<LineBreak />
+				<Run Text="LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM," />
+				<LineBreak />
+				<Run Text="OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE" />
+				<LineBreak />
+				<Run Text="SOFTWARE." />
+			</SelectableTextBlock>
+			<Button Content="Close" Width="150" Height="40" HorizontalAlignment="Center" Click="OnCloseClick">
+				<Button.Styles>
+					<Style Selector="Button">
+						<Setter Property="Background" Value="#3282B8"/>
+						<Setter Property="Foreground" Value="White"/>
+						<Setter Property="FontSize" Value="16"/>
+						<Setter Property="CornerRadius" Value="10"/>
+						<Setter Property="Padding" Value="10,5"/>
+						<Setter Property="VerticalContentAlignment" Value="Center"/>
+						<Setter Property="HorizontalContentAlignment" Value="Center"/>
+					</Style>
+				</Button.Styles>
+			</Button>
+		</StackPanel>
+	</Border>
+</Window>
