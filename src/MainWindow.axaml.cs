@@ -284,6 +284,12 @@ namespace PD3AudioModder
                     if (File.Exists(wemPath)) File.Delete(wemPath);
                     if (File.Exists(tempUbulkPath)) File.Delete(tempUbulkPath);
                     if (File.Exists(tempUexpPath)) File.Delete(tempUexpPath);
+
+                    uploadedAudioPath = null;
+                    uploadedUbulkPath = null;
+                    uploadedUexpPath = null;
+                    uploadedUassetPath = null;
+                    uploadedJsonPath = null;
                 }
                 catch
                 {
