@@ -194,6 +194,16 @@ namespace PD3AudioModder
 
             try
             {
+                // Copy the original ubulk file to temp directory
+                string tempUbulkPath = Path.Combine(tempDirectory, Path.GetFileName(uploadedUbulkPath));
+                File.Copy(uploadedUbulkPath, tempUbulkPath, true);
+                UpdateStatus("Created backup of original ubulk file...");
+
+                // Copy the original uexp file to temp directory
+                string tempUexpPath = Path.Combine(tempDirectory, Path.GetFileName(uploadedUexpPath));
+                File.Copy(uploadedUexpPath, tempUexpPath, true);
+                UpdateStatus("Created backup of original uexp file...");
+
                 // Convert audio to WAV using MediaFoundation
                 UpdateStatus("Converting audio to WAV format...");
                 string wavPath = Path.Combine(tempDirectory, Path.GetFileNameWithoutExtension(uploadedAudioPath) + ".wav");
@@ -229,16 +239,16 @@ namespace PD3AudioModder
                 UpdateStatus("Processing file sizes...");
                 long newSize = new FileInfo(wemPath).Length;
 
-                // Read uexp file, modify size if we have the old size
+                // Modify the temporary uexp file if we have the old size
                 if (oldSize != -1)
                 {
-                    UpdateStatus("Modifying uexp file size...");
-                    ModifyUexpSize(uploadedUexpPath, oldSize, newSize);
+                    UpdateStatus("Modifying temporary uexp file size...");
+                    ModifyUexpSize(tempUexpPath, oldSize, newSize);
                 }
 
-                // Replace ubulk file with the new wem file
-                UpdateStatus("Replacing ubulk file with new WEM...");
-                File.Copy(wemPath, uploadedUbulkPath, true);
+                // Replace the temporary ubulk file with the new wem file
+                UpdateStatus("Replacing temporary ubulk file with new WEM...");
+                File.Copy(wemPath, tempUbulkPath, true);
 
                 // Create timestamped export folder
                 string timestamp = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
@@ -252,10 +262,10 @@ namespace PD3AudioModder
                 }
                 Directory.CreateDirectory(timestampedExportPath);
 
-                // Copy files to timestamped export folder
+                // Copy modified files to timestamped export folder
                 UpdateStatus($"Copying files to export folder ({timestamp})...");
-                CopyToExport(uploadedUbulkPath, timestampedExportPath);
-                CopyToExport(uploadedUexpPath, timestampedExportPath);
+                File.Copy(tempUbulkPath, Path.Combine(timestampedExportPath, Path.GetFileName(uploadedUbulkPath)), true);
+                File.Copy(tempUexpPath, Path.Combine(timestampedExportPath, Path.GetFileName(uploadedUexpPath)), true);
                 if (uploadedUassetPath != null)
                 {
                     CopyToExport(uploadedUassetPath, timestampedExportPath);
@@ -272,6 +282,8 @@ namespace PD3AudioModder
                 {
                     if (File.Exists(wavPath)) File.Delete(wavPath);
                     if (File.Exists(wemPath)) File.Delete(wemPath);
+                    if (File.Exists(tempUbulkPath)) File.Delete(tempUbulkPath);
+                    if (File.Exists(tempUexpPath)) File.Delete(tempUexpPath);
                 }
                 catch
                 {
