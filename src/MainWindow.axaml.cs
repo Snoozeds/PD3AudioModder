@@ -27,7 +27,7 @@ namespace PD3AudioModder
             // Create temp directory
             if (Environment.OSVersion.Platform == PlatformID.Win32NT)
             {
-                tempDirectory = Path.Combine(Path.GetTempPath(), "UnrealAudioModder");
+                tempDirectory = Path.Combine(Path.GetTempPath(), "PD3AudioModder");
             }
             else
             {
