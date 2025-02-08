@@ -6,7 +6,7 @@ on:
       - published  # Trigger build when a release is published
 
 permissions:
-  contents: write  # Add explicit permissions for release management
+  contents: write
 
 jobs:
   build:
