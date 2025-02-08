@@ -1,0 +1,46 @@
+name: Build PD3AudioModder
+
+on:
+  release:
+    types:
+      - published  # Trigger build when a release is published
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up .NET SDK
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0'
+
+      - name: Restore dependencies
+        run: dotnet restore ./src/PD3AudioModder.csproj
+
+      - name: Build PD3AudioModder
+        run: |
+          dotnet publish ./src/PD3AudioModder.csproj -c Release -r win-x64 --self-contained true /p:PublishSingleFile=true /p:PublishTrimmed=true --output ./output
+
+      - name: Create ZIP file with EXE and DLLs (PowerShell)
+        run: |
+          $zipFile = "./output/PD3AudioModder.zip"
+          $filesToInclude = Get-ChildItem -Path "./output" -Filter "*.exe, *.dll"
+          Compress-Archive -Path $filesToInclude -DestinationPath $zipFile
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: PD3AudioModder-exe
+          path: ./output/PD3AudioModder.zip
+
+      - name: Upload to Release
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ./output/PD3AudioModder.zip
+          asset_name: PD3AudioModder.zip
+          asset_content_type: application/zip
