@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
@@ -23,14 +23,11 @@ jobs:
 
       - name: Build PD3AudioModder
         run: |
-          dotnet publish ./src/PD3AudioModder.csproj -c Release -r win-x64 --self-contained true /p:PublishSingleFile=true /p:PublishTrimmed=true --output ./output
+          dotnet publish ./src/PD3AudioModder.csproj -c Release -r linux-x64 --self-contained true /p:PublishSingleFile=true /p:PublishTrimmed=true --output ./output
 
-      - name: Create ZIP file with EXE and DLLs (PowerShell)
+      - name: Create ZIP file with EXE and DLLs
         run: |
-          $zipFile = "./output/PD3AudioModder.zip"
-          $filesToInclude = Get-ChildItem -Path "./output" -Filter "*.exe" -Recurse
-          $filesToInclude += Get-ChildItem -Path "./output" -Filter "*.dll" -Recurse
-          Compress-Archive -Path $filesToInclude -DestinationPath $zipFile
+          zip -r ./output/PD3AudioModder.zip ./output/*.exe ./output/*.dll
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
