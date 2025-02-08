@@ -19,6 +19,8 @@ namespace PD3AudioModder
         private TextBlock? statusTextBlock;
         private string tempDirectory;
 
+        private Button? convertButton;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -44,7 +46,11 @@ namespace PD3AudioModder
         {
             AvaloniaXamlLoader.Load(this);
             var uploadButton = this.FindControl<Button>("UploadButton")!;
-            var convertButton = this.FindControl<Button>("ConvertButton")!;
+
+            convertButton = this.FindControl<Button>("ConvertButton")!;
+            // Start with the convert button disabled
+            convertButton.IsEnabled = false;
+
             statusTextBlock = this.FindControl<TextBlock>("StatusTextBlock")!;
 
             uploadButton.Click += async (_, _) => await UploadFile();
@@ -56,6 +62,22 @@ namespace PD3AudioModder
             if (statusTextBlock != null)
             {
                 statusTextBlock.Text = $"Status: {message}";
+            }
+        }
+
+        private void UpdateConvertButtonState()
+        {
+            // Check that the required file paths are not null.
+            bool allFilesUploaded =
+                   uploadedAudioPath != null
+                && uploadedUbulkPath != null
+                && uploadedUexpPath != null
+                && uploadedJsonPath != null
+                && uploadedUassetPath != null;
+
+            if (convertButton != null)
+            {
+                convertButton.IsEnabled = allFilesUploaded;
             }
         }
 
@@ -176,6 +198,8 @@ namespace PD3AudioModder
                 {
                     UpdateStatus("Error: .ubulk, .uasset, .uexp, and .json files must share the same base filename (excluding extensions).");
                 }
+
+                UpdateConvertButtonState();
             }
             else
             {
@@ -290,6 +314,8 @@ namespace PD3AudioModder
                     uploadedUexpPath = null;
                     uploadedUassetPath = null;
                     uploadedJsonPath = null;
+
+                    UpdateConvertButtonState();
                 }
                 catch
                 {
