@@ -4,7 +4,12 @@
              RequestedThemeVariant="Default">
              <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
-    <Application.Styles>
+	<Application.Resources>
+		<Color x:Key="SystemAccentColor">#3282B8</Color>
+		<SolidColorBrush x:Key="SystemAccentBrush" Color="{DynamicResource SystemAccentColor}"/>
+	</Application.Resources>
+
+	<Application.Styles>
         <FluentTheme />
     </Application.Styles>
 </Application>
