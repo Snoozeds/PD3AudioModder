@@ -274,32 +274,49 @@ namespace PD3AudioModder
                 UpdateStatus("Replacing temporary ubulk file with new WEM...");
                 File.Copy(wemPath, tempUbulkPath, true);
 
-                // Create timestamped export folder
-                string timestamp = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
-                string baseExportPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Export");
-                string timestampedExportPath = Path.Combine(baseExportPath, timestamp);
-
-                // Create export folders if they don't exist
-                if (!Directory.Exists(baseExportPath))
+                // Ask user where to save the files
+                var folderResult = await StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
                 {
-                    Directory.CreateDirectory(baseExportPath);
-                }
-                Directory.CreateDirectory(timestampedExportPath);
+                    Title = "Choose where to save converted files",
+                    DefaultExtension = "",
+                    ShowOverwritePrompt = true,
+                    SuggestedFileName = Path.GetFileNameWithoutExtension(uploadedUbulkPath)
+                });
 
-                // Copy modified files to timestamped export folder
-                UpdateStatus($"Copying files to export folder ({timestamp})...");
-                File.Copy(tempUbulkPath, Path.Combine(timestampedExportPath, Path.GetFileName(uploadedUbulkPath)), true);
-                File.Copy(tempUexpPath, Path.Combine(timestampedExportPath, Path.GetFileName(uploadedUexpPath)), true);
-                if (uploadedUassetPath != null)
+                if (folderResult != null)
                 {
-                    CopyToExport(uploadedUassetPath, timestampedExportPath);
-                }
-                else if (uploadedJsonPath != null)
-                {
-                    CopyToExport(uploadedJsonPath, timestampedExportPath);
-                }
+                    string saveDirectory = Path.GetDirectoryName(folderResult.Path.LocalPath)!;
+                    string baseFileName = Path.GetFileNameWithoutExtension(folderResult.Path.LocalPath);
 
-                UpdateStatus($"Conversion completed successfully! Files saved to Export/{timestamp} folder.");
+                    // Save all files with the chosen base filename
+                    UpdateStatus("Saving converted files...");
+
+                    // Save ubulk
+                    string ubulkSavePath = Path.Combine(saveDirectory, baseFileName + ".ubulk");
+                    File.Copy(tempUbulkPath, ubulkSavePath, true);
+
+                    // Save uexp
+                    string uexpSavePath = Path.Combine(saveDirectory, baseFileName + ".uexp");
+                    File.Copy(tempUexpPath, uexpSavePath, true);
+
+                    // Save uasset or json if they exist
+                    if (uploadedUassetPath != null)
+                    {
+                        string uassetSavePath = Path.Combine(saveDirectory, baseFileName + ".uasset");
+                        File.Copy(uploadedUassetPath, uassetSavePath, true);
+                    }
+                    else if (uploadedJsonPath != null)
+                    {
+                        string jsonSavePath = Path.Combine(saveDirectory, baseFileName + ".json");
+                        File.Copy(uploadedJsonPath, jsonSavePath, true);
+                    }
+
+                    UpdateStatus($"Conversion completed successfully! Files saved to {saveDirectory}");
+                }
+                else
+                {
+                    UpdateStatus("Save operation cancelled");
+                }
 
                 // Clean up temp files
                 try

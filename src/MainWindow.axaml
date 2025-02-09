@@ -8,64 +8,81 @@
         Height="400"
         Width="600"
         Background="#1B262C"
-		Icon="avares://PD3AudioModder/assets/icons/audio.ico"
-		WindowStartupLocation="CenterScreen">
+        Icon="avares://PD3AudioModder/assets/icons/audio.ico"
+        WindowStartupLocation="CenterScreen">
 	<Grid>
-		<!-- Main content -->
-		<Border Padding="20" HorizontalAlignment="Center" VerticalAlignment="Center">
-			<Grid RowDefinitions="Auto,Auto,Auto,Auto">
-				<!-- Title -->
-				<TextBlock Grid.Row="0"
-                           Text="PD3AudioModder"
-                           HorizontalAlignment="Center"
-                           FontSize="28"
-                           Foreground="#BBE1FA"
-                           Margin="10"
-                           TextWrapping="Wrap"
-                           MaxWidth="250"/>
+		<TabControl>
+			<!-- Single File Tab -->
+			<TabItem Header="Single File" IsVisible="False">
+				<Grid>
+					<Border Padding="20" HorizontalAlignment="Center" VerticalAlignment="Center">
+						<Grid RowDefinitions="Auto,Auto,Auto,Auto">
+							<!-- Title -->
+							<TextBlock Grid.Row="0"
+                                       Text="PD3AudioModder"
+                                       HorizontalAlignment="Center"
+                                       FontSize="28"
+                                       Foreground="#BBE1FA"
+                                       Margin="10"
+                                       TextWrapping="Wrap"
+                                       MaxWidth="250"/>
 
-				<!-- Upload Button -->
-				<Button x:Name="UploadButton"
-                        Grid.Row="1"
-                        Content="Upload Files"
-						HorizontalContentAlignment="Center"
-						VerticalContentAlignment="Center"
-                        Width="250"
-                        Height="40"
-                        Background="#3282B8"
-                        Foreground="White"
-                        FontSize="16"
-                        Padding="10,5"
-                        CornerRadius="10"
-                        Margin="0,0,0,15"/>
+							<!-- Upload Button -->
+							<Button x:Name="UploadButton"
+                                    Grid.Row="1"
+                                    Content="Upload Files"
+                                    HorizontalContentAlignment="Center"
+                                    VerticalContentAlignment="Center"
+                                    Width="250"
+                                    Height="40"
+                                    Background="#3282B8"
+                                    Foreground="White"
+                                    FontSize="16"
+                                    Padding="10,5"
+                                    CornerRadius="10"
+                                    Margin="0,0,0,15"/>
 
-				<!-- Convert Button -->
-				<Button x:Name="ConvertButton"
-                        Grid.Row="2"
-                        Content="Convert Files"
-						HorizontalContentAlignment="Center"
-						VerticalContentAlignment="Center"
-                        Width="250"
-                        Height="40"
-                        Background="#3282B8"
-                        Foreground="White"
-                        FontSize="16"
-                        Padding="10,5"
-                        CornerRadius="10"
-                        Margin="0,0,0,15"/>
+							<!-- Convert Button -->
+							<Button x:Name="ConvertButton"
+                                    Grid.Row="2"
+                                    Content="Convert Files"
+                                    HorizontalContentAlignment="Center"
+                                    VerticalContentAlignment="Center"
+                                    Width="250"
+                                    Height="40"
+                                    Background="#3282B8"
+                                    Foreground="White"
+                                    FontSize="16"
+                                    Padding="10,5"
+                                    CornerRadius="10"
+                                    Margin="0,0,0,15"/>
 
-				<!-- Status -->
-				<TextBlock x:Name="StatusTextBlock"
-                           Grid.Row="3"
-                           Text="Status: Waiting for input..."
-                           HorizontalAlignment="Center"
-                           FontSize="16"
-                           Foreground="#BBE1FA"
-                           Margin="10"
-                           TextWrapping="Wrap"
-                           MaxWidth="250"/>
-			</Grid>
-		</Border>
+							<!-- Status -->
+							<TextBlock x:Name="StatusTextBlock"
+                                       Grid.Row="3"
+                                       Text="Status: Waiting for input..."
+                                       HorizontalAlignment="Center"
+                                       FontSize="16"
+                                       Foreground="#BBE1FA"
+                                       Margin="10"
+                                       TextWrapping="Wrap"
+                                       MaxWidth="250"/>
+						</Grid>
+					</Border>
+				</Grid>
+			</TabItem>
+
+			<!-- Multiple Files Tab -->
+			<TabItem Header="Multiple Files" IsVisible="False">
+				<Grid>
+					<TextBlock Text="Coming soon"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               FontSize="16"
+                               Foreground="#BBE1FA"/>
+				</Grid>
+			</TabItem>
+		</TabControl>
 
 		<!-- Licenses Button -->
 		<Button x:Name="LicensesButton"
