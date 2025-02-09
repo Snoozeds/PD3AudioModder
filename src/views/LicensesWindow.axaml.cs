@@ -14,7 +14,7 @@ namespace PD3AudioModder
 
         private void OnWwisePd3Clicked(object sender, RoutedEventArgs e)
         {
-            string url = "https://github.com/YourRepo/wwise_pd3";
+            string url = "https://github.com/MoolahModding/wwise_pd3";
             try
             {
                 Process.Start(new ProcessStartInfo
