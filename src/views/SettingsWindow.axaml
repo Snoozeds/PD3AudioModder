@@ -1,0 +1,92 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="PD3AudioModder.SettingsWindow"
+        Title="Settings"
+        Height="400" Width="600"
+        Background="#1B262C"
+        Icon="avares://PD3AudioModder/assets/icons/audio.ico"
+        WindowStartupLocation="CenterOwner">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        
+        <!-- Main Content Grid -->
+        <Grid Grid.Row="0" Margin="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            
+            <!-- Updates Section -->
+            <StackPanel Grid.Row="0" Spacing="15">
+                <TextBlock Text="Updates"
+                         Foreground="#BBE1FA"
+                         FontSize="28"
+                         HorizontalAlignment="Center"
+                         Margin="0,0,0,10"/>
+                <ToggleSwitch Content="Check for updates on launch"
+                              Name="UpdateToggle"
+                              Foreground="#BBE1FA"
+                              OnContent="Enabled"
+                              OffContent="Disabled"
+                              VerticalAlignment="Center"
+                              HorizontalAlignment="Center"
+                              FontSize="18"/>
+                <Button Content="Check for Updates"
+                        Name="CheckUpdatesButton"
+                        HorizontalAlignment="Center"
+                        Width="250"
+                        Height="40"
+                        Background="#3282B8"
+                        Foreground="White"
+                        FontSize="16"
+                        Padding="10,5"
+                        CornerRadius="10"
+                        HorizontalContentAlignment="Center"
+                        VerticalContentAlignment="Center"
+                        Click="OnUpdateClick"/>
+            </StackPanel>
+            
+            <!-- About Section -->
+            <StackPanel Grid.Row="1"
+                        Margin="0,30,0,0"
+                        Spacing="15">
+                <TextBlock Text="About"
+                         Foreground="#BBE1FA"
+                         FontSize="28"
+                         HorizontalAlignment="Center"
+                         Margin="0,0,0,10"/>
+                <Button Content="View Licenses"
+                        Name="ViewLicensesButton"
+                        HorizontalAlignment="Center"
+                        Width="250"
+                        Height="40"
+                        Background="#3282B8"
+                        Foreground="White"
+                        FontSize="16"
+                        Padding="10,5"
+                        CornerRadius="10"
+                        HorizontalContentAlignment="Center"
+                        VerticalContentAlignment="Center"
+                        Click="OnLicensesClick"/>
+            </StackPanel>
+        </Grid>
+        
+        <!-- Back Button -->
+        <Button Grid.Row="1"
+                x:Name="BackButton"
+                Content="Back"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                Margin="10"
+                Background="#3282B8"
+                Foreground="White"
+                FontSize="16"
+                Padding="10,5"
+                CornerRadius="10"
+                Click="OnBackClick"/>
+    </Grid>
+</Window>

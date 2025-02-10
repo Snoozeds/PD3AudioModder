@@ -86,7 +86,7 @@
 
 		<!-- Licenses Button -->
 		<Button x:Name="LicensesButton"
-                Content="View Licenses"
+                Content="Settings"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Bottom"
                 Margin="10"
@@ -95,6 +95,6 @@
                 FontSize="16"
                 Padding="10,5"
                 CornerRadius="10"
-                Click="OnLicensesClick"/>
+				Click="OnSettingsClick"/>
 	</Grid>
 </Window>

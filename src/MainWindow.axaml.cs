@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using Avalonia.Controls.Notifications;
 using Avalonia.Markup.Xaml;
 using Avalonia.Platform.Storage;
 using Newtonsoft.Json;
@@ -17,30 +18,62 @@ namespace PD3AudioModder
         private string? uploadedUassetPath;
         private string? uploadedJsonPath;
         private TextBlock? statusTextBlock;
-        private string tempDirectory;
-
+        private readonly string tempDirectory;
         private Button? convertButton;
+
+        private WindowNotificationManager? _notificationManager;
+        private AppConfig _appConfig;
 
         public MainWindow()
         {
+            _appConfig = AppConfig.Load();
+            _notificationManager = new WindowNotificationManager(this);
             InitializeComponent();
             DataContext = this;
 
             // Create temp directory
-            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
-            {
-                tempDirectory = Path.Combine(Path.GetTempPath(), "PD3AudioModder");
-            }
-            else
-            {
-                tempDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Temp");
-            }
+            tempDirectory = Environment.OSVersion.Platform == PlatformID.Win32NT
+                ? Path.Combine(Path.GetTempPath(), "PD3AudioModder")
+                : Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Temp");
 
             if (!Directory.Exists(tempDirectory))
             {
                 Directory.CreateDirectory(tempDirectory);
             }
+
+            // Check for updates if enabled
+            if (_appConfig.AutoUpdateEnabled)
+            {
+                CheckForUpdatesAsync();
+            }
         }
+
+        private async void CheckForUpdatesAsync()
+        {
+            try
+            {
+                AutoUpdater updater = new AutoUpdater(_notificationManager!, this);
+                var (updateAvailable, newVersion) = await updater.CheckForUpdates();
+
+                if (updateAvailable)
+                {
+                    bool userWantsUpdate = await UpdateDialog.ShowDialogAsync(this, newVersion);
+                    if (userWantsUpdate)
+                    {
+                        updater.DownloadUpdate();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _notificationManager?.Show(new Notification(
+                    "Update Error",
+                    $"Failed to check for updates: {ex.Message}",
+                    NotificationType.Error
+                ));
+            }
+        }
+
 
         private void InitializeComponent()
         {
@@ -404,10 +437,10 @@ namespace PD3AudioModder
             File.WriteAllBytes(uexpFilePath, uexpData);
         }
 
-        private void OnLicensesClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+        private void OnSettingsClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
-            var licensesWindow = new LicensesWindow();
-            licensesWindow.ShowDialog(this);
+            var settingsWindow = new SettingsWindow(this);
+            settingsWindow.ShowDialog(this);
         }
     }
 }
