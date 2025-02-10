@@ -308,6 +308,7 @@ namespace PD3AudioModder
                 File.Copy(wemPath, tempUbulkPath, true);
 
                 // Ask user where to save the files
+                UpdateStatus("Select where to save converted files...");
                 var folderResult = await StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
                 {
                     Title = "Choose where to save converted files",
