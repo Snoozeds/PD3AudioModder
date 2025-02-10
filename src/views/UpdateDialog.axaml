@@ -1,0 +1,58 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="PD3AudioModder.UpdateDialog"
+        Title="Update Available"
+        SizeToContent="WidthAndHeight"
+        Background="#1B262C"
+        Icon="avares://PD3AudioModder/assets/icons/audio.ico"
+        WindowStartupLocation="CenterOwner">
+
+	<Border Padding="20" Background="#1B262C">
+		<StackPanel HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Spacing="15"
+                    MinWidth="300">
+			<TextBlock Text="A new update is available!"
+                       FontSize="18"
+                       HorizontalAlignment="Center"
+                       FontWeight="Bold"
+                       Foreground="#BBE1FA"/>
+			<TextBlock x:Name="VersionText"
+                       Text="New version: {0}"
+                       HorizontalAlignment="Center"
+                       FontSize="16"
+                       Foreground="#BBE1FA"/>
+			<TextBlock Text="Do you want to update now?"
+                       HorizontalAlignment="Center"
+                       FontSize="16"
+                       Foreground="#BBE1FA"/>
+			<StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Center"
+                        Spacing="15"
+                        Margin="0,10,0,0">
+				<Button Content="Yes"
+                        Width="75"
+                        Height="40"
+                        Background="#3282B8"
+                        Foreground="White"
+                        FontSize="16"
+                        Padding="10,5"
+                        CornerRadius="10"
+                        Click="OnYesClick"
+						VerticalContentAlignment="Center"
+						HorizontalContentAlignment="Center"/>
+				<Button Content="No"
+                        Width="75"
+                        Height="40"
+                        Background="#BBE1FA"
+                        Foreground="#1B262C"
+                        FontSize="16"
+                        Padding="10,5"
+                        CornerRadius="10"
+                        Click="OnNoClick"
+						VerticalContentAlignment="Center"
+						HorizontalContentAlignment="Center"/>
+			</StackPanel>
+		</StackPanel>
+	</Border>
+</Window>

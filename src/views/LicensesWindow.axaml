@@ -12,9 +12,23 @@
 			<TextBlock Text="Licenses for open-source code used:"
                        FontSize="18"
                        Foreground="#BBE1FA" HorizontalAlignment="Center" />
-			<TextBlock Text="wwise_pd3:"
-                       FontSize="14"
-                       Foreground="#BBE1FA" HorizontalAlignment="Center" />
+			<Button Click="OnWwisePd3Clicked"
+        FontSize="14"
+        HorizontalAlignment="Center">
+				<Button.Styles>
+					<Style Selector="Button">
+						<Setter Property="Background" Value="Transparent"/>
+						<Setter Property="BorderThickness" Value="0"/>
+						<Setter Property="Padding" Value="0"/>
+						<Setter Property="Cursor" Value="Hand"/>
+						<Setter Property="Foreground" Value="#BBE1FA"/>
+					</Style>
+					<Style Selector="Button:pointerover /template/ ContentPresenter">
+						<Setter Property="TextBlock.TextDecorations" Value="Underline"/>
+					</Style>
+				</Button.Styles>
+				<TextBlock Text="wwise_pd3:"/>
+			</Button>
 			<SelectableTextBlock FontSize="14" Foreground="#BBE1FA" HorizontalAlignment="Center">
 				<Run Text="MIT License" />
 				<LineBreak />
