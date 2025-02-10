@@ -50,6 +50,22 @@ namespace PD3AudioModder
             }
         }
 
+        public string GetCurrentVersion()
+        {
+            try
+            {
+                string currentVersion = File.Exists(LocalVersionFile)
+                    ? File.ReadAllText(LocalVersionFile).Replace("\r", "").Replace("\n", "").TrimEnd()
+                    : "0.0.0";
+                return currentVersion;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error retrieving current version: {ex.Message}");
+                return "Unknown";
+            }
+        }
+
         public void LaunchUpdateProcess()
         {
             string currentProcessId = Process.GetCurrentProcess().Id.ToString();
