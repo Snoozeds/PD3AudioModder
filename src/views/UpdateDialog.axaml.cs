@@ -12,9 +12,11 @@ namespace PD3AudioModder
             InitializeComponent();
         }
 
-        public UpdateDialog(string newVersion)
+        public UpdateDialog(string currentVersion, string newVersion)
         {
             InitializeComponent();
+            this.FindControl<TextBlock>("CurrentVersionText")!.Text =
+                string.Format("Current version: {0}", currentVersion);
             this.FindControl<TextBlock>("VersionText")!.Text =
                 string.Format("New version: {0}", newVersion);
         }
@@ -31,9 +33,9 @@ namespace PD3AudioModder
             Close(false);
         }
 
-        public static async Task<bool> ShowDialogAsync(Window parent, string newVersion)
+        public static async Task<bool> ShowDialogAsync(Window parent, string currentVersion, string newVersion)
         {
-            var dialog = new UpdateDialog(newVersion);
+            var dialog = new UpdateDialog(currentVersion, newVersion);
             var result = await dialog.ShowDialog<bool>(parent);
             return result;
         }

@@ -57,7 +57,8 @@ namespace PD3AudioModder
 
                 if (updateAvailable)
                 {
-                    bool userWantsUpdate = await UpdateDialog.ShowDialogAsync(this, newVersion);
+                    string currentVersion = updater.GetCurrentVersion();
+                    bool userWantsUpdate = await UpdateDialog.ShowDialogAsync(this, currentVersion, newVersion);
                     if (userWantsUpdate)
                     {
                          updater.DownloadUpdate();
