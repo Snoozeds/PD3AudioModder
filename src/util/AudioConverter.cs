@@ -70,6 +70,11 @@ public class AudioConverter
             throw new ArgumentException("Input path cannot be null or empty.", nameof(inputPath));
         }
 
+        if (string.IsNullOrEmpty(outputPath))
+        {
+            throw new ArgumentException("Output path cannot be null or empty.", nameof(outputPath));
+        }
+
         if (!File.Exists(inputPath))
         {
             throw new FileNotFoundException($"Input file not found: {inputPath}");
