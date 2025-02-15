@@ -220,16 +220,6 @@ namespace PD3AudioModder
             }
         }
 
-        private void CopyToExport(string sourcePath, string exportFolder)
-        {
-            if (File.Exists(sourcePath))
-            {
-                string fileName = Path.GetFileName(sourcePath);
-                string destPath = Path.Combine(exportFolder, fileName);
-                File.Copy(sourcePath, destPath, true);
-            }
-        }
-
         private void OnSettingsClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
             var settingsWindow = new SettingsWindow(this);
