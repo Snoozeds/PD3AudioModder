@@ -22,9 +22,9 @@ namespace PD3AudioModder
         private readonly string tempDirectory;
         private Button? convertButton;
 
-        private WindowNotificationManager? _notificationManager;
-        private AppConfig _appConfig;
-        private FileProcessor _fileProcessor;
+        private readonly WindowNotificationManager? _notificationManager;
+        private readonly AppConfig _appConfig;
+        private readonly FileProcessor _fileProcessor;
 
         public MainWindow()
         {
