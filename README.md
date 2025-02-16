@@ -1,3 +1,5 @@
+![](/wiki/assets/img/PAM-banner-wide.png)
+
 ## PD3AudioModder
 A small program for editing PAYDAY 3 (and other non-iostore Unreal Engine games)'s audio files.
 
