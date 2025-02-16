@@ -33,4 +33,8 @@
       <DependentUpon>LicensesWindow.axaml</DependentUpon>
     </Compile>
   </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="views\HelpWindow.axaml" />
+  </ItemGroup>
 </Project>

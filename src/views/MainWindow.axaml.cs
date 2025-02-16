@@ -280,6 +280,19 @@ namespace PD3AudioModder
             }
         }
 
+        private void OnHelpClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+        {
+            var tabControl = this.FindControl<TabControl>("MainTabControl");
+
+            // Determine which tab is selected
+            var selectedTab = ((TabItem)tabControl!.SelectedItem!).Header!.ToString();
+            string activeTab = selectedTab == "Single File" ? "SingleFile" : "BatchConversion";
+
+            // Show help window with the active tab
+            var helpWindow = new HelpWindow(activeTab);
+            helpWindow.ShowDialog(this);
+        }
+
         private void OnSettingsClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
             var settingsWindow = new SettingsWindow(this);
