@@ -7,6 +7,7 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
 	<StartupObject>PD3AudioModder.Program</StartupObject>
+	<ApplicationIcon>assets\icons\audio.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="assets\icons\audio.ico" />
@@ -36,5 +37,9 @@
 
   <ItemGroup>
     <UpToDateCheckInput Remove="views\HelpWindow.axaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="assets\icons\audio.ico" />
   </ItemGroup>
 </Project>
