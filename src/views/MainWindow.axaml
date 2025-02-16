@@ -162,8 +162,8 @@
 			</TabItem>
 		</TabControl>
 
-		<!-- Licenses Button -->
-		<Button x:Name="LicensesButton"
+		<!-- Settings Button -->
+		<Button x:Name="SettingsButton"
                 Content="Settings"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Bottom"
