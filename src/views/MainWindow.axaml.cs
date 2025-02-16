@@ -108,6 +108,7 @@ namespace PD3AudioModder
             selectAudioFolderButton = this.FindControl<Button>("SelectAudioFolderButton")!;
             selectGameFilesFolderButton = this.FindControl<Button>("SelectGameFilesFolderButton")!;
             batchConvertButton = this.FindControl<Button>("BatchConvertButton")!;
+            batchConvertButton.IsEnabled = false;// Start with the batch convert button disabled
             batchStatusTextBlock = this.FindControl<TextBlock>("BatchStatusTextBlock")!;
             batchProgressBar = this.FindControl<ProgressBar>("BatchProgressBar")!;
 
