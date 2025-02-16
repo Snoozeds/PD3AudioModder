@@ -13,26 +13,38 @@ namespace PD3AudioModder
 {
     public partial class MainWindow : Window
     {
+        // Single file operation
         private string? uploadedAudioPath;
         private string? uploadedUbulkPath;
         private string? uploadedUexpPath;
         private string? uploadedUassetPath;
         private string? uploadedJsonPath;
         private TextBlock? statusTextBlock;
-        private readonly string tempDirectory;
         private Button? convertButton;
 
+        private readonly string tempDirectory;
         private readonly WindowNotificationManager? _notificationManager;
         private readonly AppConfig _appConfig;
         private readonly FileProcessor _fileProcessor;
+
+        // Batch file operation
+        private readonly BatchProcessor _batchProcessor;
+        private Button? selectAudioFolderButton;
+        private Button? selectGameFilesFolderButton;
+        private Button? batchConvertButton;
+        private TextBlock? batchStatusTextBlock;
+        private ProgressBar? batchProgressBar;
 
         public MainWindow()
         {
             _appConfig = AppConfig.Load();
             _notificationManager = new WindowNotificationManager(this);
             _fileProcessor = new FileProcessor();
-            InitializeComponent();
+
+            _batchProcessor = new BatchProcessor();
+
             DataContext = this;
+            InitializeComponent();
 
             // Create temp directory
             tempDirectory = Environment.OSVersion.Platform == PlatformID.Win32NT
@@ -82,16 +94,32 @@ namespace PD3AudioModder
         private void InitializeComponent()
         {
             AvaloniaXamlLoader.Load(this);
+
+            // Single file operation
             var uploadButton = this.FindControl<Button>("UploadButton")!;
-
             convertButton = this.FindControl<Button>("ConvertButton")!;
-            // Start with the convert button disabled
-            convertButton.IsEnabled = false;
-
+            convertButton.IsEnabled = false;// Start with the convert button disabled
             statusTextBlock = this.FindControl<TextBlock>("StatusTextBlock")!;
 
             uploadButton.Click += async (_, _) => await UploadFile();
             convertButton.Click += async (_, _) => await _fileProcessor.ProcessFiles(uploadedAudioPath!, uploadedUbulkPath!, uploadedUexpPath!, uploadedUassetPath!, uploadedJsonPath!, tempDirectory, statusTextBlock!, convertButton!, this);
+
+            // Batch file operation
+            selectAudioFolderButton = this.FindControl<Button>("SelectAudioFolderButton")!;
+            selectGameFilesFolderButton = this.FindControl<Button>("SelectGameFilesFolderButton")!;
+            batchConvertButton = this.FindControl<Button>("BatchConvertButton")!;
+            batchStatusTextBlock = this.FindControl<TextBlock>("BatchStatusTextBlock")!;
+            batchProgressBar = this.FindControl<ProgressBar>("BatchProgressBar")!;
+
+            selectAudioFolderButton.Click += async (_, _) => await SelectAudioFolder();
+            selectGameFilesFolderButton.Click += async (_, _) => await SelectGameFilesFolder();
+            batchConvertButton.Click += async (_, _) => await _batchProcessor.ProcessBatch(
+                tempDirectory,
+                batchStatusTextBlock!,
+                batchProgressBar!,
+                batchConvertButton!,
+                this
+            );
         }
 
         private async Task UploadFile()
@@ -217,6 +245,38 @@ namespace PD3AudioModder
             else
             {
                 _fileProcessor.UpdateStatus("File selection cancelled", StatusTextBlock);
+            }
+        }
+
+        private async Task SelectAudioFolder()
+        {
+            var folder = await StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
+            {
+                Title = "Select Audio Files Folder",
+                AllowMultiple = false
+            });
+
+            if (folder.Count > 0)
+            {
+                _batchProcessor.SetAudioFolderPath(folder[0].Path.LocalPath);
+                _batchProcessor.UpdateStatus($"Audio folder selected: {folder[0].Name}", batchStatusTextBlock!);
+                _batchProcessor.UpdateButtonStates(folder[0].Path.LocalPath, "", batchConvertButton!);
+            }
+        }
+
+        private async Task SelectGameFilesFolder()
+        {
+            var folder = await StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
+            {
+                Title = "Select Game Files Folder",
+                AllowMultiple = false
+            });
+
+            if (folder.Count > 0)
+            {
+                _batchProcessor.SetGameFilesFolderPath(folder[0].Path.LocalPath);
+                _batchProcessor.UpdateStatus($"Game files folder selected: {folder[0].Name}", batchStatusTextBlock!);
+                _batchProcessor.UpdateButtonStates("", folder[0].Path.LocalPath, batchConvertButton!);
             }
         }
 
