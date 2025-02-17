@@ -4,7 +4,7 @@
         x:Class="PD3AudioModder.LicensesWindow"
 		x:DataType="local:LicensesWindow"
         Title="Licenses"
-        Height="650" Width="800"
+        Height="550" Width="800"
         Background="#1B262C"
         Icon="avares://PD3AudioModder/assets/icons/audio.ico"
         WindowStartupLocation="CenterOwner">
