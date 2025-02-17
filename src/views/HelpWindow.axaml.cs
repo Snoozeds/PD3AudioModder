@@ -4,7 +4,12 @@ namespace PD3AudioModder
 {
     public partial class HelpWindow : Window
     {
-        public HelpWindow(string activeTab)
+        public HelpWindow()
+        {
+            InitializeComponent();
+        }
+
+        public HelpWindow(string activeTab) : this()
         {
             InitializeComponent();
 
