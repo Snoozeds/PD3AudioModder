@@ -14,6 +14,9 @@ namespace PD3AudioModder.util
         private string _audioFolderPath = string.Empty;
         private string _gameFilesFolderPath = string.Empty;
 
+        // track skipped files and reason for skipping them
+        private Dictionary<string, string> _skippedFiles = new Dictionary<string, string>();
+
         public BatchProcessor()
         {
             _fileProcessor = new FileProcessor();
@@ -132,11 +135,13 @@ namespace PD3AudioModder.util
                         else
                         {
                             UpdateStatus($"Skipping {audioBaseName}: Missing required game files", statusTextBlock);
+                            _skippedFiles[audioBaseName] = "Missing required game files";
                         }
                     }
                     else
                     {
                         UpdateStatus($"Skipping {audioBaseName}: No matching game files found", statusTextBlock);
+                        _skippedFiles[audioBaseName] = "No matching game files found";
                     }
 
                     processedFiles++;
@@ -146,6 +151,14 @@ namespace PD3AudioModder.util
                 UpdateStatus($"Batch conversion completed! Processed {processedFiles} files", statusTextBlock, progressBar, 100);
                 _audioFolderPath = string.Empty;
                 _gameFilesFolderPath = string.Empty;
+
+                if (_skippedFiles.Any())
+                {
+                    var warningDialog = new WarningDialog("Some files were skipped during batch conversion:\n\n" +
+                        string.Join("\n", _skippedFiles.Select(kvp => $"{kvp.Key}: {kvp.Value}")));
+                    warningDialog.Show();
+                }
+                
             }
             catch (Exception ex)
             {

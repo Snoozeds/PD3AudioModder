@@ -1,0 +1,55 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="using:PD3AudioModder"
+        x:DataType="local:WarningDialog"
+        x:Class="PD3AudioModder.WarningDialog"
+        Title="Warning!"
+        Background="#1B262C"
+        Icon="avares://PD3AudioModder/assets/icons/audio.ico"
+        WindowStartupLocation="CenterScreen"
+		Height="400"
+		Width="600">
+
+	<Border Padding="20" HorizontalAlignment="Center" VerticalAlignment="Center">
+		<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="15">
+
+			<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="10">
+				<Image Source="{SvgImage avares://PD3AudioModder/assets/twemoji/26a0.svg}" Width="32" Height="32" HorizontalAlignment="Center"/>
+				<TextBlock Text="Warning!"
+                           FontSize="32"
+                           FontWeight="Bold"
+                           Foreground="#BBE1FA"
+                           HorizontalAlignment="Center" />
+			</StackPanel>
+	
+			<ScrollViewer VerticalAlignment="Center" Height="200" Width="500">
+				<TextBlock
+					Name="MessageTextBlock"
+					Text="{Binding Message}"
+					FontSize="18"
+					Foreground="#BBE1FA"
+					HorizontalAlignment="Center" />
+			</ScrollViewer>
+
+			<Button Click="OkButton_Click" FontSize="18" HorizontalAlignment="Center">
+				<Button.Styles>
+					<Style Selector="Button">
+						<Setter Property="Background" Value="#3282B8"/>
+						<Setter Property="BorderThickness" Value="0"/>
+						<Setter Property="Padding" Value="10,5"/>
+						<Setter Property="Cursor" Value="Hand"/>
+						<Setter Property="Foreground" Value="White"/>
+						<Setter Property="FontSize" Value="16"/>
+						<Setter Property="CornerRadius" Value="10"/>
+					</Style>
+					<Style Selector="Button:pointerover">
+						<Setter Property="Background" Value="#3282B8"/>
+					</Style>
+				</Button.Styles>
+				<TextBlock Text="OK"/>
+			</Button>
+		</StackPanel>
+	</Border>
+</Window>

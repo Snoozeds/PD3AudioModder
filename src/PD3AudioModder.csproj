@@ -11,9 +11,12 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="assets\icons\audio.ico" />
+    <None Remove="assets\sounds\error.ogg" />
+    <None Remove="assets\twemoji\26a0.svg" />
   </ItemGroup>
   <ItemGroup>
     <AvaloniaResource Include="assets\icons\audio.ico" />
+    <AvaloniaResource Include="assets\twemoji\26a0.svg" />
   </ItemGroup>
 
   <ItemGroup>
@@ -27,6 +30,8 @@
       <IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
       <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="NAudio" Version="2.2.1" />
+    <PackageReference Include="NAudio.Vorbis" Version="1.5.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="ReactiveUI" Version="20.1.63" />
   </ItemGroup>
@@ -34,6 +39,9 @@
   <ItemGroup>
     <Compile Update="views\LicensesWindow.axaml.cs">
       <DependentUpon>LicensesWindow.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="views\WarningDialog.axaml.cs">
+      <DependentUpon>WarningDialog.axaml</DependentUpon>
     </Compile>
   </ItemGroup>
 
@@ -43,5 +51,9 @@
 
   <ItemGroup>
     <Content Include="assets\icons\audio.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="assets\sounds\error.ogg" />
   </ItemGroup>
 </Project>
