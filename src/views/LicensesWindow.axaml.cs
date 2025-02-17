@@ -1,20 +1,39 @@
 ﻿using Avalonia.Controls;
-using Avalonia.Interactivity;
-using System.Diagnostics;
 using System;
+using System.Diagnostics;
+using System.Windows.Input;
+using ReactiveUI;
+using System.Reactive;
+using System.Reactive.Linq;
 
 namespace PD3AudioModder
 {
     public partial class LicensesWindow : Window
     {
+        public ICommand WwisePd3Command { get; }
+        public ICommand TwemojiCommand { get; }
+        public ICommand CloseCommand { get; }
+
         public LicensesWindow()
         {
             InitializeComponent();
+            WwisePd3Command = ReactiveCommand.Create(
+                () => OpenUrl("https://github.com/MoolahModding/wwise_pd3"),
+                outputScheduler: RxApp.MainThreadScheduler);
+
+            TwemojiCommand = ReactiveCommand.Create(
+                () => OpenUrl("https://github.com/twitter/twemoji"),
+                outputScheduler: RxApp.MainThreadScheduler);
+
+            CloseCommand = ReactiveCommand.Create(
+                () => this.Close(),
+                outputScheduler: RxApp.MainThreadScheduler);
+
+            DataContext = this;
         }
 
-        private void OnWwisePd3Clicked(object sender, RoutedEventArgs e)
+        private void OpenUrl(string url)
         {
-            string url = "https://github.com/MoolahModding/wwise_pd3";
             try
             {
                 Process.Start(new ProcessStartInfo
@@ -26,11 +45,6 @@ namespace PD3AudioModder
             catch (Exception)
             {
             }
-        }
-
-        private void OnCloseClick(object sender, Avalonia.Interactivity.RoutedEventArgs e)
-        {
-            this.Close();
         }
     }
 }

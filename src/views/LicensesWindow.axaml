@@ -1,20 +1,22 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:local="using:PD3AudioModder"
         x:Class="PD3AudioModder.LicensesWindow"
+		x:DataType="local:LicensesWindow"
         Title="Licenses"
-        Height="700" Width="800"
+        Height="650" Width="800"
         Background="#1B262C"
-		Icon="avares://PD3AudioModder/assets/icons/audio.ico"
-		WindowStartupLocation="CenterOwner">
+        Icon="avares://PD3AudioModder/assets/icons/audio.ico"
+        WindowStartupLocation="CenterOwner">
 
 	<Border Padding="20" HorizontalAlignment="Center" VerticalAlignment="Center">
 		<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="15">
 			<TextBlock Text="Licenses for open-source code used:"
                        FontSize="18"
                        Foreground="#BBE1FA" HorizontalAlignment="Center" />
-			<Button Click="OnWwisePd3Clicked"
-        FontSize="14"
-        HorizontalAlignment="Center">
+
+			<!-- wwise_pd3 -->
+			<Button Command="{Binding WwisePd3Command}" FontSize="14" HorizontalAlignment="Center">
 				<Button.Styles>
 					<Style Selector="Button">
 						<Setter Property="Background" Value="Transparent"/>
@@ -29,45 +31,81 @@
 				</Button.Styles>
 				<TextBlock Text="wwise_pd3:"/>
 			</Button>
-			<SelectableTextBlock FontSize="14" Foreground="#BBE1FA" HorizontalAlignment="Center">
-				<Run Text="MIT License" />
-				<LineBreak />
-				<Run Text="Copyright (c) 2025 HW12Dev and Moolah Modding" />
-				<LineBreak />
-				<LineBreak />
-				<Run Text="Permission is hereby granted, free of charge, to any person obtaining a copy" />
-				<LineBreak />
-				<Run Text="of this software and associated documentation files (the 'Software'), to deal" />
-				<LineBreak />
-				<Run Text="in the Software without restriction, including without limitation the rights" />
-				<LineBreak />
-				<Run Text="to use, copy, modify, merge, publish, distribute, sublicense, and/or sell" />
-				<LineBreak />
-				<Run Text="copies of the Software, and to permit persons to whom the Software is" />
-				<LineBreak />
-				<Run Text="furnished to do so, subject to the following conditions:" />
-				<LineBreak />
-				<LineBreak />
-				<Run Text="The above copyright notice and this permission notice shall be included" />
-				<LineBreak />
-				<Run Text="in all copies or substantial portions of the Software." />
-				<LineBreak />
-				<LineBreak />
-				<Run Text="THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR" />
-				<LineBreak />
-				<Run Text="IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY," />
-				<LineBreak />
-				<Run Text="FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE" />
-				<LineBreak />
-				<Run Text="AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER" />
-				<LineBreak />
-				<Run Text="LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM," />
-				<LineBreak />
-				<Run Text="OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE" />
-				<LineBreak />
-				<Run Text="SOFTWARE." />
-			</SelectableTextBlock>
-			<Button Content="Close" Width="150" Height="40" HorizontalAlignment="Center" Click="OnCloseClick">
+
+			<ScrollViewer Height="200" Width="700">
+				<SelectableTextBlock FontSize="14" Foreground="#BBE1FA" HorizontalAlignment="Center">
+					<Run Text="MIT License" />
+					<LineBreak />
+					<Run Text="Copyright (c) 2025 HW12Dev and Moolah Modding" />
+					<LineBreak />
+					<LineBreak />
+					<Run Text="Permission is hereby granted, free of charge, to any person obtaining a copy" />
+					<LineBreak />
+					<Run Text="of this software and associated documentation files (the 'Software'), to deal" />
+					<LineBreak />
+					<Run Text="in the Software without restriction, including without limitation the rights" />
+					<LineBreak />
+					<Run Text="to use, copy, modify, merge, publish, distribute, sublicense, and/or sell" />
+					<LineBreak />
+					<Run Text="copies of the Software, and to permit persons to whom the Software is" />
+					<LineBreak />
+					<Run Text="furnished to do so, subject to the following conditions:" />
+					<LineBreak />
+					<LineBreak />
+					<Run Text="The above copyright notice and this permission notice shall be included" />
+					<LineBreak />
+					<Run Text="in all copies or substantial portions of the Software." />
+					<LineBreak />
+					<LineBreak />
+					<Run Text="THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR" />
+					<LineBreak />
+					<Run Text="IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY," />
+					<LineBreak />
+					<Run Text="FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE" />
+					<LineBreak />
+					<Run Text="AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER" />
+					<LineBreak />
+					<Run Text="LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM," />
+					<LineBreak />
+					<Run Text="OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE" />
+					<LineBreak />
+					<Run Text="SOFTWARE." />
+				</SelectableTextBlock>
+			</ScrollViewer>
+
+			<!-- twemoji -->
+			<Button Command="{Binding TwemojiCommand}" FontSize="14" HorizontalAlignment="Center">
+				<Button.Styles>
+					<Style Selector="Button">
+						<Setter Property="Background" Value="Transparent"/>
+						<Setter Property="BorderThickness" Value="0"/>
+						<Setter Property="Padding" Value="0"/>
+						<Setter Property="Cursor" Value="Hand"/>
+						<Setter Property="Foreground" Value="#BBE1FA"/>
+					</Style>
+					<Style Selector="Button:pointerover /template/ ContentPresenter">
+						<Setter Property="TextBlock.TextDecorations" Value="Underline"/>
+					</Style>
+				</Button.Styles>
+				<TextBlock Text="twemoji:"/>
+			</Button>
+
+
+			<ScrollViewer Height="150" Width="700">
+				<SelectableTextBlock FontSize="18" Foreground="#BBE1FA" HorizontalAlignment="Center">
+					<Run Text="Twemoji Licensed under the CC-BY 4.0 License." />
+					<LineBreak />
+					<Run Text="Copyright (c) 2019 Twitter, Inc and other contributors" />
+					<LineBreak />
+					<Run Text="Licensed under the Creative Commons Attribution 4.0 International license." />
+					<LineBreak />
+					<Run Text="You can obtain a copy of the license at:" />
+					<LineBreak />
+					<Run Text="https://creativecommons.org/licenses/by/4.0/" />
+				</SelectableTextBlock>
+			</ScrollViewer>
+
+			<Button Content="Close" Width="150" Height="40" HorizontalAlignment="Center" Command="{Binding CloseCommand}">
 				<Button.Styles>
 					<Style Selector="Button">
 						<Setter Property="Background" Value="#3282B8"/>
