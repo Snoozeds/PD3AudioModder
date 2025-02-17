@@ -16,7 +16,7 @@
                        Foreground="#BBE1FA" HorizontalAlignment="Center" />
 
 			<!-- wwise_pd3 -->
-			<Button Command="{Binding WwisePd3Command}" FontSize="14" HorizontalAlignment="Center">
+			<Button Click="WwisePD3Click" FontSize="14" HorizontalAlignment="Center">
 				<Button.Styles>
 					<Style Selector="Button">
 						<Setter Property="Background" Value="Transparent"/>
@@ -74,7 +74,7 @@
 			</ScrollViewer>
 
 			<!-- twemoji -->
-			<Button Command="{Binding TwemojiCommand}" FontSize="14" HorizontalAlignment="Center">
+			<Button Click="TwemojiClick" FontSize="14" HorizontalAlignment="Center">
 				<Button.Styles>
 					<Style Selector="Button">
 						<Setter Property="Background" Value="Transparent"/>
@@ -105,7 +105,7 @@
 				</SelectableTextBlock>
 			</ScrollViewer>
 
-			<Button Content="Close" Width="150" Height="40" HorizontalAlignment="Center" Command="{Binding CloseCommand}">
+			<Button Content="Close" Width="150" Height="40" HorizontalAlignment="Center" Click="CloseClick">
 				<Button.Styles>
 					<Style Selector="Button">
 						<Setter Property="Background" Value="#3282B8"/>
