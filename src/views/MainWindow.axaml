@@ -169,7 +169,7 @@
 				HorizontalContentAlignment="Center"
 				VerticalAlignment="Bottom"
 				VerticalContentAlignment="Center"
-			    Margin="0,0,10,55"
+			    Margin="0,0,10,50"
 				Background="#3282B8"
 				Foreground="White"
 				FontSize="16"
