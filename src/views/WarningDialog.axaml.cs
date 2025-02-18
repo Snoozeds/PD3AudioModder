@@ -8,6 +8,7 @@ namespace PD3AudioModder
     {
         private TextBlock? _messageTextBlock;
         private readonly AudioPlayer _audioPlayer = new AudioPlayer();
+        private AppConfig _config = AppConfig.Instance;
 
         public string? Message
         {
@@ -47,7 +48,10 @@ namespace PD3AudioModder
                 _messageTextBlock.Text = Message;
             }
 
-            Task.Run(() => _audioPlayer.PlaySound("assets.sounds.error.ogg"));
+            if (!_config.MuteNotificationSound)
+            {
+                Task.Run(() => _audioPlayer.PlaySound("assets.sounds.error.ogg"));
+            }
         }
     }
 }

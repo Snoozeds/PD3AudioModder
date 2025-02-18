@@ -9,6 +9,8 @@ namespace PD3AudioModder
     {
         public static readonly bool AutoUpdateEnabled = true;
         public static readonly string? RepakPath = null;
+        public static readonly string? FfmpegOptions = "-acodec pcm_s16le -ar 48000 -ac 2";
+        public static readonly bool MuteNotificationSound = false;
     }
 
     public class AppConfig
@@ -17,6 +19,9 @@ namespace PD3AudioModder
         private static readonly object _lock = new object();
         public bool AutoUpdateEnabled { get; set; } = DefaultConfig.AutoUpdateEnabled;
         public string? RepakPath { get; set; } = DefaultConfig.RepakPath;
+        public string? FfmpegOptions { get; set; } = DefaultConfig.FfmpegOptions;
+        public string? DefaultExportFolder { get; set; }
+        public bool MuteNotificationSound { get; set; }
 
         public static AppConfig Instance
         {
@@ -59,7 +64,10 @@ namespace PD3AudioModder
             return new Dictionary<string, Func<AppConfig, bool>>()
             {
                 { "AutoUpdateEnabled", config => config.AutoUpdateEnabled == true || config.AutoUpdateEnabled == false },
-                { "RepakPath", config => config.RepakPath == null || File.Exists(config.RepakPath) }
+                { "RepakPath", config => config.RepakPath == null || File.Exists(config.RepakPath) },
+                { "FfmpegOptions", config => true },
+                { "DefaultExportFolder", config => true },
+                { "MuteNotificationSound", config => config.MuteNotificationSound == true || config.MuteNotificationSound == false }
             };
         }
 

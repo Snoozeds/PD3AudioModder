@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PD3AudioModder;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -6,6 +7,8 @@ using System.Threading.Tasks;
 
 public class AudioConverter
 {
+    private static AppConfig _config = AppConfig.Load();
+    private static string? FfmpegOptions = _config.FfmpegOptions;
     private static string GetFfmpegPath()
     {
         // check if ffmpeg exists in the application directory
@@ -100,10 +103,15 @@ public class AudioConverter
             outputPath = Path.ChangeExtension(outputPath, ".wav");
         }
 
+        if(String.IsNullOrEmpty(FfmpegOptions))
+        {
+            FfmpegOptions = DefaultConfig.FfmpegOptions!;
+        }
+
         var processStartInfo = new ProcessStartInfo
         {
             FileName = ffmpegPath,
-            Arguments = $"-i \"{inputPath}\" -acodec pcm_s16le -ar 48000 -ac 2 \"{outputPath}\" -y",
+            Arguments = $"-i \"{inputPath}\" {FfmpegOptions} \"{outputPath}\" -y",
             RedirectStandardOutput = true,
             RedirectStandardError = true,
             UseShellExecute = false,
