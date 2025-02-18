@@ -31,3 +31,11 @@ You may find instructions on how to use the app by clicking on the "Help" button
 | Modding a single sound | Modding multiple sounds |
 | -------- | -------- |
 |[![Modding a single sound](https://img.youtube.com/vi/wbDB-RdiKRY/maxresdefault.jpg)](https://www.youtube.com/watch?v=wbDB-RdiKRY)  | [![Modding multiple sounds](https://img.youtube.com/vi/36ryInl7q3M/maxresdefault.jpg)](https://www.youtube.com/watch?v=36ryInl7q3M)
+
+| Single File Mode | Batch Conversion Mode |
+| ---------------- | --------------------- |
+| [![Single File Mode](https://storage.modworkshop.net/mods/images/BC6iPRrJ4JafHwuMophDeBc0O1h47WEqLLN0aXdc.webp)](https://storage.modworkshop.net/mods/images/BC6iPRrJ4JafHwuMophDeBc0O1h47WEqLLN0aXdc.webp) | [![Batch Conversion Mode](https://storage.modworkshop.net/mods/images/qNORHnLqKTrNtTSsnPB8exwzJsUlrmESB8LX3rX4.webp)](https://storage.modworkshop.net/mods/images/qNORHnLqKTrNtTSsnPB8exwzJsUlrmESB8LX3rX4.webp) |
+
+| Pack Files | Settings Window |
+| ---------- | --------------- |
+| [![Pack Files](https://storage.modworkshop.net/mods/images/InzkAPBPZEleJ2Jr5hnWSmNBzHp16g72eIM2H6Cz.webp)](https://storage.modworkshop.net/mods/images/InzkAPBPZEleJ2Jr5hnWSmNBzHp16g72eIM2H6Cz.webp) | [![Settings Window](https://storage.modworkshop.net/mods/images/Bs6IV07MgLvykO2AaHyvV0zZLVKK2vRivVI5IQzS.webp)](https://storage.modworkshop.net/mods/images/Bs6IV07MgLvykO2AaHyvV0zZLVKK2vRivVI5IQzS.webp) |
