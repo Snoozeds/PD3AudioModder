@@ -8,6 +8,7 @@ namespace PD3AudioModder
     public static class DefaultConfig
     {
         public static readonly bool AutoUpdateEnabled = true;
+        public static readonly string? RepakPath = null;
     }
 
     public class AppConfig
@@ -15,6 +16,7 @@ namespace PD3AudioModder
         private static AppConfig? _instance;
         private static readonly object _lock = new object();
         public bool AutoUpdateEnabled { get; set; } = DefaultConfig.AutoUpdateEnabled;
+        public string? RepakPath { get; set; } = DefaultConfig.RepakPath;
 
         public static AppConfig Instance
         {
@@ -56,7 +58,8 @@ namespace PD3AudioModder
         {
             return new Dictionary<string, Func<AppConfig, bool>>()
             {
-                { "AutoUpdateEnabled", config => config.AutoUpdateEnabled == true || config.AutoUpdateEnabled == false }
+                { "AutoUpdateEnabled", config => config.AutoUpdateEnabled == true || config.AutoUpdateEnabled == false },
+                { "RepakPath", config => config.RepakPath == null || File.Exists(config.RepakPath) }
             };
         }
 

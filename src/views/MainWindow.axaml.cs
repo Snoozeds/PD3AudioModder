@@ -2,12 +2,11 @@ using Avalonia.Controls;
 using Avalonia.Controls.Notifications;
 using Avalonia.Markup.Xaml;
 using Avalonia.Platform.Storage;
-using Newtonsoft.Json;
+using PD3AudioModder.util;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using PD3AudioModder.util;
 
 namespace PD3AudioModder
 {
@@ -34,6 +33,11 @@ namespace PD3AudioModder
         private Button? batchConvertButton;
         private TextBlock? batchStatusTextBlock;
         private ProgressBar? batchProgressBar;
+
+        // Pack Files tab
+        private string? ModName;
+        private bool? CompressionEnabled;
+        private string? PackFolderPath;
 
         public MainWindow()
         {
@@ -121,6 +125,35 @@ namespace PD3AudioModder
                 batchConvertButton!,
                 this
             );
+
+            // Pack Files tab
+            var repakPathTextBlock = this.FindControl<TextBlock>("RepakPathTextBlock")!;
+            var selectRepakButton = this.FindControl<Button>("SelectRepakButton")!;
+            var ModNameTextBox = this.FindControl<TextBox>("ModNameTextBox")!;
+            var selectFolderButton = this.FindControl<Button>("SelectFolderButton")!;
+            var compressCheckBox = this.FindControl<CheckBox>("CompressCheckBox")!;
+            var packButton = this.FindControl<Button>("PackButton")!;
+
+            if (_appConfig.RepakPath != null)
+            {
+                repakPathTextBlock.Text = "Repak path: " + _appConfig.RepakPath;
+            }
+
+            ModNameTextBox.TextChanged += (_, _) =>
+            {
+                if (!string.IsNullOrEmpty(ModNameTextBox.Text))
+                {
+                    ModName = ModNameTextBox.Text;
+                }
+                else
+                {
+                    ModName = "MyPD3Mod";
+                }
+            };
+            selectRepakButton.Click += (_, _) => SelectRepakButton_Click(repakPathTextBlock);
+            compressCheckBox.IsCheckedChanged += (_, _) => CompressionEnabled = compressCheckBox.IsChecked;
+            selectFolderButton.Click += (_, _) => SelectFolderButton_Click(packButton);
+            packButton.Click += (_, _) => PackButton_Click(PackFolderPath);
         }
 
         private async Task UploadFile()
@@ -281,6 +314,75 @@ namespace PD3AudioModder
             }
         }
 
+        // Pack files tab
+        private async void SelectRepakButton_Click(TextBlock repakPathTextBlock)
+        {
+            var files = await StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
+            {
+                Title = "Select repak.exe",
+                AllowMultiple = false,
+                FileTypeFilter = new List<FilePickerFileType>
+        {
+            new FilePickerFileType("Executable")
+            {
+                Patterns = new List<string> { "*.exe" }
+            }
+        }
+            });
+
+            if (files.Count > 0)
+            {
+                repakPathTextBlock.Text = "Repak path: " + files[0].Path.LocalPath;
+                _appConfig.RepakPath = files[0].Path.LocalPath;
+                _appConfig.Save();
+            }
+        }
+
+        private async void SelectFolderButton_Click(Button packButton)
+        {
+            var folder = await StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
+            {
+                Title = "Select folder to pack"
+            });
+
+            if (folder.Count > 0)
+            {
+                PackFolderPath = folder[0].Path.LocalPath;
+                packButton.IsEnabled = true;
+            }
+        }
+
+        private async void PackButton_Click(string packFolderPath)
+        {
+            await PackFiles.DownloadMappings();
+
+            if (_appConfig.RepakPath == null)
+            {
+                _notificationManager?.Show(new Notification(
+                    "Error",
+                    "Please select the repak.exe path.",
+                    NotificationType.Error
+                ));
+                return;
+            }
+
+            PackFiles.Pack(_appConfig.RepakPath, CompressionEnabled ?? false, packFolderPath, Path.GetDirectoryName(packFolderPath)!, ModName ?? "MyPD3Mod");
+            await PackFiles.Repak(_appConfig.RepakPath, CompressionEnabled ?? false, packFolderPath, ModName ?? "MyPD3Mod");
+
+            _notificationManager?.Show(new Notification(
+                "Success",
+                "Files packed successfully.",
+                NotificationType.Success
+            ));
+
+            System.Diagnostics.Process.Start("explorer.exe", Path.GetDirectoryName(packFolderPath)!);
+
+            // Reset fields
+            PackFolderPath = null;
+            var packButton = this.FindControl<Button>("PackButton")!;
+            packButton.IsEnabled = false;
+        }
+
         private void OnHelpClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
             var tabControl = this.FindControl<TabControl>("MainTabControl");
@@ -299,5 +401,6 @@ namespace PD3AudioModder
             var settingsWindow = new SettingsWindow(this);
             settingsWindow.ShowDialog(this);
         }
+
     }
 }
