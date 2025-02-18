@@ -7,6 +7,7 @@ A small program for editing PAYDAY 3's audio files. \
 Converts the audio file to WAV, 16 bit signed little-endian using [ffmpeg](https://ffmpeg.org/), then converts that WAV file to WEM using [wwise_pd3](https://github.com/MoolahModding/wwise_pd3), and then finally replaces the ubulk file with that WEM, and edits the uexp file to have the size value that's inside the json file (fixes corrupted, glitchy audio).
 The program will prompt you where you want to save converted files.
 
+Also has the option to pack files for you using repak if you wish.
 
 -----
 
@@ -15,7 +16,9 @@ The program will prompt you where you want to save converted files.
 You may install ffmpeg [here](https://ffmpeg.org/download.html).
 You can check it is installed correctly by opening command prompt and typing `ffmpeg`
 
-- This tool reuires `.json`, `.uasset`, `.uexp`, `.ubulk` files + a `(.wav/.mp3/.ogg/.flac/.aiff/.wma/.m4a/.aac/.opus)` file for conversion.
+- This tool requires `.json`, `.uasset`, `.uexp`, `.ubulk` files + a `(.wav/.mp3/.ogg/.flac/.aiff/.wma/.m4a/.aac/.opus)` file for conversion.
+
+- This tool requires [repak.exe](https://github.com/trumank/repak/releases/latest/download/repak_cli-x86_64-pc-windows-msvc.zip) if you want to use the Pack Files tab.
 
 -----
 
