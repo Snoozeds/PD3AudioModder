@@ -45,7 +45,7 @@
 		</StackPanel>
 
 		<!-- Pack Files Section -->
-		<StackPanel x:Name="PackFilesSection"  Grid.Row="0" IsVisible="True">
+		<StackPanel x:Name="PackFilesSection"  Grid.Row="0" IsVisible="False">
 			<TextBlock Text="Pack Files"
                        FontSize="28"
                        FontWeight="Bold"
