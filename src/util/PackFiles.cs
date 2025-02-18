@@ -56,7 +56,22 @@ public class PackFiles
             }
 
             string localizedJson = await response.Content.ReadAsStringAsync();
-            await File.WriteAllTextAsync(Path.Combine(AppDataPath(), "localized.json"), localizedJson);
+            string localizedFilePath = Path.Combine(AppDataPath(), "localized.json");
+
+            // Check if the content is different before writing
+            if (File.Exists(localizedFilePath))
+            {
+                string currentLocalizedJson = await File.ReadAllTextAsync(localizedFilePath);
+                if (localizedJson != currentLocalizedJson)
+                {
+                    await File.WriteAllTextAsync(localizedFilePath, localizedJson);
+                }
+            }
+            else
+            {
+                // If the file doesn't exist, write the new content
+                await File.WriteAllTextAsync(localizedFilePath, localizedJson);
+            }
 
             // Media mappings
             response = await client.GetAsync(MediaMappings);
@@ -66,13 +81,29 @@ public class PackFiles
             }
 
             string mediaJson = await response.Content.ReadAsStringAsync();
-            await File.WriteAllTextAsync(Path.Combine(AppDataPath(), "media.json"), mediaJson);
+            string mediaFilePath = Path.Combine(AppDataPath(), "media.json");
+
+            // Check if the content is different before writing
+            if (File.Exists(mediaFilePath))
+            {
+                string currentMediaJson = await File.ReadAllTextAsync(mediaFilePath);
+                if (mediaJson != currentMediaJson)
+                {
+                    await File.WriteAllTextAsync(mediaFilePath, mediaJson);
+                }
+            }
+            else
+            {
+                // If the file doesn't exist, write the new content
+                await File.WriteAllTextAsync(mediaFilePath, mediaJson);
+            }
         }
         catch (Exception ex)
         {
             throw new Exception("Unexpected error: " + ex.Message);
         }
     }
+
 
     public static void Pack(string repakPath, bool compression, string packFolderPath, string folderPath, string modName)
     {
