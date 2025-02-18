@@ -104,7 +104,6 @@ public class PackFiles
         }
     }
 
-
     public static void Pack(string repakPath, bool compression, string packFolderPath, string folderPath, string modName)
     {
         try
@@ -134,7 +133,7 @@ public class PackFiles
                 string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(filePath);
 
                 // Skip non uassset, json, ubulk, and uexp files
-                if(!fileName.EndsWith(".uasset") && !fileName.EndsWith(".json") && !fileName.EndsWith(".ubulk") && !fileName.EndsWith(".uexp"))
+                if (!fileName.EndsWith(".uasset") && !fileName.EndsWith(".json") && !fileName.EndsWith(".ubulk") && !fileName.EndsWith(".uexp"))
                 {
                     continue;
                 }

@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+using static PD3AudioModder.WAVE;
 
 public class AudioConverter
 {
@@ -135,6 +136,8 @@ public class AudioConverter
 
         if (process.ExitCode != 0)
         {
+            var warningDialog = new WarningDialog($"FFmpeg conversion failed with exit code {process.ExitCode}.\nError: {errorOutput}");
+            warningDialog.Show();
             throw new Exception($"FFmpeg conversion failed with exit code {process.ExitCode}. Error: {errorOutput}");
         }
 

@@ -13,6 +13,8 @@ namespace PD3AudioModder
 
             if (header.type != 1)
             {
+                var warningDialog = new WarningDialog(String.Format("wwise_pd3 error:\nPAYDAY 3 only supports PCM, not type {0}", header.type));
+                warningDialog.Show();
                 Console.WriteLine(String.Format("PAYDAY 3 only supports PCM, not type {0}", header.type));
             }
 
