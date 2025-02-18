@@ -5,11 +5,19 @@
              <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
 	<Application.Resources>
-		<Color x:Key="SystemAccentColor">#3282B8</Color>
+		<Color x:Key="SystemAccentColor">#3ca1e6</Color>
 		<SolidColorBrush x:Key="SystemAccentBrush" Color="{DynamicResource SystemAccentColor}"/>
 	</Application.Resources>
 
+	<!-- https://github.com/AvaloniaUI/Avalonia/pull/11097#issue-1679291634 -->
 	<Application.Styles>
-        <FluentTheme />
+		<FluentTheme>
+			<FluentTheme.Palettes>
+				<ColorPaletteResources x:Key="Light"
+					Accent="#3ca1e6" />
+				<ColorPaletteResources x:Key="Dark"
+                    Accent="#3ca1e6" />
+			</FluentTheme.Palettes>
+		</FluentTheme>
     </Application.Styles>
 </Application>
