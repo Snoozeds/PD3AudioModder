@@ -1,6 +1,6 @@
 ![A blue waveform logo on a dark background. It consists of angular blue lines forming several peaks and valleys that create a zigzag pattern similar to an audio waveform or electrical signal.](/wiki/assets/img/PAM-banner-wide.png)
 
-A small program for editing PAYDAY 3 (and other non-iostore Unreal Engine games)'s audio files. \
+A small program for editing PAYDAY 3's audio files. \
 <br />
 [![Ko-fi Badge](https://img.shields.io/badge/Ko--fi-F16061?style=for-the-badge&logo=ko-fi&logoColor=white)](https://ko-fi.com/snoozeds) [![Patreon](https://img.shields.io/badge/Patreon-F96854?style=for-the-badge&logo=patreon&logoColor=white)](https://patreon.com/snoozeds)
 
