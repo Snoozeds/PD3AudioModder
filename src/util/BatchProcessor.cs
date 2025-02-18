@@ -219,8 +219,8 @@ namespace PD3AudioModder.util
             File.Copy(wemPath, tempUbulkPath, true);
 
             // Save the converted files
-            string ubulkSavePath = Path.Combine(outputDirectory, baseName + ".ubulk");
-            string uexpSavePath = Path.Combine(outputDirectory, baseName + ".uexp");
+            string ubulkSavePath = Path.Combine(outputDirectory, Path.GetFileName(ubulkPath));
+            string uexpSavePath = Path.Combine(outputDirectory, Path.GetFileName(uexpPath));
 
             File.Copy(tempUbulkPath, ubulkSavePath, true);
             File.Copy(tempUexpPath, uexpSavePath, true);
