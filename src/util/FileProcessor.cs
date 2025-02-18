@@ -2,16 +2,15 @@
 using Avalonia.Platform.Storage;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace PD3AudioModder.util
 {
     internal class FileProcessor
     {
+
+        private AppConfig? _appConfig;
 
         public void UpdateStatus(string message, TextBlock statusTextBlock)
         {
@@ -22,7 +21,7 @@ namespace PD3AudioModder.util
         }
 
         public async Task ProcessFiles(string uploadedAudioPath, string uploadedUbulkPath, string uploadedUexpPath,
-            string uploadedUassetPath, string uploadedJsonPath, string tempDirectory, TextBlock statusTextBlock, Button convertButton, WindowBase ParentWindow)
+            string uploadedUassetPath, string uploadedJsonPath, string tempDirectory, bool useDefaultExportPath, TextBlock statusTextBlock, Button convertButton, WindowBase ParentWindow)
         {
             if (uploadedAudioPath == null || uploadedUbulkPath == null || uploadedUexpPath == null ||
                 (uploadedJsonPath == null && uploadedUassetPath == null))
@@ -89,20 +88,37 @@ namespace PD3AudioModder.util
                 UpdateStatus("Replacing temporary ubulk file with new WEM...", statusTextBlock);
                 File.Copy(wemPath, tempUbulkPath, true);
 
-                // Ask user where to save the files
-                UpdateStatus("Select where to save converted files...", statusTextBlock);
-                var folderResult = await ParentWindow.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
+                // Ask user where to save the files, or use the default export path
+                _appConfig = AppConfig.Load();
+                IStorageFolder? folderResult = null;
+
+                if(!String.IsNullOrEmpty(_appConfig.DefaultExportFolder) && useDefaultExportPath) {
+                    folderResult = await ParentWindow.StorageProvider.TryGetFolderFromPathAsync(_appConfig.DefaultExportFolder);
+                }
+
+                if (folderResult == null || !useDefaultExportPath)
                 {
-                    Title = "Choose where to save converted files",
-                    DefaultExtension = "",
-                    ShowOverwritePrompt = true,
-                    SuggestedFileName = Path.GetFileNameWithoutExtension(uploadedUbulkPath)
-                });
+                    UpdateStatus("Select where to save converted files...", statusTextBlock);
+                    var fileResult = await ParentWindow.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
+                    {
+                        Title = "Choose where to save converted files",
+                        DefaultExtension = "",
+                        ShowOverwritePrompt = true,
+                        SuggestedFileName = Path.GetFileNameWithoutExtension(uploadedUbulkPath)
+                    });
+
+                    if (fileResult == null)
+                    {
+                        UpdateStatus("Save operation cancelled", statusTextBlock);
+                        return;
+                    }
+                    folderResult = await fileResult.GetParentAsync();
+                }
 
                 if (folderResult != null)
                 {
                     string saveDirectory = Path.GetDirectoryName(folderResult.Path.LocalPath)!;
-                    string baseFileName = Path.GetFileNameWithoutExtension(folderResult.Path.LocalPath);
+                    string baseFileName = Path.GetFileNameWithoutExtension(uploadedUbulkPath);
 
                     // Save all files with the chosen base filename
                     UpdateStatus("Saving converted files...", statusTextBlock);

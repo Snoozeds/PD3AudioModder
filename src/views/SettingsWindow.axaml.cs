@@ -108,6 +108,8 @@ namespace PD3AudioModder
                 _exportFolderTextBox.Text = result;
                 AppConfig.Instance.DefaultExportFolder = result;
                 AppConfig.Instance.Save();
+                _mainWindow!.defaultExportFolder = result;
+                _mainWindow!.UpdateExportFolderCheckboxes();
             }
         }
 

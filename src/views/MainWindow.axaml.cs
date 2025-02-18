@@ -12,12 +12,16 @@ namespace PD3AudioModder
 {
     public partial class MainWindow : Window
     {
+        // Default folder to save converted files to
+        public string? defaultExportFolder { get; set; }
+
         // Single file operation
         private string? uploadedAudioPath;
         private string? uploadedUbulkPath;
         private string? uploadedUexpPath;
         private string? uploadedUassetPath;
         private string? uploadedJsonPath;
+        private CheckBox? useExportFolderCheckBox;
         private TextBlock? statusTextBlock;
         private Button? convertButton;
 
@@ -31,6 +35,7 @@ namespace PD3AudioModder
         private Button? selectAudioFolderButton;
         private Button? selectGameFilesFolderButton;
         private Button? batchConvertButton;
+        private CheckBox? batchUseExportFolderCheckBox;
         private TextBlock? batchStatusTextBlock;
         private ProgressBar? batchProgressBar;
 
@@ -46,6 +51,15 @@ namespace PD3AudioModder
             _fileProcessor = new FileProcessor();
 
             _batchProcessor = new BatchProcessor();
+
+            if (String.IsNullOrEmpty(_appConfig.DefaultExportFolder) || _appConfig.DefaultExportFolder == "null")
+            {
+                defaultExportFolder = "Not set, change in settings.";
+            }
+            else
+            {
+                defaultExportFolder = _appConfig.DefaultExportFolder;
+            }
 
             DataContext = this;
             InitializeComponent();
@@ -103,16 +117,22 @@ namespace PD3AudioModder
             var uploadButton = this.FindControl<Button>("UploadButton")!;
             convertButton = this.FindControl<Button>("ConvertButton")!;
             convertButton.IsEnabled = false;// Start with the convert button disabled
+            useExportFolderCheckBox = this.FindControl<CheckBox>("UseExportFolder")!;
+            useExportFolderCheckBox.IsEnabled = defaultExportFolder != "Not set, change in settings.";
+            useExportFolderCheckBox.IsChecked = useExportFolderCheckBox.IsEnabled;
             statusTextBlock = this.FindControl<TextBlock>("StatusTextBlock")!;
 
             uploadButton.Click += async (_, _) => await UploadFile();
-            convertButton.Click += async (_, _) => await _fileProcessor.ProcessFiles(uploadedAudioPath!, uploadedUbulkPath!, uploadedUexpPath!, uploadedUassetPath!, uploadedJsonPath!, tempDirectory, statusTextBlock!, convertButton!, this);
+            convertButton.Click += async (_, _) => await _fileProcessor.ProcessFiles(uploadedAudioPath!, uploadedUbulkPath!, uploadedUexpPath!, uploadedUassetPath!, uploadedJsonPath!, tempDirectory, useExportFolderCheckBox.IsChecked ?? false, statusTextBlock!, convertButton!, this);
 
             // Batch file operation
             selectAudioFolderButton = this.FindControl<Button>("SelectAudioFolderButton")!;
             selectGameFilesFolderButton = this.FindControl<Button>("SelectGameFilesFolderButton")!;
             batchConvertButton = this.FindControl<Button>("BatchConvertButton")!;
             batchConvertButton.IsEnabled = false;// Start with the batch convert button disabled
+            batchUseExportFolderCheckBox = this.FindControl<CheckBox>("BatchUseExportFolder")!;
+            batchUseExportFolderCheckBox.IsEnabled = defaultExportFolder != "Not set, change in settings.";
+            batchUseExportFolderCheckBox.IsChecked = batchUseExportFolderCheckBox.IsEnabled;
             batchStatusTextBlock = this.FindControl<TextBlock>("BatchStatusTextBlock")!;
             batchProgressBar = this.FindControl<ProgressBar>("BatchProgressBar")!;
 
@@ -120,6 +140,7 @@ namespace PD3AudioModder
             selectGameFilesFolderButton.Click += async (_, _) => await SelectGameFilesFolder();
             batchConvertButton.Click += async (_, _) => await _batchProcessor.ProcessBatch(
                 tempDirectory,
+                batchUseExportFolderCheckBox.IsChecked ?? false,
                 batchStatusTextBlock!,
                 batchProgressBar!,
                 batchConvertButton!,
@@ -153,7 +174,16 @@ namespace PD3AudioModder
             selectRepakButton.Click += (_, _) => SelectRepakButton_Click(repakPathTextBlock);
             compressCheckBox.IsCheckedChanged += (_, _) => CompressionEnabled = compressCheckBox.IsChecked;
             selectFolderButton.Click += (_, _) => SelectFolderButton_Click(packButton);
-            packButton.Click += (_, _) => PackButton_Click(PackFolderPath);
+            packButton.Click += (_, _) => PackButton_Click(PackFolderPath!);
+        }
+
+        public void UpdateExportFolderCheckboxes()
+        {
+            useExportFolderCheckBox!.IsEnabled = defaultExportFolder != "Not set, change in settings.";
+            useExportFolderCheckBox.IsChecked = useExportFolderCheckBox.IsEnabled;
+
+            batchUseExportFolderCheckBox!.IsEnabled = defaultExportFolder != "Not set, change in settings.";
+            batchUseExportFolderCheckBox.IsChecked = batchUseExportFolderCheckBox.IsEnabled;
         }
 
         private async Task UploadFile()

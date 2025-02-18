@@ -10,6 +10,7 @@ namespace PD3AudioModder.util
 {
     internal class BatchProcessor
     {
+        private AppConfig? _appConfig;
         private readonly FileProcessor _fileProcessor;
         private string _audioFolderPath = string.Empty;
         private string _gameFilesFolderPath = string.Empty;
@@ -44,7 +45,7 @@ namespace PD3AudioModder.util
             }
         }
 
-        public async Task ProcessBatch(string tempDirectory, TextBlock statusTextBlock, ProgressBar progressBar,
+        public async Task ProcessBatch(string tempDirectory, bool useDefaultExportPath, TextBlock statusTextBlock, ProgressBar progressBar,
             Button batchConvertButton, WindowBase parentWindow)
         {
             if (string.IsNullOrEmpty(_audioFolderPath) || string.IsNullOrEmpty(_gameFilesFolderPath))
@@ -55,20 +56,33 @@ namespace PD3AudioModder.util
 
             try
             {
-                // Ask for output directory
-                var folderResult = await parentWindow.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
-                {
-                    Title = "Choose output folder for converted files",
-                    AllowMultiple = false
-                });
+                // Ask for output directory, or use the default export path
+                _appConfig = AppConfig.Load();
+                IStorageFolder? folderResult = null;
 
-                if (!folderResult.Any())
+                if (!String.IsNullOrEmpty(_appConfig.DefaultExportFolder) && useDefaultExportPath)
                 {
-                    UpdateStatus("Batch conversion cancelled", statusTextBlock);
-                    return;
+                    folderResult = await parentWindow.StorageProvider.TryGetFolderFromPathAsync(_appConfig.DefaultExportFolder);
                 }
 
-                string outputDirectory = folderResult[0].Path.LocalPath;
+                if (folderResult == null || !useDefaultExportPath)
+                {
+                    var folderResults = await parentWindow.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
+                    {
+                        Title = "Choose output folder for converted files",
+                        AllowMultiple = false
+                    });
+
+                    if (!folderResults.Any())
+                    {
+                        UpdateStatus("Batch conversion cancelled", statusTextBlock);
+                        return;
+                    }
+
+                    folderResult = folderResults[0];
+                }
+
+                string outputDirectory = folderResult.Path.LocalPath;
 
                 // Get all audio files
                 var audioFiles = Directory.GetFiles(_audioFolderPath, "*.*")

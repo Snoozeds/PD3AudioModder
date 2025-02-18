@@ -2,6 +2,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:local="using:PD3AudioModder"
+		x:DataType="local:MainWindow"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="PD3AudioModder.MainWindow"
         Title="PD3AudioModder"
@@ -57,17 +59,33 @@
                                     CornerRadius="10"
                                     Margin="0,0,0,15"/>
 
+							<!-- Use Default Export Folder-->
+							<CheckBox x:Name="UseExportFolder"
+									  Grid.Row="3"
+									  Content="Use default export folder"
+									  ToolTip.Tip="{Binding defaultExportFolder}"
+									  ToolTip.ShowOnDisabled="True"
+									  IsChecked="False"
+									  HorizontalAlignment="Center"
+									  VerticalAlignment="Center"
+									  HorizontalContentAlignment="Center"
+									  VerticalContentAlignment="Center"
+									  FontSize="16"
+									  Foreground="#BBE1FA"
+									  Margin="0,0,0,30"/>
+
 							<!-- Status -->
 							<TextBlock x:Name="StatusTextBlock"
-                                       Grid.Row="3"
+                                       Grid.Row="4"
                                        Text="Status: Waiting for input..."
                                        HorizontalAlignment="Center"
                                        FontSize="16"
                                        Foreground="#BBE1FA"
-                                       Margin="10"
                                        TextWrapping="Wrap"
                                        MaxWidth="250"
-									   Height="40"/>
+									   Height="40"
+									   Margin="0,0,0,-75"
+									   />
 						</Grid>
 					</Border>
 				</Grid>
@@ -132,21 +150,35 @@
                                     CornerRadius="10"
                                     Margin="0,0,0,15"/>
 
+							<!-- Use Default Export Folder-->
+							<CheckBox x:Name="BatchUseExportFolder"
+									  Grid.Row="4"
+									  Content="Use default export folder"
+									  ToolTip.Tip="{Binding defaultExportFolder}"
+									  ToolTip.ShowOnDisabled="True"
+									  IsChecked="False"
+									  HorizontalAlignment="Center"
+									  VerticalAlignment="Center"
+									  HorizontalContentAlignment="Center"
+									  VerticalContentAlignment="Center"
+									  FontSize="16"
+									  Foreground="#BBE1FA"/>
+
 							<!-- Batch Status -->
 							<TextBlock x:Name="BatchStatusTextBlock"
-                                       Grid.Row="4"
+                                       Grid.Row="5"
                                        Text="Status: Waiting for folders..."
                                        HorizontalAlignment="Center"
                                        FontSize="16"
                                        Foreground="#BBE1FA"
-                                       Margin="10"
                                        TextWrapping="Wrap"
                                        MaxWidth="250"
-									   Height="40"/>
+									   Height="40"
+									   Margin="0,0,0,20"/>
 
 							<!-- Progress Bar -->
 							<ProgressBar x:Name="BatchProgressBar"
-                                        Grid.Row="5"
+                                        Grid.Row="6"
                                         Width="280"
                                         Height="20"
                                         Minimum="0"
@@ -155,7 +187,7 @@
                                         Foreground="#3282B8"
                                         Background="#0F4C75"
                                         CornerRadius="5"
-                                        Margin="0,10,0,0"/>
+                                        Margin="0,50,0,0"/>
 						</Grid>
 					</Border>
 				</Grid>
