@@ -1,4 +1,5 @@
 ﻿using Avalonia.Controls;
+using System.Collections.Generic;
 
 namespace PD3AudioModder
 {
@@ -13,19 +14,16 @@ namespace PD3AudioModder
         {
             InitializeComponent();
 
-            var singleFileSection = this.FindControl<StackPanel>("SingleFileSection");
-            var batchConversionSection = this.FindControl<StackPanel>("BatchConversionSection");
+            var sections = new Dictionary<string, StackPanel>
+            {
+                { "SingleFile", this.FindControl<StackPanel>("SingleFileSection")! },
+                { "BatchConversion", this.FindControl<StackPanel>("BatchConversionSection")! },
+                { "PackFiles", this.FindControl<StackPanel>("PackFilesSection")! }
+            };
 
-            // Show info based off of what tab user is in
-            if (activeTab == "SingleFile")
+            foreach (var section in sections)
             {
-                singleFileSection!.IsVisible = true;
-                batchConversionSection!.IsVisible = false;
-            }
-            else if (activeTab == "BatchConversion")
-            {
-                singleFileSection!.IsVisible = false;
-                batchConversionSection!.IsVisible = true;
+                section.Value.IsVisible = section.Key == activeTab;
             }
         }
 

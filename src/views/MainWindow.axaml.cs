@@ -422,7 +422,7 @@ namespace PD3AudioModder
             string activeTab = selectedTab switch
             {
                 "Single File" => "SingleFile",
-                "Batch Files" => "BatchConversion",
+                "Batch Conversion" => "BatchConversion",
                 "Pack Files" => "PackFiles",
                 _ => "single"
             };
