@@ -389,7 +389,13 @@ namespace PD3AudioModder
 
             // Determine which tab is selected
             var selectedTab = ((TabItem)tabControl!.SelectedItem!).Header!.ToString();
-            string activeTab = selectedTab == "Single File" ? "SingleFile" : "BatchConversion";
+            string activeTab = selectedTab switch
+            {
+                "Single File" => "SingleFile",
+                "Batch Files" => "BatchConversion",
+                "Pack Files" => "PackFiles",
+                _ => "single"
+            };
 
             // Show help window with the active tab
             var helpWindow = new HelpWindow(activeTab);
