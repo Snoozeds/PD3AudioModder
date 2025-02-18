@@ -201,7 +201,7 @@ public class PackFiles
                         RedirectStandardOutput = true,
                         RedirectStandardError = true,
                         UseShellExecute = false,
-                        CreateNoWindow = true
+                        CreateNoWindow = false
                     }
                 };
 

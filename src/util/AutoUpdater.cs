@@ -132,7 +132,7 @@ done";
                 FileName = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "cmd.exe" : "bash",
                 Arguments = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? $"/c start /min \"\" \"{updateScriptPath}.bat\"" : updateScriptPath + ".sh",
                 UseShellExecute = true,
-                CreateNoWindow = true
+                CreateNoWindow = false
             });
 
             Environment.Exit(0);

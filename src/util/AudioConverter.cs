@@ -116,7 +116,7 @@ public class AudioConverter
             RedirectStandardOutput = true,
             RedirectStandardError = true,
             UseShellExecute = false,
-            CreateNoWindow = true
+            CreateNoWindow = false
         };
 
         using var process = Process.Start(processStartInfo)
