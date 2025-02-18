@@ -10,6 +10,8 @@ namespace PD3AudioModder
         public static readonly bool AutoUpdateEnabled = true;
         public static readonly string? RepakPath = null;
         public static readonly string? FfmpegOptions = "-acodec pcm_s16le -ar 48000 -ac 2";
+        public static readonly string? DefaultExportFolder = null;
+        public static readonly bool UseDefaultExportFolder = false;
         public static readonly bool MuteNotificationSound = false;
     }
 
@@ -21,6 +23,7 @@ namespace PD3AudioModder
         public string? RepakPath { get; set; } = DefaultConfig.RepakPath;
         public string? FfmpegOptions { get; set; } = DefaultConfig.FfmpegOptions;
         public string? DefaultExportFolder { get; set; }
+        public bool UseDefaultExportFolder { get; set; }
         public bool MuteNotificationSound { get; set; }
 
         public static AppConfig Instance
@@ -67,6 +70,7 @@ namespace PD3AudioModder
                 { "RepakPath", config => config.RepakPath == null || File.Exists(config.RepakPath) },
                 { "FfmpegOptions", config => true },
                 { "DefaultExportFolder", config => true },
+                { "UseDefaultExportFolder", config => config.UseDefaultExportFolder == true || config.UseDefaultExportFolder == false },
                 { "MuteNotificationSound", config => config.MuteNotificationSound == true || config.MuteNotificationSound == false }
             };
         }

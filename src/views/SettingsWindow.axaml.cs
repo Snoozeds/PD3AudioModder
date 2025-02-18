@@ -2,7 +2,9 @@
 using Avalonia.Controls.Notifications;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
 namespace PD3AudioModder
 {
@@ -13,6 +15,7 @@ namespace PD3AudioModder
         private ToggleSwitch? _updateToggle;
         private ToggleSwitch? _muteNotificationSoundToggle;
         private TextBox? _exportFolderTextBox;
+        private ToggleSwitch? _useExportFolderToggle;
         private TextBox? _repakPathTextBox;
         private TextBox? _ffmpegOptionsTextBox;
 
@@ -46,11 +49,22 @@ namespace PD3AudioModder
             DataContext = this;
         }
 
-        private void InitializeControls()
+    private void InitializeControls()
         {
             _updateToggle = this.FindControl<ToggleSwitch>("UpdateToggle");
             _muteNotificationSoundToggle = this.FindControl<ToggleSwitch>("MuteNotificationSoundToggle");
-            _exportFolderTextBox = this.FindControl<TextBox>("ExportFolderTextBox");
+            _exportFolderTextBox = this.FindControl<TextBox>("ExportFolderTextBox")!;
+            _useExportFolderToggle = this.FindControl<ToggleSwitch>("UseExportFolderToggle");
+
+            if (String.IsNullOrEmpty(AppConfig.Instance.DefaultExportFolder) || AppConfig.Instance.DefaultExportFolder == "null")
+            {
+                _useExportFolderToggle!.IsChecked = false;
+                _useExportFolderToggle!.IsEnabled = false;
+            } else if(AppConfig.Instance.UseDefaultExportFolder == true)
+            {
+                _useExportFolderToggle!.IsChecked = true;
+            }
+
             _repakPathTextBox = this.FindControl<TextBox>("RepakPathTextBox");
             _ffmpegOptionsTextBox = this.FindControl<TextBox>("FFmpegOptionsTextBox");
 
@@ -111,6 +125,19 @@ namespace PD3AudioModder
                 _mainWindow!.defaultExportFolder = result;
                 _mainWindow!.UpdateExportFolderCheckboxes();
             }
+        }
+
+        private void OnUseExportFolderToggleChecked(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+        {
+            AppConfig.Instance.UseDefaultExportFolder = true;
+            AppConfig.Instance.Save();
+            _mainWindow!.UpdateExportFolderCheckboxes();
+        }
+        private void OnUseExportFolderToggleUnchecked(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+        {
+            AppConfig.Instance.UseDefaultExportFolder = false;
+            AppConfig.Instance.Save();
+            _mainWindow!.UpdateExportFolderCheckboxes();
         }
 
         private async void OnRepakPathBrowseButtonClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)

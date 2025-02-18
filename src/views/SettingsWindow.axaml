@@ -25,7 +25,8 @@
 						<TextBlock Text="Mute Notification Sound"
 								   Foreground="#BBE1FA"
 								   FontSize="18"
-								   Margin="0,20,0,0"/>
+								   Margin="0,20,0,0"
+								   ToolTip.Tip="Mutes sound that warning windows play."/>
 						<ToggleSwitch Name="MuteNotificationSoundToggle"
 									  Foreground="#BBE1FA"
 									  OnContent="Enabled"
@@ -37,7 +38,8 @@
 						<TextBlock Text="Default Export Folder"
 								 Foreground="#BBE1FA"
 								 FontSize="18"
-								 Margin="0,10,0,0"/>
+								 Margin="0,10,0,0"
+								 ToolTip.Tip="The folder that files are saved in when 'Use default export folder' is enabled." />
 						<TextBox Name="ExportFolderTextBox"
 								 Text=""
 								 Background="#2C3E50"
@@ -59,11 +61,29 @@
 								Click="OnExportFolderBrowseButtonClick"
 								VerticalContentAlignment="Center"
 								HorizontalContentAlignment="Center"/>
+
+						<!-- Use Export Folder By Default -->
+						<TextBlock Text="Use Export Folder By Default"
+								   ToolTip.Tip="Enables the 'Use default export folder' checkbox by default. Normal behaviour is it starts disabled."
+								   Foreground="#BBE1FA"
+								   FontSize="18"
+								   Margin="0,10,0,0"/>
+						<ToggleSwitch Name="UseExportFolderToggle"
+									  Foreground="#BBE1FA"
+									  OnContent="Enabled"
+									  OffContent="Disabled"
+									  Checked="OnUseExportFolderToggleChecked"
+									  Unchecked="OnUseExportFolderToggleUnchecked"
+									  VerticalAlignment="Center"
+									  HorizontalAlignment="Left"
+									  FontSize="18"/>
+						
 						<!-- Repak path -->
 						<TextBlock Text="Repak Path"
 								 Foreground="#BBE1FA"
 								 FontSize="18"
-								   Margin="0,10,0,0"/>
+								 Margin="0,10,0,0"
+								 ToolTip.Tip="repak.exe path that is used in the Pack Files section."/>
 						<TextBox Name="RepakPathTextBox"
 								 Text=""
 								 Background="#2C3E50"
@@ -90,7 +110,8 @@
 						<TextBlock Text="FFmpeg Options"
 								 Foreground="#BBE1FA"
 								 FontSize="18"
-								 Margin="0,10,0,0"/>
+								 Margin="0,10,0,0"
+								 ToolTip.Tip="Options used on the audio file uploaded, when converting it to WAV (which then gets converted to WEM/ubulk)."/>
 						<TextBlock Text="Only change if you know what you are doing!"
 								 Foreground="#BBE1FA"
 								 FontSize="14"/>

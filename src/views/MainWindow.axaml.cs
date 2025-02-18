@@ -119,7 +119,7 @@ namespace PD3AudioModder
             convertButton.IsEnabled = false;// Start with the convert button disabled
             useExportFolderCheckBox = this.FindControl<CheckBox>("UseExportFolder")!;
             useExportFolderCheckBox.IsEnabled = defaultExportFolder != "Not set, change in settings.";
-            useExportFolderCheckBox.IsChecked = useExportFolderCheckBox.IsEnabled;
+            useExportFolderCheckBox.IsChecked = useExportFolderCheckBox.IsEnabled && _appConfig.UseDefaultExportFolder == true;
             statusTextBlock = this.FindControl<TextBlock>("StatusTextBlock")!;
 
             uploadButton.Click += async (_, _) => await UploadFile();
@@ -132,7 +132,7 @@ namespace PD3AudioModder
             batchConvertButton.IsEnabled = false;// Start with the batch convert button disabled
             batchUseExportFolderCheckBox = this.FindControl<CheckBox>("BatchUseExportFolder")!;
             batchUseExportFolderCheckBox.IsEnabled = defaultExportFolder != "Not set, change in settings.";
-            batchUseExportFolderCheckBox.IsChecked = batchUseExportFolderCheckBox.IsEnabled;
+            batchUseExportFolderCheckBox.IsChecked = useExportFolderCheckBox.IsEnabled && _appConfig.UseDefaultExportFolder == true;
             batchStatusTextBlock = this.FindControl<TextBlock>("BatchStatusTextBlock")!;
             batchProgressBar = this.FindControl<ProgressBar>("BatchProgressBar")!;
 
@@ -180,10 +180,10 @@ namespace PD3AudioModder
         public void UpdateExportFolderCheckboxes()
         {
             useExportFolderCheckBox!.IsEnabled = defaultExportFolder != "Not set, change in settings.";
-            useExportFolderCheckBox.IsChecked = useExportFolderCheckBox.IsEnabled;
+            useExportFolderCheckBox.IsChecked = useExportFolderCheckBox.IsEnabled && AppConfig.Instance.UseDefaultExportFolder == true;
 
             batchUseExportFolderCheckBox!.IsEnabled = defaultExportFolder != "Not set, change in settings.";
-            batchUseExportFolderCheckBox.IsChecked = batchUseExportFolderCheckBox.IsEnabled;
+            batchUseExportFolderCheckBox.IsChecked = batchUseExportFolderCheckBox.IsEnabled && AppConfig.Instance.UseDefaultExportFolder == true;
         }
 
         private async Task UploadFile()
