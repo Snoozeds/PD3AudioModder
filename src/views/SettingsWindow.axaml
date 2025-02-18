@@ -116,14 +116,15 @@
 								 Foreground="#BBE1FA"
 								 FontSize="14"/>
 						<TextBox Name="FFmpegOptionsTextBox"
-								 Text=""
+								 Text="{Binding FFmpegOptions, Mode=TwoWay}"
 								 Background="#2C3E50"
 								 Foreground="#BBE1FA"
 								 FontSize="16"
 								 Padding="3"
 								 CornerRadius="10"
 								 Width="400"
-								 HorizontalAlignment="Left"/>
+								 HorizontalAlignment="Left"
+								 TextChanged="FFmpegOptionsTextChanged"/>
 						<Button Content="Reset ffmpeg options"
 								Name="ResetFFmpegOptionsButton"
 								Width="200"

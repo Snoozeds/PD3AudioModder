@@ -2,9 +2,7 @@
 using Avalonia.Controls.Notifications;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
-using System.Runtime.CompilerServices;
 
 namespace PD3AudioModder
 {
@@ -20,6 +18,7 @@ namespace PD3AudioModder
         private TextBox? _ffmpegOptionsTextBox;
 
         public string? Version { get; set; }
+        public string? FFmpegOptions { get; set; } = "-acodec pcm_s16le -ar 48000 -ac 2";
 
         public SettingsWindow()
         {
@@ -49,7 +48,7 @@ namespace PD3AudioModder
             DataContext = this;
         }
 
-    private void InitializeControls()
+        private void InitializeControls()
         {
             _updateToggle = this.FindControl<ToggleSwitch>("UpdateToggle");
             _muteNotificationSoundToggle = this.FindControl<ToggleSwitch>("MuteNotificationSoundToggle");
@@ -60,13 +59,19 @@ namespace PD3AudioModder
             {
                 _useExportFolderToggle!.IsChecked = false;
                 _useExportFolderToggle!.IsEnabled = false;
-            } else if(AppConfig.Instance.UseDefaultExportFolder == true)
+            }
+            else if (AppConfig.Instance.UseDefaultExportFolder == true)
             {
                 _useExportFolderToggle!.IsChecked = true;
             }
 
             _repakPathTextBox = this.FindControl<TextBox>("RepakPathTextBox");
             _ffmpegOptionsTextBox = this.FindControl<TextBox>("FFmpegOptionsTextBox");
+
+            if (!String.IsNullOrEmpty(AppConfig.Instance.FfmpegOptions))
+            {
+                FFmpegOptions = AppConfig.Instance.FfmpegOptions;
+            }
 
             if (_updateToggle != null)
             {
@@ -154,6 +159,15 @@ namespace PD3AudioModder
             {
                 _repakPathTextBox.Text = result[0];
                 AppConfig.Instance.RepakPath = result[0];
+                AppConfig.Instance.Save();
+            }
+        }
+
+        private void FFmpegOptionsTextChanged(object? sender, TextChangedEventArgs e)
+        {
+            if (_ffmpegOptionsTextBox != null)
+            {
+                AppConfig.Instance.FfmpegOptions = _ffmpegOptionsTextBox.Text;
                 AppConfig.Instance.Save();
             }
         }
