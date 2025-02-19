@@ -1,251 +1,186 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-		xmlns:local="using:PD3AudioModder"
+        xmlns:local="using:PD3AudioModder"
         x:Class="PD3AudioModder.SettingsWindow"
-		x:DataType="local:SettingsWindow"
+        x:DataType="local:SettingsWindow"
         Title="Settings"
-        Height="500" Width="700"
+        Height="600" Width="800"
         Background="#1B262C"
         Icon="avares://PD3AudioModder/assets/icons/audio.ico"
         WindowStartupLocation="CenterOwner">
-	<Grid>
+
+	<Grid Margin="20">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="*"/>
 			<RowDefinition Height="Auto"/>
 		</Grid.RowDefinitions>
 
-		<!-- Main Content -->
-		<TabControl Grid.Row="0" Margin="20">
-
+		<TabControl Grid.Row="0">
+			<!-- General Tab -->
 			<TabItem Header="General">
-				<ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-					<StackPanel Spacing="15" VerticalAlignment="Stretch">
+				<ScrollViewer Margin="-20,10,0,0">
+					<StackPanel Margin="20,0">
+						<!-- Notifications -->
+						<Border Background="#2C3E50" CornerRadius="12" Padding="20" Margin="0,10,0,20">
+							<StackPanel>
+								<TextBlock Text="Notifications" Foreground="#BBE1FA" FontSize="20" FontWeight="Bold" Margin="0,0,0,15"/>
+								<Grid ColumnDefinitions="*, Auto" Margin="0,0,0,10">
+									<StackPanel Grid.Column="0">
+										<TextBlock Text="Mute Notification Sound" Foreground="#BBE1FA" FontSize="16"/>
+										<TextBlock Text="Mutes sound that warning windows play." Foreground="#8B9DA7" FontSize="14"/>
+									</StackPanel>
+									<ToggleSwitch Grid.Column="1" Name="MuteNotificationSoundToggle" Foreground="#BBE1FA"/>
+								</Grid>
+							</StackPanel>
+						</Border>
 
-						<!-- Mute notification sound -->
-						<TextBlock Text="Mute Notification Sound"
-								   Foreground="#BBE1FA"
-								   FontSize="18"
-								   Margin="0,20,0,0"
-								   ToolTip.Tip="Mutes sound that warning windows play."/>
-						<ToggleSwitch Name="MuteNotificationSoundToggle"
-									  Foreground="#BBE1FA"
-									  OnContent="Enabled"
-									  OffContent="Disabled"
-									  VerticalAlignment="Center"
-									  HorizontalAlignment="Left"
-									  FontSize="18"/>
-						<!-- Export folder -->
-						<TextBlock Text="Default Export Folder"
-								 Foreground="#BBE1FA"
-								 FontSize="18"
-								 Margin="0,10,0,0"
-								 ToolTip.Tip="The folder that files are saved in when 'Use default export folder' is enabled." />
-						<TextBox Name="ExportFolderTextBox"
-								 Text=""
-								 Background="#2C3E50"
-								 Foreground="#BBE1FA"
-								 FontSize="16"
-								 Padding="5"
-								 CornerRadius="10"
-								 Width="400"
-								 HorizontalAlignment="Left"/>
-						<Button Content="Browse"
-								Name="ExportFolderBrowseButton"
-								Width="80"
-								Height="30"
-								Background="#3282B8"
-								Foreground="White"
-								FontSize="16"
-								Padding="5"
-								CornerRadius="10"
-								Click="OnExportFolderBrowseButtonClick"
-								VerticalContentAlignment="Center"
-								HorizontalContentAlignment="Center"/>
+						<!-- File Management -->
+						<Border Background="#2C3E50" CornerRadius="12" Padding="20" Margin="0,0,0,20">
+							<StackPanel>
+								<TextBlock Text="File Management" Foreground="#BBE1FA" FontSize="20" FontWeight="Bold" Margin="0,0,0,15"/>
 
-						<!-- Use Export Folder By Default -->
-						<TextBlock Text="Use Export Folder By Default"
-								   ToolTip.Tip="Enables the 'Use default export folder' checkbox by default. Normal behaviour is it starts disabled."
-								   Foreground="#BBE1FA"
-								   FontSize="18"
-								   Margin="0,10,0,0"/>
-						<ToggleSwitch Name="UseExportFolderToggle"
-									  Foreground="#BBE1FA"
-									  OnContent="Enabled"
-									  OffContent="Disabled"
-									  Checked="OnUseExportFolderToggleChecked"
-									  Unchecked="OnUseExportFolderToggleUnchecked"
-									  VerticalAlignment="Center"
-									  HorizontalAlignment="Left"
-									  FontSize="18"/>
-						
-						<!-- Repak path -->
-						<TextBlock Text="Repak Path"
-								 Foreground="#BBE1FA"
-								 FontSize="18"
-								 Margin="0,10,0,0"
-								 ToolTip.Tip="repak.exe path that is used in the Pack Files section."/>
-						<TextBox Name="RepakPathTextBox"
-								 Text=""
-								 Background="#2C3E50"
-								 Foreground="#BBE1FA"
-								 FontSize="16"
-								 Padding="3"
-								 CornerRadius="10"
-								 Width="400"
-								 HorizontalAlignment="Left"/>
-						<Button Content="Browse"
-								Name="RepakPathBrowseButton"
-								Width="80"
-								Height="30"
-								Background="#3282B8"
-								Foreground="White"
-								FontSize="16"
-								Padding="3"
-								CornerRadius="10"
-								Click="OnRepakPathBrowseButtonClick"
-								VerticalContentAlignment="Center"
-								HorizontalContentAlignment="Center"/>
+								<StackPanel Margin="0,0,0,20">
+									<TextBlock Text="Default Export Folder" Foreground="#BBE1FA" FontSize="16"/>
+									<TextBlock Text="The folder that files are saved in when 'Use default export folder' is enabled."
+                                             Foreground="#8B9DA7" FontSize="14" Margin="0,0,0,10"/>
+									<Grid ColumnDefinitions="*, Auto">
+										<TextBox Grid.Column="0" Name="ExportFolderTextBox" Background="#1B262C" Foreground="#BBE1FA" Margin="0,0,10,0"/>
+										<Button Grid.Column="1" Content="Browse" Name="ExportFolderBrowseButton"
+                                                Width="80" Height="30" Background="#3282B8" Foreground="White"
+                                                FontSize="16" Padding="5" CornerRadius="10"
+                                                VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+												Click="OnExportFolderBrowseButtonClick"/>
+									</Grid>
+								</StackPanel>
 
-						<!-- ffmpeg options -->
-						<TextBlock Text="FFmpeg Options"
-								 Foreground="#BBE1FA"
-								 FontSize="18"
-								 Margin="0,10,0,0"
-								 ToolTip.Tip="Options used on the audio file uploaded, when converting it to WAV (which then gets converted to WEM/ubulk)."/>
-						<TextBlock Text="Only change if you know what you are doing!"
-								 Foreground="#BBE1FA"
-								 FontSize="14"/>
-						<TextBox Name="FFmpegOptionsTextBox"
-								 Text="{Binding FFmpegOptions, Mode=TwoWay}"
-								 Background="#2C3E50"
-								 Foreground="#BBE1FA"
-								 FontSize="16"
-								 Padding="3"
-								 CornerRadius="10"
-								 Width="400"
-								 HorizontalAlignment="Left"
-								 TextChanged="FFmpegOptionsTextChanged"/>
-						<Button Content="Reset ffmpeg options"
-								Name="ResetFFmpegOptionsButton"
-								Width="200"
-								Height="30"
-								Background="#3282B8"
-								Foreground="White"
-								FontSize="16"
-								Padding="3"
-								CornerRadius="10"
-								Click="OnResetFFmpegOptionsClick"
-								VerticalContentAlignment="Center"
-								HorizontalContentAlignment="Center"/>
+								<Grid ColumnDefinitions="*, Auto" Margin="0,0,0,10">
+									<StackPanel Grid.Column="0" Margin="0,0,0,20">
+										<TextBlock Text="Use Export Folder By Default" Foreground="#BBE1FA" FontSize="16"/>
+										<TextBlock Text="Enables the 'Use default export folder' checkbox by default."
+                                                 Foreground="#8B9DA7" FontSize="14"/>
+									</StackPanel>
+									<ToggleSwitch Grid.Column="1" Name="UseExportFolderToggle" Foreground="#BBE1FA"
+												  Checked="OnUseExportFolderToggleChecked"
+												  Unchecked="OnUseExportFolderToggleUnchecked"/>
+								</Grid>
+
+								<StackPanel Margin="0,0,0,20">
+									<TextBlock Text="Repak Path" Foreground="#BBE1FA" FontSize="16"/>
+									<TextBlock Text="repak.exe path that is used in the Pack Files section."
+                                             Foreground="#8B9DA7" FontSize="14" Margin="0,0,0,10"/>
+									<Grid ColumnDefinitions="*, Auto">
+										<TextBox Grid.Column="0" Name="RepakPathTextBox" Background="#1B262C" Foreground="#BBE1FA" Margin="0,0,10,0"/>
+										<Button Grid.Column="1" Content="Browse" Name="RepakPathBrowseButton"
+                                                Width="80" Height="30" Background="#3282B8" Foreground="White"
+                                                FontSize="16" Padding="5" CornerRadius="10"
+                                                VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+												Click="OnRepakPathBrowseButtonClick"/>
+									</Grid>
+								</StackPanel>
+							</StackPanel>
+						</Border>
+
+						<!-- Advanced Settings -->
+						<Border Background="#2C3E50" CornerRadius="12" Padding="20" Margin="0,0,0,20">
+							<StackPanel>
+								<TextBlock Text="Advanced Settings" Foreground="#BBE1FA" FontSize="20" FontWeight="Bold"/>
+								<TextBlock Text="Only change if you know what you are doing!" Foreground="#E6C400" FontSize="16" Margin="0,0,0,15"/>
+
+								<StackPanel>
+									<TextBlock Text="FFmpeg Options" Foreground="#BBE1FA" FontSize="16"/>
+									<TextBlock Text="Options used when converting audio files to WAV format."
+                                             Foreground="#8B9DA7" FontSize="14" Margin="0,0,0,10"/>
+									<TextBox Name="FFmpegOptionsTextBox" Background="#1B262C" Foreground="#BBE1FA" Margin="0,0,0,10"
+											 TextChanged="FFmpegOptionsTextChanged"/>
+									<Button Content="Reset" Name="ResetFFmpegOptionsButton"
+                                            Width="80" Height="30" Background="#3282B8" Foreground="White"
+                                            FontSize="16" Padding="5" CornerRadius="10"
+                                            VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+											Click="OnResetFFmpegOptionsClick"/>
+								</StackPanel>
+							</StackPanel>
+						</Border>
 					</StackPanel>
 				</ScrollViewer>
 			</TabItem>
 
-			<!-- Updates Tab -->
+			<!-- Updates -->
 			<TabItem Header="Updates">
-				<StackPanel Spacing="15">
-					<TextBlock Text="Updates"
-                             Foreground="#BBE1FA"
-                             FontSize="28"
-                             HorizontalAlignment="Center"
-                             Margin="0,50,0,10"/>
-					<ToggleSwitch Content="Check for updates on launch"
-                                  Name="UpdateToggle"
-                                  Foreground="#BBE1FA"
-                                  OnContent="Enabled"
-                                  OffContent="Disabled"
-                                  VerticalAlignment="Center"
-                                  HorizontalAlignment="Center"
-                                  FontSize="18"/>
-					<Button Content="Check for Updates"
-                            Name="CheckUpdatesButton"
-                            HorizontalAlignment="Center"
-                            Width="250"
-                            Height="40"
-                            Background="#3282B8"
-                            Foreground="White"
-                            FontSize="16"
-                            Padding="10,5"
-                            CornerRadius="10"
-                            HorizontalContentAlignment="Center"
-                            VerticalContentAlignment="Center"
-                            Click="OnUpdateClick"/>
-				</StackPanel>
+				<Grid VerticalAlignment="Center" HorizontalAlignment="Center">
+					<StackPanel Spacing="20" MaxWidth="400">
+						<Image Source="{SvgImage avares://PD3AudioModder/assets/icons/download.svg}"
+							   Width="80" Height="80" HorizontalAlignment="Center"/>
+						<TextBlock Text="Software Updates" Foreground="#BBE1FA" FontSize="24"
+								 HorizontalAlignment="Center" FontWeight="Bold"/>
+						<Border Background="#2C3E50" CornerRadius="12" Padding="20">
+							<StackPanel Spacing="15">
+								<Grid ColumnDefinitions="*, Auto">
+									<StackPanel Grid.Column="0">
+										<TextBlock Text="Automatic Updates" Foreground="#BBE1FA" FontSize="16"/>
+										<TextBlock Text="Check for updates when the application launches."
+												 Foreground="#8B9DA7" FontSize="14" TextWrapping="Wrap"/>
+									</StackPanel>
+									<ToggleSwitch Grid.Column="1" Name="UpdateToggle" Foreground="#BBE1FA" HorizontalAlignment="Right" Margin="0,0,30,0"/>
+								</Grid>
+								<Grid ColumnDefinitions="*, Auto">
+									<StackPanel Grid.Column="0" Margin="0,0,20,0">
+										<TextBlock Text="Ask To Update" Foreground="#BBE1FA" FontSize="16"/>
+										<TextBlock Text="Asks if you want to update each time, or update automatically."
+												  Foreground="#8B9DA7" FontSize="14" TextWrapping="Wrap"/>
+									</StackPanel>
+									<ToggleSwitch Grid.Column="1" Name="AskUpdateToggle" Foreground="#BBE1FA" HorizontalAlignment="Right" Margin="0,0,30,0"/>
+								</Grid>
+								<Button Content="Check for Updates" Name="CheckUpdatesButton"
+										Width="350" Height="40" Background="#3282B8" Foreground="White"
+										FontSize="16" Padding="10,5" CornerRadius="10"
+										HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+										Click="OnUpdateClick"/>
+							</StackPanel>
+						</Border>
+					</StackPanel>
+				</Grid>
 			</TabItem>
 
-			<!-- About Tab -->
+			<!-- About -->
 			<TabItem Header="About">
-				<StackPanel Spacing="15">
-					<Image Source="{SvgImage avares://PD3AudioModder/assets/icons/audio.svg}" Width="64" Height="64" HorizontalAlignment="Center" Margin="0,20,0,0"/>
-					<TextBlock Text="PD3AudioModder"
-							  Foreground="#BBE1FA"
-							  FontSize="28"
-							  HorizontalAlignment="Center"/>
-					<TextBlock Text="{Binding Version}"
-							   Foreground="#BBE1FA"
-							  FontSize="18"
-							  HorizontalAlignment="Center"
-							  Margin="0,-10,0,0"/>
-					<TextBlock Text="Created by Snoozeds"
-							   Foreground="#BBE1FA"
-							   FontSize="18"
-							   HorizontalAlignment="Center"
-							   Margin="0,-10,0,0"/>
-					<Button Content="View Licenses"
-                            Name="ViewLicensesButton"
-                            HorizontalAlignment="Center"
-                            Width="250"
-                            Height="40"
-                            Background="#3282B8"
-                            Foreground="White"
-                            FontSize="16"
-                            Padding="10,5"
-                            CornerRadius="10"
-                            HorizontalContentAlignment="Center"
-                            VerticalContentAlignment="Center"
-                            Click="OnLicensesClick"/>
-					<Button Content="Report issue"
-							Name="ReportIssueButton"
-							HorizontalAlignment="Center"
-							Width="250"
-							Height="40"
-							Background="#3282B8"
-							Foreground="White"
-							FontSize="16"
-							Padding="10,5"
-							CornerRadius="10"
-							HorizontalContentAlignment="Center"
-							VerticalContentAlignment="Center"
-							Click="OnReportIssueClick"/>
-					<Button Content="Donate (ko-fi)"
-							Name="DonateButton"
-							HorizontalAlignment="Center"
-							Width="250"
-							Height="40"
-							Background="#3282B8"
-							Foreground="White"
-							FontSize="16"
-							Padding="10,5"
-							CornerRadius="10"
-							HorizontalContentAlignment="Center"
-							VerticalContentAlignment="Center"
-							Click="OnDonateClick"/>
-				</StackPanel>
+				<Grid VerticalAlignment="Center" HorizontalAlignment="Center">
+					<StackPanel Spacing="20" MaxWidth="400">
+						<Image Source="{SvgImage avares://PD3AudioModder/assets/icons/audio.svg}"
+                               Width="80" Height="80" HorizontalAlignment="Center"/>
+						<TextBlock Text="PD3AudioModder" Foreground="#BBE1FA" FontSize="28"
+                                 HorizontalAlignment="Center" FontWeight="Bold"/>
+						<TextBlock Text="{Binding Version}" Foreground="#BBE1FA" FontSize="16"
+                                 HorizontalAlignment="Center"/>
+						<TextBlock Text="Created by Snoozeds" Foreground="#BBE1FA" FontSize="16"
+                                 HorizontalAlignment="Center"/>
+
+						<StackPanel Spacing="10" Margin="0,20,0,0">
+							<Button Content="View Licenses" Name="ViewLicensesButton"
+                                    Width="250" Height="40" Background="#3282B8" Foreground="White"
+                                    FontSize="16" Padding="10,5" CornerRadius="10"
+                                    HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+									Click="OnLicensesClick"/>
+							<Button Content="Report Issue" Name="ReportIssueButton"
+                                    Width="250" Height="40" Background="#3282B8" Foreground="White"
+                                    FontSize="16" Padding="10,5" CornerRadius="10"
+                                    HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+									Click="OnReportIssueClick"/>
+							<Button Content="Donate (ko-fi)" Name="DonateButton"
+                                    Width="250" Height="40" Background="#3282B8" Foreground="White"
+                                    FontSize="16" Padding="10,5" CornerRadius="10"
+                                    HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+									Click="OnDonateClick"/>
+						</StackPanel>
+					</StackPanel>
+				</Grid>
 			</TabItem>
 		</TabControl>
 
 		<!-- Back Button -->
-		<Button Grid.Row="1"
-                x:Name="BackButton"
-                Content="Back"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Bottom"
-                Margin="10"
-                Background="#3282B8"
-                Foreground="White"
-                FontSize="16"
-                Padding="10,5"
-                CornerRadius="10"
-                Click="OnBackClick"/>
+		<Button Grid.Row="1" x:Name="BackButton" Content="Back"
+                HorizontalAlignment="Right" Margin="10"
+                Background="#3282B8" Foreground="White" FontSize="16"
+                Padding="10,5" CornerRadius="10"
+				Click="OnBackClick"/>
 	</Grid>
 </Window>

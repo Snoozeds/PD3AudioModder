@@ -8,6 +8,7 @@ namespace PD3AudioModder
     public static class DefaultConfig
     {
         public static readonly bool AutoUpdateEnabled = true;
+        public static readonly bool AskToUpdate = true;
         public static readonly string? RepakPath = null;
         public static readonly string? FfmpegOptions = "-acodec pcm_s16le -ar 48000 -ac 2";
         public static readonly string? DefaultExportFolder = null;
@@ -20,6 +21,7 @@ namespace PD3AudioModder
         private static AppConfig? _instance;
         private static readonly object _lock = new object();
         public bool AutoUpdateEnabled { get; set; } = DefaultConfig.AutoUpdateEnabled;
+        public bool? AskToUpdate { get; set; } = DefaultConfig.AskToUpdate;
         public string? RepakPath { get; set; } = DefaultConfig.RepakPath;
         public string? FfmpegOptions { get; set; } = DefaultConfig.FfmpegOptions;
         public string? DefaultExportFolder { get; set; }
@@ -76,6 +78,10 @@ namespace PD3AudioModder
                 {
                     "AutoUpdateEnabled",
                     config => config.AutoUpdateEnabled == true || config.AutoUpdateEnabled == false
+                },
+                {
+                    "AskToUpdate",
+                    config => config.AskToUpdate == true || config.AskToUpdate == false
                 },
                 {
                     "RepakPath",

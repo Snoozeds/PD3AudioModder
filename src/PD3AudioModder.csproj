@@ -12,12 +12,14 @@
   <ItemGroup>
     <None Remove="assets\icons\audio.ico" />
     <None Remove="assets\icons\audio.svg" />
+    <None Remove="assets\icons\download.svg" />
     <None Remove="assets\sounds\error.ogg" />
     <None Remove="assets\twemoji\26a0.svg" />
   </ItemGroup>
   <ItemGroup>
     <AvaloniaResource Include="assets\icons\audio.ico" />
     <AvaloniaResource Include="assets\icons\audio.svg" />
+    <AvaloniaResource Include="assets\icons\download.svg" />
     <AvaloniaResource Include="assets\twemoji\26a0.svg" />
   </ItemGroup>
 

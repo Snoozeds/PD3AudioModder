@@ -11,6 +11,7 @@ namespace PD3AudioModder
         private MainWindow? _mainWindow;
         private WindowNotificationManager? _notificationManager;
         private ToggleSwitch? _updateToggle;
+        private ToggleSwitch? _askUpdateToggle;
         private ToggleSwitch? _muteNotificationSoundToggle;
         private TextBox? _exportFolderTextBox;
         private ToggleSwitch? _useExportFolderToggle;
@@ -51,6 +52,7 @@ namespace PD3AudioModder
         private void InitializeControls()
         {
             _updateToggle = this.FindControl<ToggleSwitch>("UpdateToggle");
+            _askUpdateToggle = this.FindControl<ToggleSwitch>("AskUpdateToggle");
             _muteNotificationSoundToggle = this.FindControl<ToggleSwitch>(
                 "MuteNotificationSoundToggle"
             );
@@ -83,6 +85,11 @@ namespace PD3AudioModder
                 _updateToggle.IsCheckedChanged += OnUpdateToggleChanged;
             }
 
+            if(_askUpdateToggle != null)
+            {
+                _askUpdateToggle.IsCheckedChanged += OnAskUpdateToggleChanged;
+            }
+
             if (_muteNotificationSoundToggle != null)
             {
                 _muteNotificationSoundToggle.IsCheckedChanged +=
@@ -96,6 +103,9 @@ namespace PD3AudioModder
 
             if (_updateToggle != null)
                 _updateToggle.IsChecked = config.AutoUpdateEnabled;
+
+            if (_askUpdateToggle != null)
+                _askUpdateToggle.IsChecked = config.AskToUpdate;
 
             if (_muteNotificationSoundToggle != null)
                 _muteNotificationSoundToggle.IsChecked = config.MuteNotificationSound;
@@ -116,6 +126,19 @@ namespace PD3AudioModder
             {
                 var config = AppConfig.Instance;
                 config.AutoUpdateEnabled = _updateToggle.IsChecked ?? false;
+                config.Save();
+            }
+        }
+
+        private void OnAskUpdateToggleChanged(
+            object? sender,
+            Avalonia.Interactivity.RoutedEventArgs e
+        )
+        {
+            if (_askUpdateToggle != null)
+            {
+                var config = AppConfig.Instance;
+                config.AskToUpdate = _askUpdateToggle.IsChecked ?? false;
                 config.Save();
             }
         }
@@ -241,12 +264,25 @@ namespace PD3AudioModder
                 if (updateAvailable)
                 {
                     string currentVersion = updater.GetCurrentVersion();
-                    bool userWantsUpdate = await UpdateDialog.ShowDialogAsync(
-                        this,
-                        currentVersion,
-                        newVersion
-                    );
-                    if (userWantsUpdate)
+                    bool userWantsUpdate;
+
+                    if (
+                        AppConfig.Instance.AskToUpdate == true
+                        || AppConfig.Instance.AskToUpdate == null
+                    )
+                    {
+                        userWantsUpdate = await UpdateDialog.ShowDialogAsync(
+                            this,
+                            currentVersion,
+                            newVersion
+                        );
+
+                        if (userWantsUpdate)
+                        {
+                            await updater.DownloadUpdate();
+                        }
+                    }
+                    else if (AppConfig.Instance.AskToUpdate == false)
                     {
                         await updater.DownloadUpdate();
                     }
