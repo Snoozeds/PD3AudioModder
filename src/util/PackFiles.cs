@@ -1,18 +1,21 @@
-﻿using Newtonsoft.Json.Linq;
-using PD3AudioModder;
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
+using PD3AudioModder;
 
 public class PackFiles
 {
-    private readonly static string LocalizedMappings = "https://raw.githubusercontent.com/Snoozeds/PD3WwiseMappings/refs/heads/main/localized.json";
-    private readonly static string MediaMappings = "https://raw.githubusercontent.com/Snoozeds/PD3WwiseMappings/refs/heads/main/media.json";
+    private static readonly string LocalizedMappings =
+        "https://raw.githubusercontent.com/Snoozeds/PD3WwiseMappings/refs/heads/main/localized.json";
+    private static readonly string MediaMappings =
+        "https://raw.githubusercontent.com/Snoozeds/PD3WwiseMappings/refs/heads/main/media.json";
 
-    private readonly static string LocalizedPath = "PAYDAY3/Content/WwiseAudio/Localized/English_US_/Media";
-    private readonly static string MediaPath = "PAYDAY3/Content/WwiseAudio/Media";
+    private static readonly string LocalizedPath =
+        "PAYDAY3/Content/WwiseAudio/Localized/English_US_/Media";
+    private static readonly string MediaPath = "PAYDAY3/Content/WwiseAudio/Media";
 
     private static string AppDataPath()
     {
@@ -20,11 +23,20 @@ public class PackFiles
 
         if (OperatingSystem.IsWindows())
         {
-            appDataPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PD3AudioModder", "Mappings");
+            appDataPath = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                "PD3AudioModder",
+                "Mappings"
+            );
         }
         else if (OperatingSystem.IsLinux())
         {
-            appDataPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".config", "PD3AudioModder", "Mappings");
+            appDataPath = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
+                ".config",
+                "PD3AudioModder",
+                "Mappings"
+            );
         }
         else
         {
@@ -104,7 +116,13 @@ public class PackFiles
         }
     }
 
-    public static void Pack(string repakPath, bool compression, string packFolderPath, string folderPath, string modName)
+    public static void Pack(
+        string repakPath,
+        bool compression,
+        string packFolderPath,
+        string folderPath,
+        string modName
+    )
     {
         try
         {
@@ -133,7 +151,12 @@ public class PackFiles
                 string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(filePath);
 
                 // Skip non uassset, json, ubulk, and uexp files
-                if (!fileName.EndsWith(".uasset") && !fileName.EndsWith(".json") && !fileName.EndsWith(".ubulk") && !fileName.EndsWith(".uexp"))
+                if (
+                    !fileName.EndsWith(".uasset")
+                    && !fileName.EndsWith(".json")
+                    && !fileName.EndsWith(".ubulk")
+                    && !fileName.EndsWith(".uexp")
+                )
                 {
                     continue;
                 }
@@ -141,11 +164,20 @@ public class PackFiles
                 bool fileProcessed = false;
 
                 // Check if file (without extension) matches localized mapping
-                if (localizedMappings is JArray localizedArray &&
-                    localizedArray.Any(token => token.ToString().Equals(fileNameWithoutExtension, StringComparison.OrdinalIgnoreCase)))
+                if (
+                    localizedMappings is JArray localizedArray
+                    && localizedArray.Any(token =>
+                        token
+                            .ToString()
+                            .Equals(fileNameWithoutExtension, StringComparison.OrdinalIgnoreCase)
+                    )
+                )
                 {
                     string destinationPath = Path.Combine(localizedFullPath, fileName);
-                    Directory.CreateDirectory(Path.GetDirectoryName(destinationPath) ?? throw new Exception("Invalid destination path."));
+                    Directory.CreateDirectory(
+                        Path.GetDirectoryName(destinationPath)
+                            ?? throw new Exception("Invalid destination path.")
+                    );
                     File.Copy(filePath, destinationPath, true);
                     fileProcessed = true;
                     Console.WriteLine($"Copied {fileName} to Localized folder.");
@@ -154,11 +186,23 @@ public class PackFiles
                 // Check if file (without extension) matches media mapping
                 if (!fileProcessed)
                 {
-                    if (mediaMappings is JArray mediaArray &&
-                        mediaArray.Any(token => token.ToString().Equals(fileNameWithoutExtension, StringComparison.OrdinalIgnoreCase)))
+                    if (
+                        mediaMappings is JArray mediaArray
+                        && mediaArray.Any(token =>
+                            token
+                                .ToString()
+                                .Equals(
+                                    fileNameWithoutExtension,
+                                    StringComparison.OrdinalIgnoreCase
+                                )
+                        )
+                    )
                     {
                         string destinationPath = Path.Combine(mediaFullPath, fileName);
-                        Directory.CreateDirectory(Path.GetDirectoryName(destinationPath) ?? throw new Exception("Invalid destination path."));
+                        Directory.CreateDirectory(
+                            Path.GetDirectoryName(destinationPath)
+                                ?? throw new Exception("Invalid destination path.")
+                        );
                         File.Copy(filePath, destinationPath, true);
                         fileProcessed = true;
                         Console.WriteLine($"Copied {fileName} to Media folder.");
@@ -167,7 +211,9 @@ public class PackFiles
 
                 if (!fileProcessed)
                 {
-                    var warningDialog = new WarningDialog($"File {fileName} does not match any known mappings.\nThere may have been an update to the game recently,\nand the mappings have not been updated yet.");
+                    var warningDialog = new WarningDialog(
+                        $"File {fileName} does not match any known mappings.\nThere may have been an update to the game recently,\nand the mappings have not been updated yet."
+                    );
                     warningDialog.Show();
                 }
             }
@@ -178,7 +224,12 @@ public class PackFiles
         }
     }
 
-    public static async Task Repak(string repakPath, bool compression, string folderPath, string modName)
+    public static async Task Repak(
+        string repakPath,
+        bool compression,
+        string folderPath,
+        string modName
+    )
     {
         try
         {
@@ -201,20 +252,18 @@ public class PackFiles
                         RedirectStandardOutput = true,
                         RedirectStandardError = true,
                         UseShellExecute = false,
-                        CreateNoWindow = false
-                    }
+                        CreateNoWindow = false,
+                    },
                 };
 
                 process.Start();
                 process.WaitForExit();
             });
         }
-
         catch (Exception ex)
         {
             throw new Exception($"Error running repak: {ex.Message}");
         }
-
         finally
         {
             Directory.Delete(Path.Combine(folderPath, modName), true);

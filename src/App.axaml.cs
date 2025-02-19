@@ -1,9 +1,9 @@
+using System;
+using System.IO;
+using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using System.IO;
-using System.Threading.Tasks;
-using System;
 
 namespace PD3AudioModder
 {
@@ -36,7 +36,9 @@ namespace PD3AudioModder
             }
             else
             {
-                Console.Error.WriteLine("Unhandled Exception: Unknown error (ExceptionObject was null).");
+                Console.Error.WriteLine(
+                    "Unhandled Exception: Unknown error (ExceptionObject was null)."
+                );
             }
         }
 
@@ -51,12 +53,15 @@ namespace PD3AudioModder
         {
             try
             {
-                string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+                string appDataPath = Environment.GetFolderPath(
+                    Environment.SpecialFolder.ApplicationData
+                );
                 string logDirectory = Path.Combine(appDataPath, "PD3AudioModder", "Logs");
                 Directory.CreateDirectory(logDirectory);
 
                 string logFilePath = Path.Combine(logDirectory, "crashlog.txt");
-                string logMessage = $"{DateTime.Now}: {exceptionType} - {ex?.Message}\n{ex?.StackTrace}\n\n";
+                string logMessage =
+                    $"{DateTime.Now}: {exceptionType} - {ex?.Message}\n{ex?.StackTrace}\n\n";
 
                 File.AppendAllText(logFilePath, logMessage);
 

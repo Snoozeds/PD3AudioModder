@@ -1,16 +1,17 @@
-﻿using Avalonia.Controls.Notifications;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+using Avalonia.Controls.Notifications;
 
 namespace PD3AudioModder
 {
     public class AutoUpdater
     {
-        private const string VersionUrl = "https://raw.githubusercontent.com/Snoozeds/PD3AudioModder/main/version.txt";
+        private const string VersionUrl =
+            "https://raw.githubusercontent.com/Snoozeds/PD3AudioModder/main/version.txt";
         private const string LocalVersionFile = "version.txt";
         private const string TempUpdatePath = "update.zip";
         private readonly MainWindow _mainWindow;
@@ -32,7 +33,10 @@ namespace PD3AudioModder
             {
                 string latestVersion = await GetLatestVersion();
                 string currentVersion = File.Exists(LocalVersionFile)
-                    ? File.ReadAllText(LocalVersionFile).Replace("\r", "").Replace("\n", "").TrimEnd()
+                    ? File.ReadAllText(LocalVersionFile)
+                        .Replace("\r", "")
+                        .Replace("\n", "")
+                        .TrimEnd()
                     : "0.0.0";
 
                 if (latestVersion != currentVersion)
@@ -55,7 +59,10 @@ namespace PD3AudioModder
             try
             {
                 string currentVersion = File.Exists(LocalVersionFile)
-                    ? File.ReadAllText(LocalVersionFile).Replace("\r", "").Replace("\n", "").TrimEnd()
+                    ? File.ReadAllText(LocalVersionFile)
+                        .Replace("\r", "")
+                        .Replace("\n", "")
+                        .TrimEnd()
                     : "0.0.0";
                 return currentVersion;
             }
@@ -80,7 +87,8 @@ namespace PD3AudioModder
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 // Windows script
-                scriptContent = @$"
+                scriptContent =
+                    @$"
 @echo off
 timeout /t 1 /nobreak >nul
 :loop
@@ -100,7 +108,8 @@ if errorlevel 1 (
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
                 // Linux script
-                scriptContent = @$"
+                scriptContent =
+                    @$"
 #!/bin/bash
 while true; do
     if ! ps -p {currentProcessId} > /dev/null; then
@@ -115,25 +124,33 @@ while true; do
 done";
                 File.WriteAllText(updateScriptPath + ".sh", scriptContent);
                 // Make the script executable
-                Process.Start(new ProcessStartInfo
-                {
-                    FileName = "chmod",
-                    Arguments = $"+x {updateScriptPath}.sh",
-                    UseShellExecute = true
-                });
+                Process.Start(
+                    new ProcessStartInfo
+                    {
+                        FileName = "chmod",
+                        Arguments = $"+x {updateScriptPath}.sh",
+                        UseShellExecute = true,
+                    }
+                );
             }
             else
             {
                 throw new NotSupportedException("Unsupported OS platform.");
             }
 
-            Process.Start(new ProcessStartInfo
-            {
-                FileName = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "cmd.exe" : "bash",
-                Arguments = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? $"/c start /min \"\" \"{updateScriptPath}.bat\"" : updateScriptPath + ".sh",
-                UseShellExecute = true,
-                CreateNoWindow = false
-            });
+            Process.Start(
+                new ProcessStartInfo
+                {
+                    FileName = RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
+                        ? "cmd.exe"
+                        : "bash",
+                    Arguments = RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
+                        ? $"/c start /min \"\" \"{updateScriptPath}.bat\""
+                        : updateScriptPath + ".sh",
+                    UseShellExecute = true,
+                    CreateNoWindow = false,
+                }
+            );
 
             Environment.Exit(0);
         }
@@ -147,7 +164,9 @@ done";
                     HttpResponseMessage response = await client.GetAsync(VersionUrl);
                     if (!response.IsSuccessStatusCode)
                     {
-                        throw new Exception($"Failed to fetch version file. HTTP Status Code: {response.StatusCode}");
+                        throw new Exception(
+                            $"Failed to fetch version file. HTTP Status Code: {response.StatusCode}"
+                        );
                     }
                     string version = await response.Content.ReadAsStringAsync();
                     return version.Replace("\r", "").Replace("\n", "").TrimEnd();
@@ -161,7 +180,8 @@ done";
 
         public async Task DownloadUpdate()
         {
-            string url = "https://github.com/Snoozeds/PD3AudioModder/releases/latest/download/PD3AudioModder.zip";
+            string url =
+                "https://github.com/Snoozeds/PD3AudioModder/releases/latest/download/PD3AudioModder.zip";
 
             using (HttpClient client = new HttpClient())
             {

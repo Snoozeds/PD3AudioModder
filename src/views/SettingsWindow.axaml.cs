@@ -1,8 +1,8 @@
-﻿using Avalonia.Controls;
-using Avalonia.Controls.Notifications;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Avalonia.Controls;
+using Avalonia.Controls.Notifications;
 
 namespace PD3AudioModder
 {
@@ -51,11 +51,16 @@ namespace PD3AudioModder
         private void InitializeControls()
         {
             _updateToggle = this.FindControl<ToggleSwitch>("UpdateToggle");
-            _muteNotificationSoundToggle = this.FindControl<ToggleSwitch>("MuteNotificationSoundToggle");
+            _muteNotificationSoundToggle = this.FindControl<ToggleSwitch>(
+                "MuteNotificationSoundToggle"
+            );
             _exportFolderTextBox = this.FindControl<TextBox>("ExportFolderTextBox")!;
             _useExportFolderToggle = this.FindControl<ToggleSwitch>("UseExportFolderToggle");
 
-            if (String.IsNullOrEmpty(AppConfig.Instance.DefaultExportFolder) || AppConfig.Instance.DefaultExportFolder == "null")
+            if (
+                String.IsNullOrEmpty(AppConfig.Instance.DefaultExportFolder)
+                || AppConfig.Instance.DefaultExportFolder == "null"
+            )
             {
                 _useExportFolderToggle!.IsChecked = false;
                 _useExportFolderToggle!.IsEnabled = false;
@@ -80,7 +85,8 @@ namespace PD3AudioModder
 
             if (_muteNotificationSoundToggle != null)
             {
-                _muteNotificationSoundToggle.IsCheckedChanged += OnMuteNotificationSoundToggleChanged;
+                _muteNotificationSoundToggle.IsCheckedChanged +=
+                    OnMuteNotificationSoundToggleChanged;
             }
         }
 
@@ -114,12 +120,12 @@ namespace PD3AudioModder
             }
         }
 
-        private async void OnExportFolderBrowseButtonClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+        private async void OnExportFolderBrowseButtonClick(
+            object? sender,
+            Avalonia.Interactivity.RoutedEventArgs e
+        )
         {
-            var dialog = new OpenFolderDialog
-            {
-                Title = "Select Export Folder"
-            };
+            var dialog = new OpenFolderDialog { Title = "Select Export Folder" };
 
             var result = await dialog.ShowAsync(this);
             if (!string.IsNullOrEmpty(result) && _exportFolderTextBox != null)
@@ -132,26 +138,43 @@ namespace PD3AudioModder
             }
         }
 
-        private void OnUseExportFolderToggleChecked(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+        private void OnUseExportFolderToggleChecked(
+            object? sender,
+            Avalonia.Interactivity.RoutedEventArgs e
+        )
         {
             AppConfig.Instance.UseDefaultExportFolder = true;
             AppConfig.Instance.Save();
             _mainWindow!.UpdateExportFolderCheckboxes();
         }
-        private void OnUseExportFolderToggleUnchecked(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+
+        private void OnUseExportFolderToggleUnchecked(
+            object? sender,
+            Avalonia.Interactivity.RoutedEventArgs e
+        )
         {
             AppConfig.Instance.UseDefaultExportFolder = false;
             AppConfig.Instance.Save();
             _mainWindow!.UpdateExportFolderCheckboxes();
         }
 
-        private async void OnRepakPathBrowseButtonClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+        private async void OnRepakPathBrowseButtonClick(
+            object? sender,
+            Avalonia.Interactivity.RoutedEventArgs e
+        )
         {
             var dialog = new OpenFileDialog
             {
                 Title = "Select Repak Executable",
                 AllowMultiple = false,
-                Filters = new List<FileDialogFilter> { new FileDialogFilter { Name = "Executable", Extensions = new List<string> { "exe" } } }
+                Filters = new List<FileDialogFilter>
+                {
+                    new FileDialogFilter
+                    {
+                        Name = "Executable",
+                        Extensions = new List<string> { "exe" },
+                    },
+                },
             };
 
             var result = await dialog.ShowAsync(this);
@@ -172,7 +195,10 @@ namespace PD3AudioModder
             }
         }
 
-        private void OnResetFFmpegOptionsClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+        private void OnResetFFmpegOptionsClick(
+            object? sender,
+            Avalonia.Interactivity.RoutedEventArgs e
+        )
         {
             const string defaultOptions = "-acodec pcm_s16le -ar 48000 -ac 2";
             if (_ffmpegOptionsTextBox != null)
@@ -183,11 +209,15 @@ namespace PD3AudioModder
             }
         }
 
-        private void OnMuteNotificationSoundToggleChanged(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+        private void OnMuteNotificationSoundToggleChanged(
+            object? sender,
+            Avalonia.Interactivity.RoutedEventArgs e
+        )
         {
             if (_muteNotificationSoundToggle != null)
             {
-                AppConfig.Instance.MuteNotificationSound = _muteNotificationSoundToggle.IsChecked ?? false;
+                AppConfig.Instance.MuteNotificationSound =
+                    _muteNotificationSoundToggle.IsChecked ?? false;
                 AppConfig.Instance.Save();
             }
         }
@@ -211,7 +241,11 @@ namespace PD3AudioModder
                 if (updateAvailable)
                 {
                     string currentVersion = updater.GetCurrentVersion();
-                    bool userWantsUpdate = await UpdateDialog.ShowDialogAsync(this, currentVersion, newVersion);
+                    bool userWantsUpdate = await UpdateDialog.ShowDialogAsync(
+                        this,
+                        currentVersion,
+                        newVersion
+                    );
                     if (userWantsUpdate)
                     {
                         await updater.DownloadUpdate();
@@ -219,20 +253,24 @@ namespace PD3AudioModder
                 }
                 else
                 {
-                    _notificationManager.Show(new Notification(
-                        "No updates available",
-                        "You are already on the latest version.",
-                        NotificationType.Information
-                    ));
+                    _notificationManager.Show(
+                        new Notification(
+                            "No updates available",
+                            "You are already on the latest version.",
+                            NotificationType.Information
+                        )
+                    );
                 }
             }
             catch (Exception ex)
             {
-                _notificationManager.Show(new Notification(
-                    "Update Error",
-                    $"Failed to check for updates: {ex.Message}",
-                    NotificationType.Error
-                ));
+                _notificationManager.Show(
+                    new Notification(
+                        "Update Error",
+                        $"Failed to check for updates: {ex.Message}",
+                        NotificationType.Error
+                    )
+                );
             }
         }
 
@@ -253,7 +291,7 @@ namespace PD3AudioModder
                 ProcessStartInfo psi = new ProcessStartInfo
                 {
                     FileName = url,
-                    UseShellExecute = true
+                    UseShellExecute = true,
                 };
                 Process.Start(psi);
             }
@@ -261,11 +299,13 @@ namespace PD3AudioModder
             {
                 if (_notificationManager != null)
                 {
-                    _notificationManager.Show(new Notification(
-                        "Error",
-                        $"Failed to open URL: {ex.Message}",
-                        NotificationType.Error
-                    ));
+                    _notificationManager.Show(
+                        new Notification(
+                            "Error",
+                            $"Failed to open URL: {ex.Message}",
+                            NotificationType.Error
+                        )
+                    );
                 }
             }
         }

@@ -1,10 +1,10 @@
-﻿using Avalonia.Controls;
-using Avalonia.Platform.Storage;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Avalonia.Controls;
+using Avalonia.Platform.Storage;
 
 namespace PD3AudioModder.util
 {
@@ -25,7 +25,12 @@ namespace PD3AudioModder.util
             _fileProcessor = new FileProcessor(_mainWindow);
         }
 
-        public void UpdateStatus(string message, TextBlock statusTextBlock, ProgressBar? progressBar = null, double? progress = null)
+        public void UpdateStatus(
+            string message,
+            TextBlock statusTextBlock,
+            ProgressBar? progressBar = null,
+            double? progress = null
+        )
         {
             if (_mainWindow != null)
             {
@@ -38,19 +43,33 @@ namespace PD3AudioModder.util
             }
         }
 
-        public void UpdateButtonStates(string audioFolderPath, string gameFilesFolderPath, Button batchConvertButton)
+        public void UpdateButtonStates(
+            string audioFolderPath,
+            string gameFilesFolderPath,
+            Button batchConvertButton
+        )
         {
             if (batchConvertButton != null)
             {
                 // Enable button only if both folders are selected
-                batchConvertButton.IsEnabled = !string.IsNullOrEmpty(_audioFolderPath) && !string.IsNullOrEmpty(_gameFilesFolderPath);
+                batchConvertButton.IsEnabled =
+                    !string.IsNullOrEmpty(_audioFolderPath)
+                    && !string.IsNullOrEmpty(_gameFilesFolderPath);
             }
         }
 
-        public async Task ProcessBatch(string tempDirectory, bool useDefaultExportPath, TextBlock statusTextBlock, ProgressBar progressBar,
-            Button batchConvertButton, WindowBase parentWindow)
+        public async Task ProcessBatch(
+            string tempDirectory,
+            bool useDefaultExportPath,
+            TextBlock statusTextBlock,
+            ProgressBar progressBar,
+            Button batchConvertButton,
+            WindowBase parentWindow
+        )
         {
-            if (string.IsNullOrEmpty(_audioFolderPath) || string.IsNullOrEmpty(_gameFilesFolderPath))
+            if (
+                string.IsNullOrEmpty(_audioFolderPath) || string.IsNullOrEmpty(_gameFilesFolderPath)
+            )
             {
                 UpdateStatus("Error: Please select both folders first", statusTextBlock);
                 return;
@@ -64,16 +83,20 @@ namespace PD3AudioModder.util
 
                 if (!String.IsNullOrEmpty(_appConfig.DefaultExportFolder) && useDefaultExportPath)
                 {
-                    folderResult = await parentWindow.StorageProvider.TryGetFolderFromPathAsync(_appConfig.DefaultExportFolder);
+                    folderResult = await parentWindow.StorageProvider.TryGetFolderFromPathAsync(
+                        _appConfig.DefaultExportFolder
+                    );
                 }
 
                 if (folderResult == null || !useDefaultExportPath)
                 {
-                    var folderResults = await parentWindow.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
-                    {
-                        Title = "Choose output folder for converted files",
-                        AllowMultiple = false
-                    });
+                    var folderResults = await parentWindow.StorageProvider.OpenFolderPickerAsync(
+                        new FolderPickerOpenOptions
+                        {
+                            Title = "Choose output folder for converted files",
+                            AllowMultiple = false,
+                        }
+                    );
 
                     if (!folderResults.Any())
                     {
@@ -87,21 +110,41 @@ namespace PD3AudioModder.util
                 string outputDirectory = folderResult.Path.LocalPath;
 
                 // Get all audio files
-                var audioFiles = Directory.GetFiles(_audioFolderPath, "*.*")
-                    .Where(file => new[] { ".wav", ".mp3", ".ogg", ".flac", ".aiff", ".wma", ".m4a", ".aac", ".opus" }
-                        .Contains(Path.GetExtension(file).ToLower()))
+                var audioFiles = Directory
+                    .GetFiles(_audioFolderPath, "*.*")
+                    .Where(file =>
+                        new[]
+                        {
+                            ".wav",
+                            ".mp3",
+                            ".ogg",
+                            ".flac",
+                            ".aiff",
+                            ".wma",
+                            ".m4a",
+                            ".aac",
+                            ".opus",
+                        }.Contains(Path.GetExtension(file).ToLower())
+                    )
                     .ToList();
 
                 if (!audioFiles.Any())
                 {
-                    UpdateStatus("Error: No supported audio files found in the selected folder", statusTextBlock);
+                    UpdateStatus(
+                        "Error: No supported audio files found in the selected folder",
+                        statusTextBlock
+                    );
                     return;
                 }
 
                 // Get all game files
-                var gameFiles = Directory.GetFiles(_gameFilesFolderPath, "*.*", SearchOption.AllDirectories)
-                    .Where(file => new[] { ".ubulk", ".uexp", ".uasset", ".json" }
-                        .Contains(Path.GetExtension(file).ToLower()))
+                var gameFiles = Directory
+                    .GetFiles(_gameFilesFolderPath, "*.*", SearchOption.AllDirectories)
+                    .Where(file =>
+                        new[] { ".ubulk", ".uexp", ".uasset", ".json" }.Contains(
+                            Path.GetExtension(file).ToLower()
+                        )
+                    )
                     .ToList();
 
                 // Group game files by base name
@@ -119,14 +162,31 @@ namespace PD3AudioModder.util
                     // Find matching game files
                     if (gameFileGroups.TryGetValue(audioBaseName.ToLower(), out var matchingFiles))
                     {
-                        string? ubulkPath = matchingFiles.FirstOrDefault(f => f.EndsWith(".ubulk", StringComparison.OrdinalIgnoreCase));
-                        string? uexpPath = matchingFiles.FirstOrDefault(f => f.EndsWith(".uexp", StringComparison.OrdinalIgnoreCase));
-                        string? uassetPath = matchingFiles.FirstOrDefault(f => f.EndsWith(".uasset", StringComparison.OrdinalIgnoreCase));
-                        string? jsonPath = matchingFiles.FirstOrDefault(f => f.EndsWith(".json", StringComparison.OrdinalIgnoreCase));
+                        string? ubulkPath = matchingFiles.FirstOrDefault(f =>
+                            f.EndsWith(".ubulk", StringComparison.OrdinalIgnoreCase)
+                        );
+                        string? uexpPath = matchingFiles.FirstOrDefault(f =>
+                            f.EndsWith(".uexp", StringComparison.OrdinalIgnoreCase)
+                        );
+                        string? uassetPath = matchingFiles.FirstOrDefault(f =>
+                            f.EndsWith(".uasset", StringComparison.OrdinalIgnoreCase)
+                        );
+                        string? jsonPath = matchingFiles.FirstOrDefault(f =>
+                            f.EndsWith(".json", StringComparison.OrdinalIgnoreCase)
+                        );
 
-                        if (ubulkPath != null && uexpPath != null && (uassetPath != null || jsonPath != null))
+                        if (
+                            ubulkPath != null
+                            && uexpPath != null
+                            && (uassetPath != null || jsonPath != null)
+                        )
                         {
-                            UpdateStatus($"Processing {audioBaseName}...", statusTextBlock, progressBar, (processedFiles / totalFiles) * 100);
+                            UpdateStatus(
+                                $"Processing {audioBaseName}...",
+                                statusTextBlock,
+                                progressBar,
+                                (processedFiles / totalFiles) * 100
+                            );
 
                             try
                             {
@@ -144,37 +204,60 @@ namespace PD3AudioModder.util
                             }
                             catch (Exception ex)
                             {
-                                UpdateStatus($"Error processing {audioBaseName}: {ex.Message}", statusTextBlock);
+                                UpdateStatus(
+                                    $"Error processing {audioBaseName}: {ex.Message}",
+                                    statusTextBlock
+                                );
                                 // Continue with next file
                             }
                         }
                         else
                         {
-                            UpdateStatus($"Skipping {audioBaseName}: Missing required game files", statusTextBlock);
+                            UpdateStatus(
+                                $"Skipping {audioBaseName}: Missing required game files",
+                                statusTextBlock
+                            );
                             _skippedFiles[audioBaseName] = "Missing required game files";
                         }
                     }
                     else
                     {
-                        UpdateStatus($"Skipping {audioBaseName}: No matching game files found", statusTextBlock);
+                        UpdateStatus(
+                            $"Skipping {audioBaseName}: No matching game files found",
+                            statusTextBlock
+                        );
                         _skippedFiles[audioBaseName] = "No matching game files found";
                     }
 
                     processedFiles++;
-                    UpdateStatus($"Processed {processedFiles} of {totalFiles} files", statusTextBlock, progressBar, (processedFiles / totalFiles) * 100);
+                    UpdateStatus(
+                        $"Processed {processedFiles} of {totalFiles} files",
+                        statusTextBlock,
+                        progressBar,
+                        (processedFiles / totalFiles) * 100
+                    );
                 }
 
-                UpdateStatus($"Batch conversion completed! Processed {processedFiles} files", statusTextBlock, progressBar, 100);
+                UpdateStatus(
+                    $"Batch conversion completed! Processed {processedFiles} files",
+                    statusTextBlock,
+                    progressBar,
+                    100
+                );
                 _audioFolderPath = string.Empty;
                 _gameFilesFolderPath = string.Empty;
 
                 if (_skippedFiles.Any())
                 {
-                    var warningDialog = new WarningDialog("Some files were skipped during batch conversion:\n\n" +
-                        string.Join("\n", _skippedFiles.Select(kvp => $"{kvp.Key}: {kvp.Value}")));
+                    var warningDialog = new WarningDialog(
+                        "Some files were skipped during batch conversion:\n\n"
+                            + string.Join(
+                                "\n",
+                                _skippedFiles.Select(kvp => $"{kvp.Key}: {kvp.Value}")
+                            )
+                    );
                     warningDialog.Show();
                 }
-
             }
             catch (Exception ex)
             {
@@ -182,8 +265,16 @@ namespace PD3AudioModder.util
             }
         }
 
-        private async Task ProcessSingleFile(string audioPath, string ubulkPath, string uexpPath, string uassetPath,
-            string jsonPath, string tempDirectory, string outputDirectory, string baseName)
+        private async Task ProcessSingleFile(
+            string audioPath,
+            string ubulkPath,
+            string uexpPath,
+            string uassetPath,
+            string jsonPath,
+            string tempDirectory,
+            string outputDirectory,
+            string baseName
+        )
         {
             // Copy the original ubulk file to temp directory
             string tempUbulkPath = Path.Combine(tempDirectory, Path.GetFileName(ubulkPath));
@@ -194,11 +285,17 @@ namespace PD3AudioModder.util
             File.Copy(uexpPath, tempUexpPath, true);
 
             // Convert audio to WAV
-            string wavPath = Path.Combine(tempDirectory, Path.GetFileNameWithoutExtension(audioPath) + ".wav");
+            string wavPath = Path.Combine(
+                tempDirectory,
+                Path.GetFileNameWithoutExtension(audioPath) + ".wav"
+            );
             await AudioConverter.ConvertToWAV(audioPath, wavPath);
 
             // Convert WAV to WEM
-            string wemPath = Path.Combine(tempDirectory, Path.GetFileNameWithoutExtension(wavPath) + ".wem");
+            string wemPath = Path.Combine(
+                tempDirectory,
+                Path.GetFileNameWithoutExtension(wavPath) + ".wem"
+            );
             await Task.Run(() => WwisePD3.EncodeToWem(wavPath, wemPath));
 
             // Get the original size from the JSON file if it exists
@@ -241,10 +338,14 @@ namespace PD3AudioModder.util
             // Clean up temp files
             try
             {
-                if (File.Exists(wavPath)) File.Delete(wavPath);
-                if (File.Exists(wemPath)) File.Delete(wemPath);
-                if (File.Exists(tempUbulkPath)) File.Delete(tempUbulkPath);
-                if (File.Exists(tempUexpPath)) File.Delete(tempUexpPath);
+                if (File.Exists(wavPath))
+                    File.Delete(wavPath);
+                if (File.Exists(wemPath))
+                    File.Delete(wemPath);
+                if (File.Exists(tempUbulkPath))
+                    File.Delete(tempUbulkPath);
+                if (File.Exists(tempUexpPath))
+                    File.Delete(tempUexpPath);
             }
             catch
             {

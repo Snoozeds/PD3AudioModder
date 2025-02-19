@@ -1,9 +1,9 @@
-﻿using Avalonia.Controls;
-using Avalonia.Platform.Storage;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.IO;
 using System.Threading.Tasks;
+using Avalonia.Controls;
+using Avalonia.Platform.Storage;
+using Newtonsoft.Json;
 
 namespace PD3AudioModder.util
 {
@@ -25,11 +25,25 @@ namespace PD3AudioModder.util
             }
         }
 
-        public async Task ProcessFiles(string uploadedAudioPath, string uploadedUbulkPath, string uploadedUexpPath,
-            string uploadedUassetPath, string uploadedJsonPath, string tempDirectory, bool useDefaultExportPath, TextBlock statusTextBlock, Button convertButton, WindowBase ParentWindow)
+        public async Task ProcessFiles(
+            string uploadedAudioPath,
+            string uploadedUbulkPath,
+            string uploadedUexpPath,
+            string uploadedUassetPath,
+            string uploadedJsonPath,
+            string tempDirectory,
+            bool useDefaultExportPath,
+            TextBlock statusTextBlock,
+            Button convertButton,
+            WindowBase ParentWindow
+        )
         {
-            if (uploadedAudioPath == null || uploadedUbulkPath == null || uploadedUexpPath == null ||
-                (uploadedJsonPath == null && uploadedUassetPath == null))
+            if (
+                uploadedAudioPath == null
+                || uploadedUbulkPath == null
+                || uploadedUexpPath == null
+                || (uploadedJsonPath == null && uploadedUassetPath == null)
+            )
             {
                 UpdateStatus("Error: Please upload all required files first", statusTextBlock);
                 return;
@@ -38,18 +52,27 @@ namespace PD3AudioModder.util
             try
             {
                 // Copy the original ubulk file to temp directory
-                string tempUbulkPath = Path.Combine(tempDirectory, Path.GetFileName(uploadedUbulkPath));
+                string tempUbulkPath = Path.Combine(
+                    tempDirectory,
+                    Path.GetFileName(uploadedUbulkPath)
+                );
                 File.Copy(uploadedUbulkPath, tempUbulkPath, true);
                 UpdateStatus("Created backup of original ubulk file...", statusTextBlock);
 
                 // Copy the original uexp file to temp directory
-                string tempUexpPath = Path.Combine(tempDirectory, Path.GetFileName(uploadedUexpPath));
+                string tempUexpPath = Path.Combine(
+                    tempDirectory,
+                    Path.GetFileName(uploadedUexpPath)
+                );
                 File.Copy(uploadedUexpPath, tempUexpPath, true);
                 UpdateStatus("Created backup of original uexp file...", statusTextBlock);
 
                 // Convert audio to WAV using MediaFoundation
                 UpdateStatus("Converting audio to WAV format...", statusTextBlock);
-                string wavPath = Path.Combine(tempDirectory, Path.GetFileNameWithoutExtension(uploadedAudioPath) + ".wav");
+                string wavPath = Path.Combine(
+                    tempDirectory,
+                    Path.GetFileNameWithoutExtension(uploadedAudioPath) + ".wav"
+                );
 
                 try
                 {
@@ -57,12 +80,17 @@ namespace PD3AudioModder.util
                 }
                 catch (Exception ex)
                 {
-                    throw new Exception($"Failed to convert audio: {ex.Message}. Try converting your audio to WAV format manually before uploading.");
+                    throw new Exception(
+                        $"Failed to convert audio: {ex.Message}. Try converting your audio to WAV format manually before uploading."
+                    );
                 }
 
                 // Convert WAV to WEM
                 UpdateStatus("Converting WAV to WEM format...", statusTextBlock);
-                string wemPath = Path.Combine(tempDirectory, Path.GetFileNameWithoutExtension(wavPath) + ".wem");
+                string wemPath = Path.Combine(
+                    tempDirectory,
+                    Path.GetFileNameWithoutExtension(wavPath) + ".wem"
+                );
                 await Task.Run(() => WwisePD3.EncodeToWem(wavPath, wemPath));
 
                 // Get the original size from the JSON file if it exists
@@ -97,20 +125,25 @@ namespace PD3AudioModder.util
                 _appConfig = AppConfig.Load();
                 IStorageFolder? folderResult = null;
 
-                if(!String.IsNullOrEmpty(_appConfig.DefaultExportFolder) && useDefaultExportPath) {
-                    folderResult = await ParentWindow.StorageProvider.TryGetFolderFromPathAsync(_appConfig.DefaultExportFolder);
+                if (!String.IsNullOrEmpty(_appConfig.DefaultExportFolder) && useDefaultExportPath)
+                {
+                    folderResult = await ParentWindow.StorageProvider.TryGetFolderFromPathAsync(
+                        _appConfig.DefaultExportFolder
+                    );
                 }
 
                 if (folderResult == null || !useDefaultExportPath)
                 {
                     UpdateStatus("Select where to save converted files...", statusTextBlock);
-                    var fileResult = await ParentWindow.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
-                    {
-                        Title = "Choose where to save converted files",
-                        DefaultExtension = "",
-                        ShowOverwritePrompt = true,
-                        SuggestedFileName = Path.GetFileNameWithoutExtension(uploadedUbulkPath)
-                    });
+                    var fileResult = await ParentWindow.StorageProvider.SaveFilePickerAsync(
+                        new FilePickerSaveOptions
+                        {
+                            Title = "Choose where to save converted files",
+                            DefaultExtension = "",
+                            ShowOverwritePrompt = true,
+                            SuggestedFileName = Path.GetFileNameWithoutExtension(uploadedUbulkPath),
+                        }
+                    );
 
                     if (fileResult == null)
                     {
@@ -139,7 +172,10 @@ namespace PD3AudioModder.util
                     // Save uasset or json if they exist
                     if (uploadedUassetPath != null)
                     {
-                        string uassetSavePath = Path.Combine(saveDirectory, baseFileName + ".uasset");
+                        string uassetSavePath = Path.Combine(
+                            saveDirectory,
+                            baseFileName + ".uasset"
+                        );
                         File.Copy(uploadedUassetPath, uassetSavePath, true);
                     }
                     else if (uploadedJsonPath != null)
@@ -148,7 +184,10 @@ namespace PD3AudioModder.util
                         File.Copy(uploadedJsonPath, jsonSavePath, true);
                     }
 
-                    UpdateStatus($"Conversion completed successfully! Files saved to {saveDirectory}", statusTextBlock);
+                    UpdateStatus(
+                        $"Conversion completed successfully! Files saved to {saveDirectory}",
+                        statusTextBlock
+                    );
                 }
                 else
                 {
@@ -158,17 +197,28 @@ namespace PD3AudioModder.util
                 // Clean up temp files
                 try
                 {
-                    if (File.Exists(wavPath)) File.Delete(wavPath);
-                    if (File.Exists(wemPath)) File.Delete(wemPath);
-                    if (File.Exists(tempUbulkPath)) File.Delete(tempUbulkPath);
-                    if (File.Exists(tempUexpPath)) File.Delete(tempUexpPath);
+                    if (File.Exists(wavPath))
+                        File.Delete(wavPath);
+                    if (File.Exists(wemPath))
+                        File.Delete(wemPath);
+                    if (File.Exists(tempUbulkPath))
+                        File.Delete(tempUbulkPath);
+                    if (File.Exists(tempUexpPath))
+                        File.Delete(tempUexpPath);
 
                     uploadedAudioPath = string.Empty;
                     uploadedUbulkPath = string.Empty;
                     uploadedUexpPath = string.Empty;
                     uploadedUassetPath = string.Empty;
 
-                    UpdateConvertButtonState(uploadedAudioPath, uploadedUbulkPath, uploadedUexpPath, uploadedUassetPath, uploadedJsonPath!, convertButton);
+                    UpdateConvertButtonState(
+                        uploadedAudioPath,
+                        uploadedUbulkPath,
+                        uploadedUexpPath,
+                        uploadedUassetPath,
+                        uploadedJsonPath!,
+                        convertButton
+                    );
                 }
                 catch
                 {
@@ -181,15 +231,24 @@ namespace PD3AudioModder.util
             }
         }
 
-        public void UpdateConvertButtonState(string uploadedAudioPath, string uploadedUbulkPath, string uploadedUexpPath,
-            string uploadedUassetPath, string uploadedJsonPath, Button convertButton)
+        public void UpdateConvertButtonState(
+            string uploadedAudioPath,
+            string uploadedUbulkPath,
+            string uploadedUexpPath,
+            string uploadedUassetPath,
+            string uploadedJsonPath,
+            Button convertButton
+        )
         {
             // Check that the required file paths are not null.
             bool allFilesUploaded =
-                   !string.IsNullOrEmpty(uploadedAudioPath)
+                !string.IsNullOrEmpty(uploadedAudioPath)
                 && !string.IsNullOrEmpty(uploadedUbulkPath)
                 && !string.IsNullOrEmpty(uploadedUexpPath)
-                && (!string.IsNullOrEmpty(uploadedJsonPath) || !string.IsNullOrEmpty(uploadedUassetPath));
+                && (
+                    !string.IsNullOrEmpty(uploadedJsonPath)
+                    || !string.IsNullOrEmpty(uploadedUassetPath)
+                );
 
             if (convertButton != null)
             {
@@ -211,7 +270,10 @@ namespace PD3AudioModder.util
                     }
                 }
 
-                UpdateStatus("Error: Could not find AkMediaAssetData in JSON file", statusTextBlock);
+                UpdateStatus(
+                    "Error: Could not find AkMediaAssetData in JSON file",
+                    statusTextBlock
+                );
                 return -1;
             }
             catch (Exception ex)
@@ -232,10 +294,12 @@ namespace PD3AudioModder.util
             // Search for the old size pattern in the file
             for (int i = 0; i < uexpData.Length - 4; i++)
             {
-                if (uexpData[i] == oldSizeBytes[0] &&
-                    uexpData[i + 1] == oldSizeBytes[1] &&
-                    uexpData[i + 2] == oldSizeBytes[2] &&
-                    uexpData[i + 3] == oldSizeBytes[3])
+                if (
+                    uexpData[i] == oldSizeBytes[0]
+                    && uexpData[i + 1] == oldSizeBytes[1]
+                    && uexpData[i + 2] == oldSizeBytes[2]
+                    && uexpData[i + 3] == oldSizeBytes[3]
+                )
                 {
                     // Replace with new size bytes
                     Array.Copy(newSizeBytes, 0, uexpData, i, 4);

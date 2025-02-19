@@ -1,12 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Controls.Notifications;
 using Avalonia.Markup.Xaml;
 using Avalonia.Platform.Storage;
 using PD3AudioModder.util;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Threading.Tasks;
 
 namespace PD3AudioModder
 {
@@ -55,7 +55,10 @@ namespace PD3AudioModder
             _fileProcessor = new FileProcessor(this);
             _batchProcessor = new BatchProcessor(this);
 
-            if (String.IsNullOrEmpty(_appConfig.DefaultExportFolder) || _appConfig.DefaultExportFolder == "null")
+            if (
+                String.IsNullOrEmpty(_appConfig.DefaultExportFolder)
+                || _appConfig.DefaultExportFolder == "null"
+            )
             {
                 defaultExportFolder = "Not set, change in settings.";
             }
@@ -68,9 +71,10 @@ namespace PD3AudioModder
             InitializeComponent();
 
             // Create temp directory
-            tempDirectory = Environment.OSVersion.Platform == PlatformID.Win32NT
-                ? Path.Combine(Path.GetTempPath(), "PD3AudioModder")
-                : Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Temp");
+            tempDirectory =
+                Environment.OSVersion.Platform == PlatformID.Win32NT
+                    ? Path.Combine(Path.GetTempPath(), "PD3AudioModder")
+                    : Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Temp");
 
             if (!Directory.Exists(tempDirectory))
             {
@@ -94,7 +98,11 @@ namespace PD3AudioModder
                 if (updateAvailable)
                 {
                     string currentVersion = updater.GetCurrentVersion();
-                    bool userWantsUpdate = await UpdateDialog.ShowDialogAsync(this, currentVersion, newVersion);
+                    bool userWantsUpdate = await UpdateDialog.ShowDialogAsync(
+                        this,
+                        currentVersion,
+                        newVersion
+                    );
                     if (userWantsUpdate)
                     {
                         await updater.DownloadUpdate();
@@ -103,14 +111,15 @@ namespace PD3AudioModder
             }
             catch (Exception ex)
             {
-                _notificationManager?.Show(new Notification(
-                    "Update Error",
-                    $"Failed to check for updates: {ex.Message}",
-                    NotificationType.Error
-                ));
+                _notificationManager?.Show(
+                    new Notification(
+                        "Update Error",
+                        $"Failed to check for updates: {ex.Message}",
+                        NotificationType.Error
+                    )
+                );
             }
         }
-
 
         private void InitializeComponent()
         {
@@ -119,35 +128,52 @@ namespace PD3AudioModder
             // Single file operation
             var uploadButton = this.FindControl<Button>("UploadButton")!;
             convertButton = this.FindControl<Button>("ConvertButton")!;
-            convertButton.IsEnabled = false;// Start with the convert button disabled
+            convertButton.IsEnabled = false; // Start with the convert button disabled
             useExportFolderCheckBox = this.FindControl<CheckBox>("UseExportFolder")!;
-            useExportFolderCheckBox.IsEnabled = defaultExportFolder != "Not set, change in settings.";
-            useExportFolderCheckBox.IsChecked = useExportFolderCheckBox.IsEnabled && _appConfig.UseDefaultExportFolder == true;
+            useExportFolderCheckBox.IsEnabled =
+                defaultExportFolder != "Not set, change in settings.";
+            useExportFolderCheckBox.IsChecked =
+                useExportFolderCheckBox.IsEnabled && _appConfig.UseDefaultExportFolder == true;
 
             uploadButton.Click += async (_, _) => await UploadFile();
-            convertButton.Click += async (_, _) => await _fileProcessor.ProcessFiles(uploadedAudioPath!, uploadedUbulkPath!, uploadedUexpPath!, uploadedUassetPath!, uploadedJsonPath!, tempDirectory, useExportFolderCheckBox.IsChecked ?? false, statusTextBlock!, convertButton!, this);
+            convertButton.Click += async (_, _) =>
+                await _fileProcessor.ProcessFiles(
+                    uploadedAudioPath!,
+                    uploadedUbulkPath!,
+                    uploadedUexpPath!,
+                    uploadedUassetPath!,
+                    uploadedJsonPath!,
+                    tempDirectory,
+                    useExportFolderCheckBox.IsChecked ?? false,
+                    statusTextBlock!,
+                    convertButton!,
+                    this
+                );
 
             // Batch file operation
             selectAudioFolderButton = this.FindControl<Button>("SelectAudioFolderButton")!;
             selectGameFilesFolderButton = this.FindControl<Button>("SelectGameFilesFolderButton")!;
             batchConvertButton = this.FindControl<Button>("BatchConvertButton")!;
-            batchConvertButton.IsEnabled = false;// Start with the batch convert button disabled
+            batchConvertButton.IsEnabled = false; // Start with the batch convert button disabled
             batchUseExportFolderCheckBox = this.FindControl<CheckBox>("BatchUseExportFolder")!;
-            batchUseExportFolderCheckBox.IsEnabled = defaultExportFolder != "Not set, change in settings.";
-            batchUseExportFolderCheckBox.IsChecked = useExportFolderCheckBox.IsEnabled && _appConfig.UseDefaultExportFolder == true;
+            batchUseExportFolderCheckBox.IsEnabled =
+                defaultExportFolder != "Not set, change in settings.";
+            batchUseExportFolderCheckBox.IsChecked =
+                useExportFolderCheckBox.IsEnabled && _appConfig.UseDefaultExportFolder == true;
             batchStatusTextBlock = this.FindControl<TextBlock>("BatchStatusTextBlock")!;
             batchProgressBar = this.FindControl<ProgressBar>("BatchProgressBar")!;
 
             selectAudioFolderButton.Click += async (_, _) => await SelectAudioFolder();
             selectGameFilesFolderButton.Click += async (_, _) => await SelectGameFilesFolder();
-            batchConvertButton.Click += async (_, _) => await _batchProcessor.ProcessBatch(
-                tempDirectory,
-                batchUseExportFolderCheckBox.IsChecked ?? false,
-                batchStatusTextBlock!,
-                batchProgressBar!,
-                batchConvertButton!,
-                this
-            );
+            batchConvertButton.Click += async (_, _) =>
+                await _batchProcessor.ProcessBatch(
+                    tempDirectory,
+                    batchUseExportFolderCheckBox.IsChecked ?? false,
+                    batchStatusTextBlock!,
+                    batchProgressBar!,
+                    batchConvertButton!,
+                    this
+                );
 
             // Pack Files tab
             var repakPathTextBlock = this.FindControl<TextBlock>("RepakPathTextBlock")!;
@@ -174,7 +200,8 @@ namespace PD3AudioModder
                 }
             };
             selectRepakButton.Click += (_, _) => SelectRepakButton_Click(repakPathTextBlock);
-            compressCheckBox.IsCheckedChanged += (_, _) => CompressionEnabled = compressCheckBox.IsChecked;
+            compressCheckBox.IsCheckedChanged += (_, _) =>
+                CompressionEnabled = compressCheckBox.IsChecked;
             selectFolderButton.Click += (_, _) => SelectFolderButton_Click(packButton);
             packButton.Click += (_, _) => PackButton_Click(PackFolderPath!);
 
@@ -207,20 +234,25 @@ namespace PD3AudioModder
 
         public void UpdateExportFolderCheckboxes()
         {
-            useExportFolderCheckBox!.IsEnabled = defaultExportFolder != "Not set, change in settings.";
-            useExportFolderCheckBox.IsChecked = useExportFolderCheckBox.IsEnabled && AppConfig.Instance.UseDefaultExportFolder == true;
+            useExportFolderCheckBox!.IsEnabled =
+                defaultExportFolder != "Not set, change in settings.";
+            useExportFolderCheckBox.IsChecked =
+                useExportFolderCheckBox.IsEnabled
+                && AppConfig.Instance.UseDefaultExportFolder == true;
 
-            batchUseExportFolderCheckBox!.IsEnabled = defaultExportFolder != "Not set, change in settings.";
-            batchUseExportFolderCheckBox.IsChecked = batchUseExportFolderCheckBox.IsEnabled && AppConfig.Instance.UseDefaultExportFolder == true;
+            batchUseExportFolderCheckBox!.IsEnabled =
+                defaultExportFolder != "Not set, change in settings.";
+            batchUseExportFolderCheckBox.IsChecked =
+                batchUseExportFolderCheckBox.IsEnabled
+                && AppConfig.Instance.UseDefaultExportFolder == true;
         }
 
         private async Task UploadFile()
         {
             _fileProcessor.UpdateStatus("Selecting files...", StatusTextBlock);
-            var files = await StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
-            {
-                AllowMultiple = true
-            });
+            var files = await StorageProvider.OpenFilePickerAsync(
+                new FilePickerOpenOptions { AllowMultiple = true }
+            );
 
             if (files.Count > 0)
             {
@@ -237,7 +269,8 @@ namespace PD3AudioModder
                 {
                     string filePath = file.Path.LocalPath;
                     string extension = Path.GetExtension(filePath).ToLower();
-                    string currentBaseFileName = Path.GetFileNameWithoutExtension(filePath).ToLower();
+                    string currentBaseFileName = Path.GetFileNameWithoutExtension(filePath)
+                        .ToLower();
 
                     switch (extension)
                     {
@@ -251,7 +284,10 @@ namespace PD3AudioModder
                         case ".aac":
                         case ".opus":
                             audioFiles.Add(filePath);
-                            _fileProcessor.UpdateStatus($"Audio file uploaded: {Path.GetFileName(filePath)}", StatusTextBlock);
+                            _fileProcessor.UpdateStatus(
+                                $"Audio file uploaded: {Path.GetFileName(filePath)}",
+                                StatusTextBlock
+                            );
                             break;
                         case ".ubulk":
                             ubulkFiles.Add(filePath);
@@ -267,18 +303,30 @@ namespace PD3AudioModder
                             jsonFiles.Add(filePath);
                             break;
                         default:
-                            _fileProcessor.UpdateStatus($"Unsupported file type: {extension}", StatusTextBlock);
+                            _fileProcessor.UpdateStatus(
+                                $"Unsupported file type: {extension}",
+                                StatusTextBlock
+                            );
                             break;
                     }
                 }
 
                 // Check if files have same base filename
                 bool allFilesMatchBaseName = true;
-                foreach (var fileList in new List<List<string>> { ubulkFiles, uassetFiles, uexpFiles, jsonFiles })
+                foreach (
+                    var fileList in new List<List<string>>
+                    {
+                        ubulkFiles,
+                        uassetFiles,
+                        uexpFiles,
+                        jsonFiles,
+                    }
+                )
                 {
                     foreach (var filePath in fileList)
                     {
-                        string currentBaseFileName = Path.GetFileNameWithoutExtension(filePath).ToLower();
+                        string currentBaseFileName = Path.GetFileNameWithoutExtension(filePath)
+                            .ToLower();
                         if (currentBaseFileName != baseFileName)
                         {
                             allFilesMatchBaseName = false;
@@ -297,7 +345,10 @@ namespace PD3AudioModder
                     if (audioFiles.Count > 0)
                     {
                         uploadedAudioPath = audioFiles[0];
-                        _fileProcessor.UpdateStatus($"Audio file uploaded: {Path.GetFileName(audioFiles[0])}", StatusTextBlock);
+                        _fileProcessor.UpdateStatus(
+                            $"Audio file uploaded: {Path.GetFileName(audioFiles[0])}",
+                            StatusTextBlock
+                        );
                     }
 
                     // Assign paths for .ubulk, .uasset, .uexp, and .json files
@@ -310,29 +361,51 @@ namespace PD3AudioModder
                         {
                             case ".ubulk":
                                 uploadedUbulkPath = filePath;
-                                _fileProcessor.UpdateStatus($"Ubulk file uploaded: {Path.GetFileName(filePath)}", StatusTextBlock);
+                                _fileProcessor.UpdateStatus(
+                                    $"Ubulk file uploaded: {Path.GetFileName(filePath)}",
+                                    StatusTextBlock
+                                );
                                 break;
                             case ".uexp":
                                 uploadedUexpPath = filePath;
-                                _fileProcessor.UpdateStatus($"Uexp file uploaded: {Path.GetFileName(filePath)}", StatusTextBlock);
+                                _fileProcessor.UpdateStatus(
+                                    $"Uexp file uploaded: {Path.GetFileName(filePath)}",
+                                    StatusTextBlock
+                                );
                                 break;
                             case ".uasset":
                                 uploadedUassetPath = filePath;
-                                _fileProcessor.UpdateStatus($"Uasset file uploaded: {Path.GetFileName(filePath)}", StatusTextBlock);
+                                _fileProcessor.UpdateStatus(
+                                    $"Uasset file uploaded: {Path.GetFileName(filePath)}",
+                                    StatusTextBlock
+                                );
                                 break;
                             case ".json":
                                 uploadedJsonPath = filePath;
-                                _fileProcessor.UpdateStatus($"Json file uploaded: {Path.GetFileName(filePath)}", StatusTextBlock);
+                                _fileProcessor.UpdateStatus(
+                                    $"Json file uploaded: {Path.GetFileName(filePath)}",
+                                    StatusTextBlock
+                                );
                                 break;
                         }
                     }
                 }
                 else
                 {
-                    _fileProcessor.UpdateStatus("Error: .ubulk, .uasset, .uexp, and .json files must share the same base filename (excluding extensions).", StatusTextBlock);
+                    _fileProcessor.UpdateStatus(
+                        "Error: .ubulk, .uasset, .uexp, and .json files must share the same base filename (excluding extensions).",
+                        StatusTextBlock
+                    );
                 }
 
-                _fileProcessor.UpdateConvertButtonState(uploadedAudioPath!, uploadedUbulkPath!, uploadedUexpPath!, uploadedUassetPath!, uploadedJsonPath!, convertButton!);
+                _fileProcessor.UpdateConvertButtonState(
+                    uploadedAudioPath!,
+                    uploadedUbulkPath!,
+                    uploadedUexpPath!,
+                    uploadedUassetPath!,
+                    uploadedJsonPath!,
+                    convertButton!
+                );
             }
             else
             {
@@ -342,51 +415,71 @@ namespace PD3AudioModder
 
         private async Task SelectAudioFolder()
         {
-            var folder = await StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
-            {
-                Title = "Select Audio Files Folder",
-                AllowMultiple = false
-            });
+            var folder = await StorageProvider.OpenFolderPickerAsync(
+                new FolderPickerOpenOptions
+                {
+                    Title = "Select Audio Files Folder",
+                    AllowMultiple = false,
+                }
+            );
 
             if (folder.Count > 0)
             {
                 _batchProcessor.SetAudioFolderPath(folder[0].Path.LocalPath);
-                _batchProcessor.UpdateStatus($"Audio folder selected: {folder[0].Name}", batchStatusTextBlock!);
-                _batchProcessor.UpdateButtonStates(folder[0].Path.LocalPath, "", batchConvertButton!);
+                _batchProcessor.UpdateStatus(
+                    $"Audio folder selected: {folder[0].Name}",
+                    batchStatusTextBlock!
+                );
+                _batchProcessor.UpdateButtonStates(
+                    folder[0].Path.LocalPath,
+                    "",
+                    batchConvertButton!
+                );
             }
         }
 
         private async Task SelectGameFilesFolder()
         {
-            var folder = await StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
-            {
-                Title = "Select Game Files Folder",
-                AllowMultiple = false
-            });
+            var folder = await StorageProvider.OpenFolderPickerAsync(
+                new FolderPickerOpenOptions
+                {
+                    Title = "Select Game Files Folder",
+                    AllowMultiple = false,
+                }
+            );
 
             if (folder.Count > 0)
             {
                 _batchProcessor.SetGameFilesFolderPath(folder[0].Path.LocalPath);
-                _batchProcessor.UpdateStatus($"Game files folder selected: {folder[0].Name}", batchStatusTextBlock!);
-                _batchProcessor.UpdateButtonStates("", folder[0].Path.LocalPath, batchConvertButton!);
+                _batchProcessor.UpdateStatus(
+                    $"Game files folder selected: {folder[0].Name}",
+                    batchStatusTextBlock!
+                );
+                _batchProcessor.UpdateButtonStates(
+                    "",
+                    folder[0].Path.LocalPath,
+                    batchConvertButton!
+                );
             }
         }
 
         // Pack files tab
         private async void SelectRepakButton_Click(TextBlock repakPathTextBlock)
         {
-            var files = await StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
-            {
-                Title = "Select repak.exe",
-                AllowMultiple = false,
-                FileTypeFilter = new List<FilePickerFileType>
-        {
-            new FilePickerFileType("Executable")
-            {
-                Patterns = new List<string> { "*.exe" }
-            }
-        }
-            });
+            var files = await StorageProvider.OpenFilePickerAsync(
+                new FilePickerOpenOptions
+                {
+                    Title = "Select repak.exe",
+                    AllowMultiple = false,
+                    FileTypeFilter = new List<FilePickerFileType>
+                    {
+                        new FilePickerFileType("Executable")
+                        {
+                            Patterns = new List<string> { "*.exe" },
+                        },
+                    },
+                }
+            );
 
             if (files.Count > 0)
             {
@@ -398,10 +491,9 @@ namespace PD3AudioModder
 
         private async void SelectFolderButton_Click(Button packButton)
         {
-            var folder = await StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions
-            {
-                Title = "Select folder to pack"
-            });
+            var folder = await StorageProvider.OpenFolderPickerAsync(
+                new FolderPickerOpenOptions { Title = "Select folder to pack" }
+            );
 
             if (folder.Count > 0)
             {
@@ -416,24 +508,38 @@ namespace PD3AudioModder
 
             if (_appConfig.RepakPath == null)
             {
-                _notificationManager?.Show(new Notification(
-                    "Error",
-                    "Please select the repak.exe path.",
-                    NotificationType.Error
-                ));
+                _notificationManager?.Show(
+                    new Notification(
+                        "Error",
+                        "Please select the repak.exe path.",
+                        NotificationType.Error
+                    )
+                );
                 return;
             }
 
-            PackFiles.Pack(_appConfig.RepakPath, CompressionEnabled ?? false, packFolderPath, Path.GetDirectoryName(packFolderPath)!, ModName ?? "MyPD3Mod");
-            await PackFiles.Repak(_appConfig.RepakPath, CompressionEnabled ?? false, packFolderPath, ModName ?? "MyPD3Mod");
+            PackFiles.Pack(
+                _appConfig.RepakPath,
+                CompressionEnabled ?? false,
+                packFolderPath,
+                Path.GetDirectoryName(packFolderPath)!,
+                ModName ?? "MyPD3Mod"
+            );
+            await PackFiles.Repak(
+                _appConfig.RepakPath,
+                CompressionEnabled ?? false,
+                packFolderPath,
+                ModName ?? "MyPD3Mod"
+            );
 
-            _notificationManager?.Show(new Notification(
-                "Success",
-                "Files packed successfully.",
-                NotificationType.Success
-            ));
+            _notificationManager?.Show(
+                new Notification("Success", "Files packed successfully.", NotificationType.Success)
+            );
 
-            System.Diagnostics.Process.Start("explorer.exe", Path.GetDirectoryName(packFolderPath)!);
+            System.Diagnostics.Process.Start(
+                "explorer.exe",
+                Path.GetDirectoryName(packFolderPath)!
+            );
 
             // Reset fields
             PackFolderPath = null;
@@ -444,7 +550,11 @@ namespace PD3AudioModder
         // Status
         public void UpdateGlobalStatus(string message, string sourceTab)
         {
-            if (currentTab == sourceTab && globalStatusTextBlock != null && sourceTab != "Pack Files")
+            if (
+                currentTab == sourceTab
+                && globalStatusTextBlock != null
+                && sourceTab != "Pack Files"
+            )
             {
                 globalStatusTextBlock.Text = message;
             }
@@ -461,7 +571,7 @@ namespace PD3AudioModder
                 "Single File" => "SingleFile",
                 "Batch Conversion" => "BatchConversion",
                 "Pack Files" => "PackFiles",
-                _ => "single"
+                _ => "single",
             };
 
             // Show help window with the active tab
@@ -474,6 +584,5 @@ namespace PD3AudioModder
             var settingsWindow = new SettingsWindow(this);
             settingsWindow.ShowDialog(this);
         }
-
     }
 }

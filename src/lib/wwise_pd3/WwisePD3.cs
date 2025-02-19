@@ -3,8 +3,8 @@ using System.IO;
 
 namespace PD3AudioModder
 {
-	public class WwisePD3
-	{
+    public class WwisePD3
+    {
         public static void EncodeToWem(string input, string output)
         {
             BinaryReader br = new BinaryReader(File.OpenRead(input));
@@ -13,9 +13,16 @@ namespace PD3AudioModder
 
             if (header.type != 1)
             {
-                var warningDialog = new WarningDialog(String.Format("wwise_pd3 error:\nPAYDAY 3 only supports PCM, not type {0}", header.type));
+                var warningDialog = new WarningDialog(
+                    String.Format(
+                        "wwise_pd3 error:\nPAYDAY 3 only supports PCM, not type {0}",
+                        header.type
+                    )
+                );
                 warningDialog.Show();
-                Console.WriteLine(String.Format("PAYDAY 3 only supports PCM, not type {0}", header.type));
+                Console.WriteLine(
+                    String.Format("PAYDAY 3 only supports PCM, not type {0}", header.type)
+                );
             }
 
             Console.WriteLine(String.Format("Format Length: {0}", header.lengthofformatdata));
@@ -26,14 +33,18 @@ namespace PD3AudioModder
 
             Console.WriteLine(String.Format("Sample Rate: {0}", header.samplerate));
 
-            Console.WriteLine(String.Format("Avg. Bytes per second: {0}", header.averagebytespersecond));
+            Console.WriteLine(
+                String.Format("Avg. Bytes per second: {0}", header.averagebytespersecond)
+            );
 
             Console.WriteLine(String.Format("Block Align: {0}", header.blockalign));
 
             Console.WriteLine(String.Format("Bits per Sample: {0}", header.bitspersample));
 
             //br.Read(data, (int)br.BaseStream.Position, (int)(br.BaseStream.Length - br.BaseStream.Position));
-            byte[] data = br.ReadBytes((int)(File.ReadAllBytes(input).LongLength - br.BaseStream.Position));
+            byte[] data = br.ReadBytes(
+                (int)(File.ReadAllBytes(input).LongLength - br.BaseStream.Position)
+            );
             //Console.WriteLine(File.ReadAllBytes(input).LongLength);
             //Console.WriteLine(br.BaseStream.Length);
 
@@ -86,13 +97,17 @@ namespace PD3AudioModder
 
             Console.WriteLine(String.Format("Sample Rate: {0}", header.samplerate));
 
-            Console.WriteLine(String.Format("Avg. Bytes per second: {0}", header.averagebytespersecond));
+            Console.WriteLine(
+                String.Format("Avg. Bytes per second: {0}", header.averagebytespersecond)
+            );
 
             Console.WriteLine(String.Format("Block Align: {0}", header.blockalign));
 
             Console.WriteLine(String.Format("Bits per Sample: {0}", header.bitspersample));
 
-            byte[] data = br.ReadBytes((int)(File.ReadAllBytes(input).LongLength - br.BaseStream.Position));
+            byte[] data = br.ReadBytes(
+                (int)(File.ReadAllBytes(input).LongLength - br.BaseStream.Position)
+            );
             //Console.WriteLine(File.ReadAllBytes(input).LongLength);
             //Console.WriteLine(br.BaseStream.Length);
 
@@ -130,5 +145,5 @@ namespace PD3AudioModder
 
             bw.Close();
         }
-	}
+    }
 }

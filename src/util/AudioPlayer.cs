@@ -1,7 +1,7 @@
-﻿using NAudio.Vorbis;
-using NAudio.Wave;
-using System;
+﻿using System;
 using System.Reflection;
+using NAudio.Vorbis;
+using NAudio.Wave;
 
 public class AudioPlayer : IDisposable
 {
@@ -25,7 +25,9 @@ public class AudioPlayer : IDisposable
         try
         {
             var assembly = Assembly.GetExecutingAssembly();
-            var resourceStream = assembly.GetManifestResourceStream($"PD3AudioModder.{resourceName}");
+            var resourceStream = assembly.GetManifestResourceStream(
+                $"PD3AudioModder.{resourceName}"
+            );
 
             if (resourceStream == null)
             {

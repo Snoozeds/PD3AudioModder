@@ -1,8 +1,8 @@
-﻿using Avalonia.Controls;
-using Avalonia.Interactivity;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
 
 namespace PD3AudioModder
 {
@@ -17,7 +17,7 @@ namespace PD3AudioModder
             { "NAudio", "https://github.com/naudio/NAudio" },
             { "NAudioVorbis", "https://github.com/naudio/Vorbis" },
             { "NewtonsoftJson", "https://github.com/JamesNK/Newtonsoft.Json" },
-            { "ReactiveUI", "https://github.com/reactiveui/reactiveui" }
+            { "ReactiveUI", "https://github.com/reactiveui/reactiveui" },
         };
 
         public LicensesWindow()
@@ -29,11 +29,7 @@ namespace PD3AudioModder
         {
             try
             {
-                Process.Start(new ProcessStartInfo
-                {
-                    FileName = url,
-                    UseShellExecute = true
-                });
+                Process.Start(new ProcessStartInfo { FileName = url, UseShellExecute = true });
             }
             catch (Exception ex)
             {
@@ -51,7 +47,11 @@ namespace PD3AudioModder
 
         private void HandleUrlClick(object sender, RoutedEventArgs e)
         {
-            if (sender is Button button && button.Name is string name && urlMappings.TryGetValue(name, out var url))
+            if (
+                sender is Button button
+                && button.Name is string name
+                && urlMappings.TryGetValue(name, out var url)
+            )
             {
                 LaunchUrl(url);
             }

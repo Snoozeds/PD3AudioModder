@@ -1,5 +1,5 @@
-﻿using Avalonia.Controls;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Avalonia.Controls;
 
 namespace PD3AudioModder
 {
@@ -10,7 +10,8 @@ namespace PD3AudioModder
             InitializeComponent();
         }
 
-        public HelpWindow(string activeTab) : this()
+        public HelpWindow(string activeTab)
+            : this()
         {
             InitializeComponent();
 
@@ -18,7 +19,7 @@ namespace PD3AudioModder
             {
                 { "SingleFile", this.FindControl<StackPanel>("SingleFileSection")! },
                 { "BatchConversion", this.FindControl<StackPanel>("BatchConversionSection")! },
-                { "PackFiles", this.FindControl<StackPanel>("PackFilesSection")! }
+                { "PackFiles", this.FindControl<StackPanel>("PackFilesSection")! },
             };
 
             foreach (var section in sections)

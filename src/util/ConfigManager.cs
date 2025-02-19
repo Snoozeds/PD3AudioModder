@@ -1,7 +1,7 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Newtonsoft.Json;
 
 namespace PD3AudioModder
 {
@@ -45,11 +45,18 @@ namespace PD3AudioModder
         {
             if (OperatingSystem.IsWindows())
             {
-                return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PD3AudioModder");
+                return Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                    "PD3AudioModder"
+                );
             }
             else if (OperatingSystem.IsLinux())
             {
-                return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".config", "PD3AudioModder");
+                return Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
+                    ".config",
+                    "PD3AudioModder"
+                );
             }
 
             throw new PlatformNotSupportedException("Unsupported OS.");
@@ -66,12 +73,28 @@ namespace PD3AudioModder
         {
             return new Dictionary<string, Func<AppConfig, bool>>()
             {
-                { "AutoUpdateEnabled", config => config.AutoUpdateEnabled == true || config.AutoUpdateEnabled == false },
-                { "RepakPath", config => config.RepakPath == null || File.Exists(config.RepakPath) },
+                {
+                    "AutoUpdateEnabled",
+                    config => config.AutoUpdateEnabled == true || config.AutoUpdateEnabled == false
+                },
+                {
+                    "RepakPath",
+                    config => config.RepakPath == null || File.Exists(config.RepakPath)
+                },
                 { "FfmpegOptions", config => true },
                 { "DefaultExportFolder", config => true },
-                { "UseDefaultExportFolder", config => config.UseDefaultExportFolder == true || config.UseDefaultExportFolder == false },
-                { "MuteNotificationSound", config => config.MuteNotificationSound == true || config.MuteNotificationSound == false }
+                {
+                    "UseDefaultExportFolder",
+                    config =>
+                        config.UseDefaultExportFolder == true
+                        || config.UseDefaultExportFolder == false
+                },
+                {
+                    "MuteNotificationSound",
+                    config =>
+                        config.MuteNotificationSound == true
+                        || config.MuteNotificationSound == false
+                },
             };
         }
 
@@ -99,7 +122,10 @@ namespace PD3AudioModder
                                 if (!rule.Value(config))
                                 {
                                     // If validation fails, revert to the default config value
-                                    property.SetValue(config, typeof(DefaultConfig).GetProperty(rule.Key)?.GetValue(null));
+                                    property.SetValue(
+                                        config,
+                                        typeof(DefaultConfig).GetProperty(rule.Key)?.GetValue(null)
+                                    );
                                 }
                             }
                         }
@@ -108,9 +134,7 @@ namespace PD3AudioModder
                     }
                 }
             }
-            catch (Exception)
-            {
-            }
+            catch (Exception) { }
 
             return new AppConfig();
         }
@@ -119,7 +143,9 @@ namespace PD3AudioModder
         {
             try
             {
-                Console.WriteLine($"Saving config: {JsonConvert.SerializeObject(this, Formatting.Indented)}");
+                Console.WriteLine(
+                    $"Saving config: {JsonConvert.SerializeObject(this, Formatting.Indented)}"
+                );
                 string filePath = GetConfigFilePath();
                 string json = JsonConvert.SerializeObject(this, Formatting.Indented);
                 File.WriteAllText(filePath, json);

@@ -1,6 +1,6 @@
+using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
-using System.Threading.Tasks;
 
 namespace PD3AudioModder
 {
@@ -30,7 +30,8 @@ namespace PD3AudioModder
             this.Loaded += WarningDialog_Loaded;
         }
 
-        public WarningDialog(string message) : this()
+        public WarningDialog(string message)
+            : this()
         {
             Message = message;
         }
@@ -43,7 +44,11 @@ namespace PD3AudioModder
         private void WarningDialog_Loaded(object? sender, RoutedEventArgs e)
         {
             // if message was set before the window was loaded, set the text block text
-            if (_messageTextBlock != null && string.IsNullOrEmpty(_messageTextBlock.Text) && Message != null)
+            if (
+                _messageTextBlock != null
+                && string.IsNullOrEmpty(_messageTextBlock.Text)
+                && Message != null
+            )
             {
                 _messageTextBlock.Text = Message;
             }
