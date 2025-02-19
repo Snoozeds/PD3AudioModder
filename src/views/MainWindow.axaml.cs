@@ -44,13 +44,16 @@ namespace PD3AudioModder
         private bool? CompressionEnabled;
         private string? PackFolderPath;
 
+        // Status text
+        public TextBlock? globalStatusTextBlock;
+        public string currentTab = "Single File";
+
         public MainWindow()
         {
             _appConfig = AppConfig.Load();
             _notificationManager = new WindowNotificationManager(this);
-            _fileProcessor = new FileProcessor();
-
-            _batchProcessor = new BatchProcessor();
+            _fileProcessor = new FileProcessor(this);
+            _batchProcessor = new BatchProcessor(this);
 
             if (String.IsNullOrEmpty(_appConfig.DefaultExportFolder) || _appConfig.DefaultExportFolder == "null")
             {
@@ -120,7 +123,6 @@ namespace PD3AudioModder
             useExportFolderCheckBox = this.FindControl<CheckBox>("UseExportFolder")!;
             useExportFolderCheckBox.IsEnabled = defaultExportFolder != "Not set, change in settings.";
             useExportFolderCheckBox.IsChecked = useExportFolderCheckBox.IsEnabled && _appConfig.UseDefaultExportFolder == true;
-            statusTextBlock = this.FindControl<TextBlock>("StatusTextBlock")!;
 
             uploadButton.Click += async (_, _) => await UploadFile();
             convertButton.Click += async (_, _) => await _fileProcessor.ProcessFiles(uploadedAudioPath!, uploadedUbulkPath!, uploadedUexpPath!, uploadedUassetPath!, uploadedJsonPath!, tempDirectory, useExportFolderCheckBox.IsChecked ?? false, statusTextBlock!, convertButton!, this);
@@ -175,6 +177,32 @@ namespace PD3AudioModder
             compressCheckBox.IsCheckedChanged += (_, _) => CompressionEnabled = compressCheckBox.IsChecked;
             selectFolderButton.Click += (_, _) => SelectFolderButton_Click(packButton);
             packButton.Click += (_, _) => PackButton_Click(PackFolderPath!);
+
+            // Status text
+            globalStatusTextBlock = this.FindControl<TextBlock>("StatusTextBlock")!;
+            var mainTabControl = this.FindControl<TabControl>("MainTabControl")!;
+
+            mainTabControl.SelectionChanged += (sender, e) =>
+            {
+                var selectedTab = ((TabItem)mainTabControl.SelectedItem!).Header!.ToString()!;
+                currentTab = selectedTab;
+
+                // Update global status based on current tab's status
+                switch (selectedTab)
+                {
+                    case "Single File":
+                        if (statusTextBlock != null)
+                            globalStatusTextBlock!.Text = statusTextBlock.Text;
+                        break;
+                    case "Batch Conversion":
+                        if (batchStatusTextBlock != null)
+                            globalStatusTextBlock!.Text = batchStatusTextBlock.Text;
+                        break;
+                    case "Pack Files":
+                        globalStatusTextBlock!.Text = string.Empty;
+                        break;
+                }
+            };
         }
 
         public void UpdateExportFolderCheckboxes()
@@ -411,6 +439,15 @@ namespace PD3AudioModder
             PackFolderPath = null;
             var packButton = this.FindControl<Button>("PackButton")!;
             packButton.IsEnabled = false;
+        }
+
+        // Status
+        public void UpdateGlobalStatus(string message, string sourceTab)
+        {
+            if (currentTab == sourceTab && globalStatusTextBlock != null && sourceTab != "Pack Files")
+            {
+                globalStatusTextBlock.Text = message;
+            }
         }
 
         private void OnHelpClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)

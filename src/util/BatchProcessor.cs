@@ -1,15 +1,16 @@
 ﻿using Avalonia.Controls;
+using Avalonia.Platform.Storage;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Avalonia.Platform.Storage;
 
 namespace PD3AudioModder.util
 {
     internal class BatchProcessor
     {
+        private readonly MainWindow? _mainWindow;
         private AppConfig? _appConfig;
         private readonly FileProcessor _fileProcessor;
         private string _audioFolderPath = string.Empty;
@@ -18,16 +19,17 @@ namespace PD3AudioModder.util
         // track skipped files and reason for skipping them
         private Dictionary<string, string> _skippedFiles = new Dictionary<string, string>();
 
-        public BatchProcessor()
+        public BatchProcessor(MainWindow mainWindow)
         {
-            _fileProcessor = new FileProcessor();
+            _mainWindow = mainWindow;
+            _fileProcessor = new FileProcessor(_mainWindow);
         }
 
         public void UpdateStatus(string message, TextBlock statusTextBlock, ProgressBar? progressBar = null, double? progress = null)
         {
-            if (statusTextBlock != null)
+            if (_mainWindow != null)
             {
-                statusTextBlock.Text = $"Status: {message}";
+                _mainWindow.UpdateGlobalStatus(message, "Batch Conversion");
             }
 
             if (progressBar != null && progress.HasValue)
@@ -172,7 +174,7 @@ namespace PD3AudioModder.util
                         string.Join("\n", _skippedFiles.Select(kvp => $"{kvp.Key}: {kvp.Value}")));
                     warningDialog.Show();
                 }
-                
+
             }
             catch (Exception ex)
             {

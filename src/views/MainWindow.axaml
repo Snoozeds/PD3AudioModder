@@ -2,8 +2,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-		xmlns:local="using:PD3AudioModder"
-		x:DataType="local:MainWindow"
+        xmlns:local="using:PD3AudioModder"
+        x:DataType="local:MainWindow"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="PD3AudioModder.MainWindow"
         Title="PD3AudioModder"
@@ -12,312 +12,305 @@
         Background="#1B262C"
         Icon="avares://PD3AudioModder/assets/icons/audio.ico"
         WindowStartupLocation="CenterScreen">
-	<Grid>
-		<TabControl x:Name="MainTabControl">
-			<!-- Single File Tab -->
-			<TabItem Header="Single File" IsVisible="True" Foreground="#BBE1FA" FontSize="20">
-				<Grid>
-					<Border Padding="20" HorizontalAlignment="Center" VerticalAlignment="Center">
-						<Grid RowDefinitions="Auto,Auto,Auto,Auto">
-							<!-- Title -->
-							<TextBlock Grid.Row="0"
-                                       Text="PD3AudioModder"
-                                       HorizontalAlignment="Center"
-                                       FontSize="28"
-                                       Foreground="#BBE1FA"
-                                       Margin="10"
-                                       TextWrapping="Wrap"
-                                       MaxWidth="250"/>
 
-							<!-- Upload Button -->
-							<Button x:Name="UploadButton"
-                                    Grid.Row="1"
-                                    Content="Upload Files"
-                                    HorizontalContentAlignment="Center"
-                                    VerticalContentAlignment="Center"
-                                    Width="250"
-                                    Height="40"
-                                    Background="#3282B8"
-                                    Foreground="White"
-                                    FontSize="16"
-                                    Padding="10,5"
-                                    CornerRadius="10"
-                                    Margin="0,0,0,15"/>
+	<DockPanel LastChildFill="True">
+		<!-- Status Bar -->
+		<Grid DockPanel.Dock="Bottom"
+              Height="22"
+              Background="#0F4C75">
+			<StackPanel Orientation="Horizontal"
+                        Margin="5,0">
+				<TextBlock x:Name="StatusTextBlock"
+                          Text="Status: Waiting for input..."
+                          Foreground="#BBE1FA"
+                          VerticalAlignment="Center"
+                          FontSize="12"/>
+			</StackPanel>
+		</Grid>
 
-							<!-- Convert Button -->
-							<Button x:Name="ConvertButton"
-                                    Grid.Row="2"
-                                    Content="Convert Files"
-                                    HorizontalContentAlignment="Center"
-                                    VerticalContentAlignment="Center"
-                                    Width="250"
-                                    Height="40"
-                                    Background="#3282B8"
-                                    Foreground="White"
-                                    FontSize="16"
-                                    Padding="10,5"
-                                    CornerRadius="10"
-                                    Margin="0,0,0,15"/>
+		<!-- Main Content -->
+		<Grid>
+			<TabControl x:Name="MainTabControl">
+				<!-- Single File Tab -->
+				<TabItem Header="Single File" IsVisible="True" Foreground="#BBE1FA" FontSize="20">
+					<Grid>
+						<Border Padding="20" HorizontalAlignment="Center" VerticalAlignment="Center">
+							<Grid RowDefinitions="Auto,Auto,Auto,Auto">
+								<!-- Title -->
+								<TextBlock Grid.Row="0"
+                                          Text="PD3AudioModder"
+                                          HorizontalAlignment="Center"
+                                          FontSize="28"
+                                          Foreground="#BBE1FA"
+                                          Margin="10"
+                                          TextWrapping="Wrap"
+                                          MaxWidth="250"/>
 
-							<!-- Use Default Export Folder-->
-							<CheckBox x:Name="UseExportFolder"
-									  Grid.Row="3"
-									  Content="Use default export folder"
-									  ToolTip.Tip="{Binding defaultExportFolder}"
-									  ToolTip.ShowOnDisabled="True"
-									  IsChecked="False"
-									  HorizontalAlignment="Center"
-									  VerticalAlignment="Center"
-									  HorizontalContentAlignment="Center"
-									  VerticalContentAlignment="Center"
-									  FontSize="16"
-									  Foreground="#BBE1FA"
-									  Margin="0,0,0,30"/>
+								<!-- Upload Button -->
+								<Button x:Name="UploadButton"
+                                        Grid.Row="1"
+                                        Content="Upload Files"
+                                        HorizontalContentAlignment="Center"
+                                        VerticalContentAlignment="Center"
+                                        Width="250"
+                                        Height="40"
+                                        Background="#3282B8"
+                                        Foreground="White"
+                                        FontSize="16"
+                                        Padding="10,5"
+                                        CornerRadius="10"
+                                        Margin="0,0,0,15"/>
 
-							<!-- Status -->
-							<TextBlock x:Name="StatusTextBlock"
-                                       Grid.Row="4"
-                                       Text="Status: Waiting for input..."
-                                       HorizontalAlignment="Center"
-                                       FontSize="16"
-                                       Foreground="#BBE1FA"
-                                       TextWrapping="Wrap"
-                                       MaxWidth="250"
-									   Height="40"
-									   Margin="0,0,0,-75"
-									   />
-						</Grid>
-					</Border>
-				</Grid>
-			</TabItem>
-			<!-- Multiple Files Tab -->
-			<TabItem Header="Batch Conversion" IsVisible="True" Foreground="#BBE1FA" FontSize="20">
-				<Grid>
-					<Border Padding="20" HorizontalAlignment="Center" VerticalAlignment="Center">
-						<Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto">
-							<!-- Title -->
-							<TextBlock Grid.Row="0"
-                                       Text="PD3AudioModder"
-                                       HorizontalAlignment="Center"
-                                       FontSize="24"
-                                       Foreground="#BBE1FA"
-                                       Margin="10"
-                                       TextWrapping="Wrap"
-                                       MaxWidth="350"/>
+								<!-- Convert Button -->
+								<Button x:Name="ConvertButton"
+                                        Grid.Row="2"
+                                        Content="Convert Files"
+                                        HorizontalContentAlignment="Center"
+                                        VerticalContentAlignment="Center"
+                                        Width="250"
+                                        Height="40"
+                                        Background="#3282B8"
+                                        Foreground="White"
+                                        FontSize="16"
+                                        Padding="10,5"
+                                        CornerRadius="10"
+                                        Margin="0,0,0,15"/>
 
-							<!-- Audio Folder Button -->
-							<Button x:Name="SelectAudioFolderButton"
-                                    Grid.Row="1"
-                                    Content="Select Audio Folder"
-                                    HorizontalContentAlignment="Center"
-                                    VerticalContentAlignment="Center"
-                                    Width="280"
-                                    Height="40"
-                                    Background="#3282B8"
-                                    Foreground="White"
-                                    FontSize="16"
-                                    Padding="10,5"
-                                    CornerRadius="10"
-                                    Margin="0,0,0,15"/>
-
-							<!-- Game Files Folder Button -->
-							<Button x:Name="SelectGameFilesFolderButton"
-                                    Grid.Row="2"
-                                    Content="Select Game Files Folder"
-                                    HorizontalContentAlignment="Center"
-                                    VerticalContentAlignment="Center"
-                                    Width="280"
-                                    Height="40"
-                                    Background="#3282B8"
-                                    Foreground="White"
-                                    FontSize="16"
-                                    Padding="10,5"
-                                    CornerRadius="10"
-                                    Margin="0,0,0,15"/>
-
-							<!-- Batch Convert Button -->
-							<Button x:Name="BatchConvertButton"
-                                    Grid.Row="3"
-                                    Content="Start Batch Conversion"
-                                    HorizontalContentAlignment="Center"
-                                    VerticalContentAlignment="Center"
-                                    Width="280"
-                                    Height="40"
-                                    Background="#3282B8"
-                                    Foreground="White"
-                                    FontSize="16"
-                                    Padding="10,5"
-                                    CornerRadius="10"
-                                    Margin="0,0,0,15"/>
-
-							<!-- Use Default Export Folder-->
-							<CheckBox x:Name="BatchUseExportFolder"
-									  Grid.Row="4"
-									  Content="Use default export folder"
-									  ToolTip.Tip="{Binding defaultExportFolder}"
-									  ToolTip.ShowOnDisabled="True"
-									  IsChecked="False"
-									  HorizontalAlignment="Center"
-									  VerticalAlignment="Center"
-									  HorizontalContentAlignment="Center"
-									  VerticalContentAlignment="Center"
-									  FontSize="16"
-									  Foreground="#BBE1FA"/>
-
-							<!-- Batch Status -->
-							<TextBlock x:Name="BatchStatusTextBlock"
-                                       Grid.Row="5"
-                                       Text="Status: Waiting for folders..."
-                                       HorizontalAlignment="Center"
-                                       FontSize="16"
-                                       Foreground="#BBE1FA"
-                                       TextWrapping="Wrap"
-                                       MaxWidth="250"
-									   Height="40"
-									   Margin="0,0,0,20"/>
-
-							<!-- Progress Bar -->
-							<ProgressBar x:Name="BatchProgressBar"
-                                        Grid.Row="6"
-                                        Width="280"
-                                        Height="20"
-                                        Minimum="0"
-                                        Maximum="100"
-                                        Value="0"
-                                        Foreground="#3282B8"
-                                        Background="#0F4C75"
-                                        CornerRadius="5"
-                                        Margin="0,50,0,0"/>
-						</Grid>
-					</Border>
-				</Grid>
-			</TabItem>
-
-			<!-- Pack Files Tab -->
-			<TabItem Header="Pack Files" IsVisible="True" Foreground="#BBE1FA" FontSize="20">
-				<Grid>
-					<Border Padding="20">
-						<Grid RowDefinitions="Auto,*,Auto"
-							  MaxWidth="800"
-							  HorizontalAlignment="Center">
-							<!-- Title Section -->
-							<StackPanel Grid.Row="0" Margin="0,0,0,10">
-								<TextBlock Text="PD3AudioModder"
-										   HorizontalAlignment="Center"
-										   FontSize="32"
-										   Foreground="#BBE1FA"
-										   Margin="0,0,0,15"/>
-								<TextBlock x:Name="RepakPathTextBlock"
-										   Text="Repak Path: None"
-										   HorizontalAlignment="Center"
-										   FontSize="16"
-										   Foreground="#BBE1FA"
-										   TextWrapping="Wrap"
-										   Margin="0,0,0,20"/>
-							</StackPanel>
-
-							<!-- Main Content -->
-							<Grid Grid.Row="1"
-								  ColumnDefinitions="*,*"
-								  MaxWidth="600">
-								<!-- Left Column -->
-								<StackPanel Grid.Column="0" Spacing="20" Margin="0,0,10,0">
-									<Button x:Name="SelectRepakButton"
-											Content="Select repak.exe"
-											HorizontalContentAlignment="Center"
-											VerticalContentAlignment="Center"
-											HorizontalAlignment="Stretch"
-											Height="45"
-											Background="#3282B8"
-											Foreground="White"
-											FontSize="16"
-											Padding="15,5"
-											CornerRadius="8"/>
-									<TextBox x:Name="ModNameTextBox"
-											 Text="Mod Name"
-											 HorizontalContentAlignment="Center"
-											 VerticalContentAlignment="Center"
-											 Height="45"
-											 FontSize="16"
-											 Foreground="#BBE1FA"
-											 Padding="15,5"
-											 CornerRadius="8"/>
-								</StackPanel>
-
-								<!-- Right Column -->
-								<StackPanel Grid.Column="1" Spacing="20" Margin="10,0,0,0">
-									<Button x:Name="SelectFolderButton"
-											Content="Select Folder"
-											HorizontalContentAlignment="Center"
-											VerticalContentAlignment="Center"
-											HorizontalAlignment="Stretch"
-											Height="45"
-											Background="#3282B8"
-											Foreground="White"
-											FontSize="16"
-											Padding="15,5"
-											CornerRadius="8"/>
-									<Button x:Name="PackButton"
-											Content="Pack Files"
-											IsEnabled="False"
-											HorizontalContentAlignment="Center"
-											VerticalContentAlignment="Center"
-											HorizontalAlignment="Stretch"
-											Height="45"
-											Background="#3282B8"
-											Foreground="White"
-											FontSize="16"
-											Padding="15,5"
-											CornerRadius="8"/>
-								</StackPanel>
+								<!-- Use Default Export Folder-->
+								<CheckBox x:Name="UseExportFolder"
+                                          Grid.Row="3"
+                                          Content="Use default export folder"
+                                          ToolTip.Tip="{Binding defaultExportFolder}"
+                                          ToolTip.ShowOnDisabled="True"
+                                          IsChecked="False"
+                                          HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"
+                                          HorizontalContentAlignment="Center"
+                                          VerticalContentAlignment="Center"
+                                          FontSize="16"
+                                          Foreground="#BBE1FA"/>
 							</Grid>
+						</Border>
+					</Grid>
+				</TabItem>
 
-							<!-- Compress Checkbox -->
-							<CheckBox x:Name="CompressCheckBox"
-									  Content="Compress"
-									  IsChecked="True"
-									  HorizontalAlignment="Center"
-									  VerticalAlignment="Center"
-									  FontSize="16"
-									  Foreground="#BBE1FA"
-									  Margin="0,5,0,0"
-									  Grid.Row="2"/>
-						</Grid>
-					</Border>
-				</Grid>
-			</TabItem>
-		</TabControl>
+				<!-- Multiple Files Tab -->
+				<TabItem Header="Batch Conversion" IsVisible="True" Foreground="#BBE1FA" FontSize="20">
+					<Grid>
+						<Border Padding="20" HorizontalAlignment="Center" VerticalAlignment="Center">
+							<Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto">
+								<!-- Title -->
+								<TextBlock Grid.Row="0"
+                                          Text="PD3AudioModder"
+                                          HorizontalAlignment="Center"
+                                          FontSize="24"
+                                          Foreground="#BBE1FA"
+                                          Margin="10"
+                                          TextWrapping="Wrap"
+                                          MaxWidth="350"/>
 
-		<!-- Help Button -->
-		<Button x:Name="HelpButton"
-				Content="Help"
-				HorizontalAlignment="Right"
-				HorizontalContentAlignment="Center"
-				VerticalAlignment="Bottom"
-				VerticalContentAlignment="Center"
-			    Margin="0,0,10,50"
-				Background="#3282B8"
-				Foreground="White"
-				FontSize="16"
-				Padding="10,5"
-				CornerRadius="10"
-				Click="OnHelpClick"
-				Width="85"/>
-		
-		<!-- Settings Button -->
-		<Button x:Name="SettingsButton"
-                Content="Settings"
-                HorizontalAlignment="Right"
-				HorizontalContentAlignment="Center"
-                VerticalAlignment="Bottom"
-				VerticalContentAlignment="Center"
-                Margin="10"
-                Background="#3282B8"
-                Foreground="White"
-                FontSize="16"
-                Padding="10,5"
-                CornerRadius="10"
-				Click="OnSettingsClick"
-				Width="85"/>
-	</Grid>
+								<!-- Audio Folder Button -->
+								<Button x:Name="SelectAudioFolderButton"
+                                        Grid.Row="1"
+                                        Content="Select Audio Folder"
+                                        HorizontalContentAlignment="Center"
+                                        VerticalContentAlignment="Center"
+                                        Width="280"
+                                        Height="40"
+                                        Background="#3282B8"
+                                        Foreground="White"
+                                        FontSize="16"
+                                        Padding="10,5"
+                                        CornerRadius="10"
+                                        Margin="0,0,0,15"/>
+
+								<!-- Game Files Folder Button -->
+								<Button x:Name="SelectGameFilesFolderButton"
+                                        Grid.Row="2"
+                                        Content="Select Game Files Folder"
+                                        HorizontalContentAlignment="Center"
+                                        VerticalContentAlignment="Center"
+                                        Width="280"
+                                        Height="40"
+                                        Background="#3282B8"
+                                        Foreground="White"
+                                        FontSize="16"
+                                        Padding="10,5"
+                                        CornerRadius="10"
+                                        Margin="0,0,0,15"/>
+
+								<!-- Batch Convert Button -->
+								<Button x:Name="BatchConvertButton"
+                                        Grid.Row="3"
+                                        Content="Start Batch Conversion"
+                                        HorizontalContentAlignment="Center"
+                                        VerticalContentAlignment="Center"
+                                        Width="280"
+                                        Height="40"
+                                        Background="#3282B8"
+                                        Foreground="White"
+                                        FontSize="16"
+                                        Padding="10,5"
+                                        CornerRadius="10"
+                                        Margin="0,0,0,15"/>
+
+								<!-- Use Default Export Folder-->
+								<CheckBox x:Name="BatchUseExportFolder"
+                                          Grid.Row="4"
+                                          Content="Use default export folder"
+                                          ToolTip.Tip="{Binding defaultExportFolder}"
+                                          ToolTip.ShowOnDisabled="True"
+                                          IsChecked="False"
+                                          HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"
+                                          HorizontalContentAlignment="Center"
+                                          VerticalContentAlignment="Center"
+                                          FontSize="16"
+                                          Foreground="#BBE1FA"/>
+
+								<!-- Progress Bar -->
+								<ProgressBar x:Name="BatchProgressBar"
+                                            Grid.Row="5"
+                                            Width="280"
+                                            Height="20"
+                                            Minimum="0"
+                                            Maximum="100"
+                                            Value="0"
+                                            Foreground="#3282B8"
+                                            Background="#0F4C75"
+                                            CornerRadius="5"
+                                            Margin="0,15,0,0"/>
+							</Grid>
+						</Border>
+					</Grid>
+				</TabItem>
+
+				<!-- Pack Files Tab -->
+				<TabItem Header="Pack Files" IsVisible="True" Foreground="#BBE1FA" FontSize="20">
+					<Grid>
+						<Border Padding="20">
+							<Grid RowDefinitions="Auto,*,Auto"
+                                  MaxWidth="800"
+                                  HorizontalAlignment="Center">
+								<!-- Title Section -->
+								<StackPanel Grid.Row="0" Margin="0,0,0,10">
+									<TextBlock Text="PD3AudioModder"
+                                               HorizontalAlignment="Center"
+                                               FontSize="32"
+                                               Foreground="#BBE1FA"
+                                               Margin="0,0,0,15"/>
+									<TextBlock x:Name="RepakPathTextBlock"
+                                               Text="Repak Path: None"
+                                               HorizontalAlignment="Center"
+                                               FontSize="16"
+                                               Foreground="#BBE1FA"
+                                               TextWrapping="Wrap"
+                                               Margin="0,0,0,20"/>
+								</StackPanel>
+
+								<!-- Main Content -->
+								<Grid Grid.Row="1"
+                                      ColumnDefinitions="*,*"
+                                      MaxWidth="600">
+									<!-- Left Column -->
+									<StackPanel Grid.Column="0" Spacing="20" Margin="0,0,10,0">
+										<Button x:Name="SelectRepakButton"
+                                                Content="Select repak.exe"
+                                                HorizontalContentAlignment="Center"
+                                                VerticalContentAlignment="Center"
+                                                HorizontalAlignment="Stretch"
+                                                Height="45"
+                                                Background="#3282B8"
+                                                Foreground="White"
+                                                FontSize="16"
+                                                Padding="15,5"
+                                                CornerRadius="8"/>
+										<TextBox x:Name="ModNameTextBox"
+                                                 Text="Mod Name"
+                                                 HorizontalContentAlignment="Center"
+                                                 VerticalContentAlignment="Center"
+                                                 Height="45"
+                                                 FontSize="16"
+                                                 Foreground="#BBE1FA"
+                                                 Padding="15,5"
+                                                 CornerRadius="8"/>
+									</StackPanel>
+
+									<!-- Right Column -->
+									<StackPanel Grid.Column="1" Spacing="20" Margin="10,0,0,0">
+										<Button x:Name="SelectFolderButton"
+                                                Content="Select Folder"
+                                                HorizontalContentAlignment="Center"
+                                                VerticalContentAlignment="Center"
+                                                HorizontalAlignment="Stretch"
+                                                Height="45"
+                                                Background="#3282B8"
+                                                Foreground="White"
+                                                FontSize="16"
+                                                Padding="15,5"
+                                                CornerRadius="8"/>
+										<Button x:Name="PackButton"
+                                                Content="Pack Files"
+                                                IsEnabled="False"
+                                                HorizontalContentAlignment="Center"
+                                                VerticalContentAlignment="Center"
+                                                HorizontalAlignment="Stretch"
+                                                Height="45"
+                                                Background="#3282B8"
+                                                Foreground="White"
+                                                FontSize="16"
+                                                Padding="15,5"
+                                                CornerRadius="8"/>
+									</StackPanel>
+								</Grid>
+
+								<!-- Compress Checkbox -->
+								<CheckBox x:Name="CompressCheckBox"
+                                          Content="Compress"
+                                          IsChecked="True"
+                                          HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"
+                                          FontSize="16"
+                                          Foreground="#BBE1FA"
+                                          Margin="0,5,0,0"
+                                          Grid.Row="2"/>
+							</Grid>
+						</Border>
+					</Grid>
+				</TabItem>
+			</TabControl>
+
+			<!-- Help Button -->
+			<Button x:Name="HelpButton"
+                    Content="Help"
+                    HorizontalAlignment="Right"
+                    HorizontalContentAlignment="Center"
+                    VerticalAlignment="Bottom"
+                    VerticalContentAlignment="Center"
+                    Margin="0,0,10,50"
+                    Background="#3282B8"
+                    Foreground="White"
+                    FontSize="16"
+                    Padding="10,5"
+                    CornerRadius="10"
+                    Click="OnHelpClick"
+                    Width="85"/>
+
+			<!-- Settings Button -->
+			<Button x:Name="SettingsButton"
+                    Content="Settings"
+                    HorizontalAlignment="Right"
+                    HorizontalContentAlignment="Center"
+                    VerticalAlignment="Bottom"
+                    VerticalContentAlignment="Center"
+                    Margin="10"
+                    Background="#3282B8"
+                    Foreground="White"
+                    FontSize="16"
+                    Padding="10,5"
+                    CornerRadius="10"
+                    Click="OnSettingsClick"
+                    Width="85"/>
+		</Grid>
+	</DockPanel>
 </Window>

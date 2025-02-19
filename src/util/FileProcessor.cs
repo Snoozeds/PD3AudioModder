@@ -9,14 +9,19 @@ namespace PD3AudioModder.util
 {
     internal class FileProcessor
     {
-
+        private readonly MainWindow? _mainWindow;
         private AppConfig? _appConfig;
+
+        public FileProcessor(MainWindow mainWindow)
+        {
+            _mainWindow = mainWindow;
+        }
 
         public void UpdateStatus(string message, TextBlock statusTextBlock)
         {
-            if (statusTextBlock != null)
+            if (_mainWindow != null)
             {
-                statusTextBlock.Text = $"Status: {message}";
+                _mainWindow.UpdateGlobalStatus(message, "Single File");
             }
         }
 
