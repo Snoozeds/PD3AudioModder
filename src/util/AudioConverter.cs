@@ -4,12 +4,12 @@ using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
-using static PD3AudioModder.WAVE;
 
 public class AudioConverter
 {
     private static AppConfig _config = AppConfig.Load();
     private static string? FfmpegOptions = _config.FfmpegOptions;
+
     private static string GetFfmpegPath()
     {
         // check if ffmpeg exists in the application directory
@@ -22,7 +22,6 @@ public class AudioConverter
             return localFfmpeg;
         }
 
-        // check PATH on windows
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
         {
             string? ffmpegFromPath = GetCommandPath(ffmpegExecutable);
@@ -31,16 +30,11 @@ public class AudioConverter
                 return ffmpegFromPath;
             }
         }
-        
+
         // check unix-like system locations
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux) || RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
         {
-            string[] commonPaths = {
-                "/usr/bin/ffmpeg",
-                "/usr/local/bin/ffmpeg",
-                "/opt/homebrew/bin/ffmpeg"  // Common on macOS with Homebrew
-            };
-
+            string[] commonPaths = { "/usr/bin/ffmpeg", "/usr/local/bin/ffmpeg", "/opt/homebrew/bin/ffmpeg" };
             foreach (string path in commonPaths)
             {
                 if (File.Exists(path))
@@ -94,17 +88,15 @@ public class AudioConverter
             throw new Exception("FFmpeg not found. Please install FFmpeg and ensure it's available in your system PATH.", ex);
         }
 
-        // Ensure output directory exists
         string outputDir = Path.GetDirectoryName(outputPath) ?? throw new ArgumentException("Invalid output path");
         Directory.CreateDirectory(outputDir);
 
-        // Ensure output path has .wav extension
         if (!outputPath.EndsWith(".wav", StringComparison.OrdinalIgnoreCase))
         {
             outputPath = Path.ChangeExtension(outputPath, ".wav");
         }
 
-        if(String.IsNullOrEmpty(FfmpegOptions))
+        if (string.IsNullOrEmpty(FfmpegOptions))
         {
             FfmpegOptions = DefaultConfig.FfmpegOptions!;
         }
@@ -113,32 +105,20 @@ public class AudioConverter
         {
             FileName = ffmpegPath,
             Arguments = $"-i \"{inputPath}\" {FfmpegOptions} \"{outputPath}\" -y",
-            RedirectStandardOutput = true,
-            RedirectStandardError = true,
-            UseShellExecute = false,
-            CreateNoWindow = false
+            UseShellExecute = true,
+            WindowStyle = ProcessWindowStyle.Hidden
         };
 
         using var process = Process.Start(processStartInfo)
             ?? throw new Exception("Failed to start FFmpeg process");
 
-        var errorOutput = new System.Text.StringBuilder();
-        process.ErrorDataReceived += (sender, e) =>
-        {
-            if (!string.IsNullOrEmpty(e.Data))
-            {
-                errorOutput.AppendLine(e.Data);
-            }
-        };
-
-        process.BeginErrorReadLine();
         await process.WaitForExitAsync();
 
         if (process.ExitCode != 0)
         {
-            var warningDialog = new WarningDialog($"FFmpeg conversion failed with exit code {process.ExitCode}.\nError: {errorOutput}");
+            var warningDialog = new WarningDialog($"FFmpeg conversion failed with exit code {process.ExitCode}.");
             warningDialog.Show();
-            throw new Exception($"FFmpeg conversion failed with exit code {process.ExitCode}. Error: {errorOutput}");
+            throw new Exception($"FFmpeg conversion failed with exit code {process.ExitCode}.");
         }
 
         if (!File.Exists(outputPath))
