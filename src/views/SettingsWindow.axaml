@@ -128,7 +128,7 @@
 										<TextBlock Text="Asks if you want to update each time, or update automatically."
 												  Foreground="#8B9DA7" FontSize="14" TextWrapping="Wrap"/>
 									</StackPanel>
-									<ToggleSwitch Grid.Column="1" Name="AskUpdateToggle" Foreground="#BBE1FA" HorizontalAlignment="Right" Margin="0,0,30,0"/>
+									<ToggleSwitch Grid.Column="1" Name="AskUpdateToggle" Foreground="#BBE1FA" HorizontalAlignment="Right" Margin="0,0,-10,0" OnContent="Ask" OffContent="Don't ask"/>
 								</Grid>
 								<Button Content="Check for Updates" Name="CheckUpdatesButton"
 										Width="350" Height="40" Background="#3282B8" Foreground="White"
