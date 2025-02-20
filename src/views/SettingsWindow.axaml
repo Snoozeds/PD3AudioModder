@@ -86,7 +86,7 @@
 								<TextBlock Text="Advanced Settings" Foreground="#BBE1FA" FontSize="20" FontWeight="Bold"/>
 								<TextBlock Text="Only change if you know what you are doing!" Foreground="#E6C400" FontSize="16" Margin="0,0,0,15"/>
 
-								<StackPanel>
+								<StackPanel Margin="0,0,0,20">
 									<TextBlock Text="FFmpeg Options" Foreground="#BBE1FA" FontSize="16"/>
 									<TextBlock Text="Options used when converting audio files to WAV format."
                                              Foreground="#8B9DA7" FontSize="14" Margin="0,0,0,10"/>
@@ -98,6 +98,21 @@
                                             VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
 											Click="OnResetFFmpegOptionsClick"/>
 								</StackPanel>
+
+								<StackPanel Margin="0,0,0,20">
+									<TextBlock Text="FFmpeg Path" Foreground="#BBE1FA" FontSize="16"/>
+									<TextBlock Text="The app looks in common locations, but you may specify an ffmpeg.exe path here."
+                                             Foreground="#8B9DA7" FontSize="14" TextWrapping="Wrap" Margin="0,0,0,10"/>
+									<Grid ColumnDefinitions="*, Auto">
+										<TextBox Grid.Column="0" Name="FFmpegPathTextBox" Background="#1B262C" Foreground="#BBE1FA" Margin="0,0,10,0"/>
+										<Button Grid.Column="1" Content="Browse" Name="FFmpegPathBrowseButton"
+                                                Width="80" Height="30" Background="#3282B8" Foreground="White"
+                                                FontSize="16" Padding="5" CornerRadius="10"
+                                                VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+												Click="OnFFmpegPathBrowseButtonClick"/>
+									</Grid>
+								</StackPanel>
+								
 							</StackPanel>
 						</Border>
 					</StackPanel>

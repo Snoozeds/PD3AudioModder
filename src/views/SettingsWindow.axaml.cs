@@ -17,6 +17,7 @@ namespace PD3AudioModder
         private ToggleSwitch? _useExportFolderToggle;
         private TextBox? _repakPathTextBox;
         private TextBox? _ffmpegOptionsTextBox;
+        private TextBox? _ffmpegPathTextBox;
 
         public string? Version { get; set; }
         public string? FFmpegOptions { get; set; } = "-acodec pcm_s16le -ar 48000 -ac 2";
@@ -74,6 +75,7 @@ namespace PD3AudioModder
 
             _repakPathTextBox = this.FindControl<TextBox>("RepakPathTextBox");
             _ffmpegOptionsTextBox = this.FindControl<TextBox>("FFmpegOptionsTextBox");
+            _ffmpegPathTextBox = this.FindControl<TextBox>("FFmpegPathTextBox");
 
             if (!String.IsNullOrEmpty(AppConfig.Instance.FfmpegOptions))
             {
@@ -85,7 +87,7 @@ namespace PD3AudioModder
                 _updateToggle.IsCheckedChanged += OnUpdateToggleChanged;
             }
 
-            if(_askUpdateToggle != null)
+            if (_askUpdateToggle != null)
             {
                 _askUpdateToggle.IsCheckedChanged += OnAskUpdateToggleChanged;
             }
@@ -118,6 +120,9 @@ namespace PD3AudioModder
 
             if (_ffmpegOptionsTextBox != null)
                 _ffmpegOptionsTextBox.Text = config.FfmpegOptions;
+
+            if (_ffmpegPathTextBox != null)
+                _ffmpegPathTextBox.Text = config.FfmpegPath;
         }
 
         private void OnUpdateToggleChanged(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
@@ -228,6 +233,34 @@ namespace PD3AudioModder
             {
                 _ffmpegOptionsTextBox.Text = defaultOptions;
                 AppConfig.Instance.FfmpegOptions = defaultOptions;
+                AppConfig.Instance.Save();
+            }
+        }
+
+        private async void OnFFmpegPathBrowseButtonClick(
+            object? sender,
+            Avalonia.Interactivity.RoutedEventArgs e
+        )
+        {
+            var dialog = new OpenFileDialog
+            {
+                Title = "Select FFmpeg Executable",
+                AllowMultiple = false,
+                Filters = new List<FileDialogFilter>
+                {
+                    new FileDialogFilter
+                    {
+                        Name = "Executable",
+                        Extensions = new List<string> { "exe" },
+                    },
+                },
+            };
+
+            var result = await dialog.ShowAsync(this);
+            if (result != null && result.Length > 0 && _ffmpegPathTextBox != null)
+            {
+                _ffmpegPathTextBox.Text = result[0];
+                AppConfig.Instance.FfmpegPath = result[0];
                 AppConfig.Instance.Save();
             }
         }

@@ -9,9 +9,16 @@ public class AudioConverter
 {
     private static AppConfig _config = AppConfig.Load();
     private static string? FfmpegOptions = _config.FfmpegOptions;
+    private static string? FfmpegPath = _config.FfmpegPath;
 
     private static string GetFfmpegPath()
     {
+        // check config path
+        if (!String.IsNullOrEmpty(FfmpegPath))
+        {
+            return FfmpegPath;
+        }
+
         // check if ffmpeg exists in the application directory
         string baseDir = AppDomain.CurrentDomain.BaseDirectory;
         string ffmpegExecutable = RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
@@ -55,7 +62,7 @@ public class AudioConverter
         }
 
         throw new FileNotFoundException(
-            "FFmpeg not found. Please ensure FFmpeg is installed and available in your system PATH or application directory."
+            "FFmpeg not found. Please ensure FFmpeg is installed and available in your system PATH or the same directory PD3AudioModder is in. You may also choose a path in settings."
         );
     }
 
