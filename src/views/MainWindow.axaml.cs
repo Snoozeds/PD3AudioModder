@@ -247,17 +247,20 @@ namespace PD3AudioModder
 
         public void UpdateExportFolderCheckboxes()
         {
-            useExportFolderCheckBox!.IsEnabled =
-                defaultExportFolder != "Not set, change in settings.";
-            useExportFolderCheckBox.IsChecked =
-                useExportFolderCheckBox.IsEnabled
-                && AppConfig.Instance.UseDefaultExportFolder == true;
+            bool isExportFolderSet = defaultExportFolder != "Not set, change in settings.";
+            bool useDefaultExport = AppConfig.Instance.UseDefaultExportFolder == true;
 
-            batchUseExportFolderCheckBox!.IsEnabled =
-                defaultExportFolder != "Not set, change in settings.";
-            batchUseExportFolderCheckBox.IsChecked =
-                batchUseExportFolderCheckBox.IsEnabled
-                && AppConfig.Instance.UseDefaultExportFolder == true;
+            if (useExportFolderCheckBox != null)
+            {
+                useExportFolderCheckBox.IsEnabled = isExportFolderSet;
+                useExportFolderCheckBox.IsChecked = isExportFolderSet && useDefaultExport;
+            }
+
+            if (batchUseExportFolderCheckBox != null)
+            {
+                batchUseExportFolderCheckBox.IsEnabled = isExportFolderSet;
+                batchUseExportFolderCheckBox.IsChecked = isExportFolderSet && useDefaultExport;
+            }
         }
 
         private async Task UploadFile()

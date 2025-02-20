@@ -8,319 +8,245 @@ namespace PD3AudioModder
 {
     public partial class SettingsWindow : Window
     {
-        private MainWindow? _mainWindow;
-        private WindowNotificationManager? _notificationManager;
-        private ToggleSwitch? _updateToggle;
-        private ToggleSwitch? _askUpdateToggle;
-        private ToggleSwitch? _muteNotificationSoundToggle;
-        private TextBox? _exportFolderTextBox;
-        private ToggleSwitch? _useExportFolderToggle;
-        private TextBox? _repakPathTextBox;
-        private TextBox? _ffmpegOptionsTextBox;
-        private TextBox? _ffmpegPathTextBox;
+        private readonly MainWindow? _mainWindow;
+        private readonly WindowNotificationManager? _notificationManager;
+        private readonly Dictionary<string, Control> _controls = new();
 
-        public string? Version { get; set; }
-        public string? FFmpegOptions { get; set; } = "-acodec pcm_s16le -ar 48000 -ac 2";
+        public string Version { get; set; } = "Version: Unknown";
+        public string FFmpegOptions { get; set; } = "-acodec pcm_s16le -ar 48000 -ac 2";
 
-        public SettingsWindow()
-        {
-            InitializeComponent();
-        }
+        public SettingsWindow() { }
 
         public SettingsWindow(MainWindow mainWindow)
         {
             _mainWindow = mainWindow;
             _notificationManager = new WindowNotificationManager(this);
-            AutoUpdater updater = new AutoUpdater(_notificationManager!, _mainWindow);
 
-            if (updater.GetCurrentVersion() != "0.0.0")
-            {
-                Version = "Version: " + updater.GetCurrentVersion();
-            }
-            else
-            {
-                Version = "Version: Unknown";
-            }
-
+            InitializeVersion();
             InitializeComponent();
-
             InitializeControls();
             LoadSettings();
-
             DataContext = this;
+        }
+
+        private void InitializeVersion()
+        {
+            var updater = new AutoUpdater(_notificationManager!, _mainWindow!);
+            var currentVersion = updater.GetCurrentVersion();
+            Version = currentVersion != "0.0.0" ? $"Version: {currentVersion}" : "Version: Unknown";
         }
 
         private void InitializeControls()
         {
-            _updateToggle = this.FindControl<ToggleSwitch>("UpdateToggle");
-            _askUpdateToggle = this.FindControl<ToggleSwitch>("AskUpdateToggle");
-            _muteNotificationSoundToggle = this.FindControl<ToggleSwitch>(
-                "MuteNotificationSoundToggle"
-            );
-            _exportFolderTextBox = this.FindControl<TextBox>("ExportFolderTextBox")!;
-            _useExportFolderToggle = this.FindControl<ToggleSwitch>("UseExportFolderToggle");
+            string[] controlNames =
+            {
+                "UpdateToggle",
+                "AskUpdateToggle",
+                "MuteNotificationSoundToggle",
+                "ExportFolderTextBox",
+                "UseExportFolderToggle",
+                "RepakPathTextBox",
+                "FFmpegOptionsTextBox",
+                "FFmpegPathTextBox",
+            };
+            foreach (var name in controlNames)
+            {
+                _controls[name] = this.FindControl<Control>(name)!;
+            }
 
-            if (
-                String.IsNullOrEmpty(AppConfig.Instance.DefaultExportFolder)
-                || AppConfig.Instance.DefaultExportFolder == "null"
+            InitializeEventHandlers();
+        }
+
+        private void InitializeEventHandlers()
+        {
+            foreach (
+                var toggleName in new[]
+                {
+                    "UpdateToggle",
+                    "AskUpdateToggle",
+                    "MuteNotificationSoundToggle",
+                    "UseExportFolderToggle",
+                }
             )
             {
-                _useExportFolderToggle!.IsChecked = false;
-                _useExportFolderToggle!.IsEnabled = false;
-            }
-            else if (AppConfig.Instance.UseDefaultExportFolder == true)
-            {
-                _useExportFolderToggle!.IsChecked = true;
-            }
-
-            _repakPathTextBox = this.FindControl<TextBox>("RepakPathTextBox");
-            _ffmpegOptionsTextBox = this.FindControl<TextBox>("FFmpegOptionsTextBox");
-            _ffmpegPathTextBox = this.FindControl<TextBox>("FFmpegPathTextBox");
-
-            if (!String.IsNullOrEmpty(AppConfig.Instance.FfmpegOptions))
-            {
-                FFmpegOptions = AppConfig.Instance.FfmpegOptions;
-            }
-
-            if (_updateToggle != null)
-            {
-                _updateToggle.IsCheckedChanged += OnUpdateToggleChanged;
-            }
-
-            if (_askUpdateToggle != null)
-            {
-                _askUpdateToggle.IsCheckedChanged += OnAskUpdateToggleChanged;
-            }
-
-            if (_muteNotificationSoundToggle != null)
-            {
-                _muteNotificationSoundToggle.IsCheckedChanged +=
-                    OnMuteNotificationSoundToggleChanged;
+                if (_controls[toggleName] is ToggleSwitch toggle)
+                    toggle.IsCheckedChanged += HandleToggleChanged;
             }
         }
 
         private void LoadSettings()
         {
             var config = AppConfig.Instance;
-
-            if (_updateToggle != null)
-                _updateToggle.IsChecked = config.AutoUpdateEnabled;
-
-            if (_askUpdateToggle != null)
-                _askUpdateToggle.IsChecked = config.AskToUpdate;
-
-            if (_muteNotificationSoundToggle != null)
-                _muteNotificationSoundToggle.IsChecked = config.MuteNotificationSound;
-
-            if (_exportFolderTextBox != null)
-                _exportFolderTextBox.Text = config.DefaultExportFolder;
-
-            if (_repakPathTextBox != null)
-                _repakPathTextBox.Text = config.RepakPath;
-
-            if (_ffmpegOptionsTextBox != null)
-                _ffmpegOptionsTextBox.Text = config.FfmpegOptions;
-
-            if (_ffmpegPathTextBox != null)
-                _ffmpegPathTextBox.Text = config.FfmpegPath;
-        }
-
-        private void OnUpdateToggleChanged(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
-        {
-            if (_updateToggle != null)
-            {
-                var config = AppConfig.Instance;
-                config.AutoUpdateEnabled = _updateToggle.IsChecked ?? false;
-                config.Save();
-            }
-        }
-
-        private void OnAskUpdateToggleChanged(
-            object? sender,
-            Avalonia.Interactivity.RoutedEventArgs e
-        )
-        {
-            if (_askUpdateToggle != null)
-            {
-                var config = AppConfig.Instance;
-                config.AskToUpdate = _askUpdateToggle.IsChecked ?? false;
-                config.Save();
-            }
-        }
-
-        private async void OnExportFolderBrowseButtonClick(
-            object? sender,
-            Avalonia.Interactivity.RoutedEventArgs e
-        )
-        {
-            var dialog = new OpenFolderDialog { Title = "Select Export Folder" };
-
-            var result = await dialog.ShowAsync(this);
-            if (!string.IsNullOrEmpty(result) && _exportFolderTextBox != null)
-            {
-                _exportFolderTextBox.Text = result;
-                AppConfig.Instance.DefaultExportFolder = result;
-                AppConfig.Instance.Save();
-                _mainWindow!.defaultExportFolder = result;
-                _mainWindow!.UpdateExportFolderCheckboxes();
-            }
-        }
-
-        private void OnUseExportFolderToggleChecked(
-            object? sender,
-            Avalonia.Interactivity.RoutedEventArgs e
-        )
-        {
-            AppConfig.Instance.UseDefaultExportFolder = true;
-            AppConfig.Instance.Save();
-            _mainWindow!.UpdateExportFolderCheckboxes();
-        }
-
-        private void OnUseExportFolderToggleUnchecked(
-            object? sender,
-            Avalonia.Interactivity.RoutedEventArgs e
-        )
-        {
-            AppConfig.Instance.UseDefaultExportFolder = false;
-            AppConfig.Instance.Save();
-            _mainWindow!.UpdateExportFolderCheckboxes();
-        }
-
-        private void OnExportFolderClearButtonClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
-        {
-            if (_exportFolderTextBox != null)
-            {
-                _exportFolderTextBox.Text = string.Empty;
-                AppConfig.Instance.DefaultExportFolder = string.Empty;
-                AppConfig.Instance.Save();
-                _mainWindow?.UpdateExportFolderCheckboxes();
-
-                if (_useExportFolderToggle != null)
+            foreach (
+                var (key, value) in new Dictionary<string, object?>
                 {
-                    _useExportFolderToggle.IsChecked = false;
-                    _useExportFolderToggle.IsEnabled = false;
-                    AppConfig.Instance.UseDefaultExportFolder = false;
-                    AppConfig.Instance.Save();
+                    { "UpdateToggle", config.AutoUpdateEnabled },
+                    { "AskUpdateToggle", config.AskToUpdate },
+                    { "MuteNotificationSoundToggle", config.MuteNotificationSound },
+                    { "ExportFolderTextBox", config.DefaultExportFolder },
+                    { "UseExportFolderToggle", config.UseDefaultExportFolder },
+                    { "RepakPathTextBox", config.RepakPath },
+                    { "FFmpegOptionsTextBox", config.FfmpegOptions },
+                    { "FFmpegPathTextBox", config.FfmpegPath },
+                }
+            )
+            {
+                if (_controls.TryGetValue(key, out var control))
+                {
+                    switch (control)
+                    {
+                        case ToggleSwitch toggle:
+                            toggle.IsChecked = (bool?)value;
+                            break;
+                        case TextBox textBox:
+                            textBox.Text = (string?)value;
+                            break;
+                    }
                 }
             }
+
+            // Disable UseExportFolderToggle if ExportFolderTextBox is empty
+            if (
+                _controls.TryGetValue("UseExportFolderToggle", out var useExportFolderControl)
+                && _controls.TryGetValue("ExportFolderTextBox", out var exportFolderControl)
+                && exportFolderControl is TextBox exportFolderTextBox
+                && useExportFolderControl is ToggleSwitch useExportFolderToggle
+            )
+            {
+                useExportFolderToggle.IsEnabled = !string.IsNullOrWhiteSpace(
+                    exportFolderTextBox.Text
+                );
+            }
         }
 
-        private async void OnRepakPathBrowseButtonClick(
-            object? sender,
-            Avalonia.Interactivity.RoutedEventArgs e
-        )
+        private void HandleToggleChanged(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
-            var dialog = new OpenFileDialog
+            if (sender is ToggleSwitch toggle && _controls.TryGetValue(toggle.Name, out _))
             {
-                Title = "Select Repak Executable",
-                AllowMultiple = false,
-                Filters = new List<FileDialogFilter>
+                switch (toggle.Name)
                 {
-                    new FileDialogFilter
+                    case "UpdateToggle":
+                        AppConfig.Instance.AutoUpdateEnabled = toggle.IsChecked ?? false;
+                        break;
+                    case "AskUpdateToggle":
+                        AppConfig.Instance.AskToUpdate = toggle.IsChecked ?? false;
+                        break;
+                    case "MuteNotificationSoundToggle":
+                        AppConfig.Instance.MuteNotificationSound = toggle.IsChecked ?? false;
+                        break;
+                    case "UseExportFolderToggle":
+                        AppConfig.Instance.UseDefaultExportFolder = toggle.IsChecked ?? false;
+                        break;
+                }
+                AppConfig.Instance.Save();
+            }
+        }
+
+        private async void HandleBrowseButtonClick(
+            object? sender,
+            Avalonia.Interactivity.RoutedEventArgs e
+        )
+        {
+            if (
+                sender is not Button button
+                || !_controls.TryGetValue(
+                    button.Name.Replace("BrowseButton", "TextBox"),
+                    out var control
+                )
+                || control is not TextBox textBox
+            )
+                return;
+
+            string? result = button.Name.Contains("ExportFolder")
+                ? await new OpenFolderDialog { Title = "Select Folder" }.ShowAsync(this)
+                : (
+                    await new OpenFileDialog
                     {
-                        Name = "Executable",
-                        Extensions = new List<string> { "exe" },
-                    },
-                },
-            };
+                        Title = "Select File",
+                        AllowMultiple = false,
+                        Filters = new List<FileDialogFilter>
+                        {
+                            new()
+                            {
+                                Name = "Executable",
+                                Extensions = new List<string> { "exe" },
+                            },
+                        },
+                    }.ShowAsync(this)
+                )?[0];
 
-            var result = await dialog.ShowAsync(this);
-            if (result != null && result.Length > 0 && _repakPathTextBox != null)
+            if (!string.IsNullOrEmpty(result))
             {
-                _repakPathTextBox.Text = result[0];
-                AppConfig.Instance.RepakPath = result[0];
-                AppConfig.Instance.Save();
-            }
-        }
-
-        private void OnRepakPathClearButtonClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
-        {
-            if (_repakPathTextBox != null)
-            {
-                _repakPathTextBox.Text = string.Empty;
-                AppConfig.Instance.RepakPath = string.Empty;
-                AppConfig.Instance.Save();
-            }
-        }
-
-        private void FFmpegOptionsTextChanged(object? sender, TextChangedEventArgs e)
-        {
-            if (_ffmpegOptionsTextBox != null)
-            {
-                AppConfig.Instance.FfmpegOptions = _ffmpegOptionsTextBox.Text;
-                AppConfig.Instance.Save();
-            }
-        }
-
-        private void OnResetFFmpegOptionsClick(
-            object? sender,
-            Avalonia.Interactivity.RoutedEventArgs e
-        )
-        {
-            const string defaultOptions = "-acodec pcm_s16le -ar 48000 -ac 2";
-            if (_ffmpegOptionsTextBox != null)
-            {
-                _ffmpegOptionsTextBox.Text = defaultOptions;
-                AppConfig.Instance.FfmpegOptions = defaultOptions;
-                AppConfig.Instance.Save();
-            }
-        }
-
-        private async void OnFFmpegPathBrowseButtonClick(
-            object? sender,
-            Avalonia.Interactivity.RoutedEventArgs e
-        )
-        {
-            var dialog = new OpenFileDialog
-            {
-                Title = "Select FFmpeg Executable",
-                AllowMultiple = false,
-                Filters = new List<FileDialogFilter>
+                textBox.Text = result;
+                switch (button.Name)
                 {
-                    new FileDialogFilter
-                    {
-                        Name = "Executable",
-                        Extensions = new List<string> { "exe" },
-                    },
-                },
-            };
-
-            var result = await dialog.ShowAsync(this);
-            if (result != null && result.Length > 0 && _ffmpegPathTextBox != null)
-            {
-                _ffmpegPathTextBox.Text = result[0];
-                AppConfig.Instance.FfmpegPath = result[0];
+                    case "ExportFolderBrowseButton":
+                        AppConfig.Instance.DefaultExportFolder = result;
+                        break;
+                    case "RepakPathBrowseButton":
+                        AppConfig.Instance.RepakPath = result;
+                        break;
+                    case "FFmpegPathBrowseButton":
+                        AppConfig.Instance.FfmpegPath = result;
+                        break;
+                }
                 AppConfig.Instance.Save();
             }
         }
 
-        private void OnFFmpegPathClearButtonClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
-        {
-            if (_ffmpegPathTextBox != null)
-            {
-                _ffmpegPathTextBox.Text = string.Empty;
-                AppConfig.Instance.FfmpegPath = string.Empty;
-                AppConfig.Instance.Save();
-            }
-        }
-
-        private void OnMuteNotificationSoundToggleChanged(
+        private void HandleClearButtonClick(
             object? sender,
             Avalonia.Interactivity.RoutedEventArgs e
         )
         {
-            if (_muteNotificationSoundToggle != null)
+            if (
+                sender is Button button
+                && _controls.TryGetValue(
+                    button.Name.Replace("ClearButton", "TextBox"),
+                    out var control
+                )
+                && control is TextBox textBox
+            )
             {
-                AppConfig.Instance.MuteNotificationSound =
-                    _muteNotificationSoundToggle.IsChecked ?? false;
+                textBox.Text = string.Empty;
+                switch (button.Name)
+                {
+                    case "ExportFolderClearButton":
+                        AppConfig.Instance.DefaultExportFolder = string.Empty;
+                        break;
+                    case "RepakPathClearButton":
+                        AppConfig.Instance.RepakPath = string.Empty;
+                        break;
+                    case "FFmpegPathClearButton":
+                        AppConfig.Instance.FfmpegPath = string.Empty;
+                        break;
+                }
                 AppConfig.Instance.Save();
             }
         }
 
-        private void OnLicensesClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+        private void HandleTextChanged(object? sender, TextChangedEventArgs e)
         {
-            var licensesWindow = new LicensesWindow();
-            licensesWindow.ShowDialog(this);
+            if (sender is TextBox textBox)
+            {
+                if (textBox.Name == "FFmpegOptionsTextBox")
+                {
+                    AppConfig.Instance.FfmpegOptions = textBox.Text;
+                }
+                else if (
+                    textBox.Name == "ExportFolderTextBox"
+                    && _controls.TryGetValue(
+                        "UseExportFolderToggle",
+                        out var useExportFolderControl
+                    )
+                    && useExportFolderControl is ToggleSwitch useExportFolderToggle
+                )
+                {
+                    useExportFolderToggle.IsEnabled = !string.IsNullOrWhiteSpace(textBox.Text);
+                }
+
+                AppConfig.Instance.Save();
+            }
         }
 
         private async void OnUpdateClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
@@ -382,50 +308,35 @@ namespace PD3AudioModder
             }
         }
 
+        private void OnLicensesClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+        {
+            var licensesWindow = new LicensesWindow();
+            licensesWindow.ShowDialog(this);
+        }
+
         private void OnReportIssueClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
-            OpenUrl("https://github.com/Snoozeds/PD3AudioModder/issues/new");
+            Process.Start(
+                new ProcessStartInfo
+                {
+                    FileName = "https://github.com/Snoozeds/PD3AudioModder/issues/new",
+                    UseShellExecute = true,
+                }
+            );
         }
 
         private void OnDonateClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
-            OpenUrl("https://ko-fi.com/snoozeds");
-        }
-
-        private void OpenUrl(string url)
-        {
-            try
-            {
-                ProcessStartInfo psi = new ProcessStartInfo
+            Process.Start(
+                new ProcessStartInfo
                 {
-                    FileName = url,
+                    FileName = "https://ko-fi.com/snoozeds",
                     UseShellExecute = true,
-                };
-                Process.Start(psi);
-            }
-            catch (Exception ex)
-            {
-                if (_notificationManager != null)
-                {
-                    _notificationManager.Show(
-                        new Notification(
-                            "Error",
-                            $"Failed to open URL: {ex.Message}",
-                            NotificationType.Error
-                        )
-                    );
                 }
-            }
+            );
         }
 
-        private void OnBackClick(object sender, Avalonia.Interactivity.RoutedEventArgs e)
-        {
-            this.Close();
-        }
-
-        private void OnCloseClick(object sender, Avalonia.Interactivity.RoutedEventArgs e)
-        {
-            this.Close();
-        }
+        private void OnBackClick(object sender, Avalonia.Interactivity.RoutedEventArgs e) =>
+            Close();
     }
 }
