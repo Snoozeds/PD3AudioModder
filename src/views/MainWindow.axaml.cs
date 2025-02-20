@@ -22,7 +22,7 @@ namespace PD3AudioModder
         private string? uploadedUassetPath;
         private string? uploadedJsonPath;
         private CheckBox? useExportFolderCheckBox;
-        private TextBlock? statusTextBlock;
+        private TextBlock? statusTextBlock = null;
         private Button? convertButton;
 
         private readonly string tempDirectory;

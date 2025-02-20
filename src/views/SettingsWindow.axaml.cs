@@ -121,7 +121,7 @@ namespace PD3AudioModder
 
         private void HandleToggleChanged(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
-            if (sender is ToggleSwitch toggle && _controls.TryGetValue(toggle.Name, out _))
+            if (sender is ToggleSwitch toggle && _controls.TryGetValue(toggle.Name!, out _))
             {
                 switch (toggle.Name)
                 {
@@ -150,7 +150,7 @@ namespace PD3AudioModder
             if (
                 sender is not Button button
                 || !_controls.TryGetValue(
-                    button.Name.Replace("BrowseButton", "TextBox"),
+                    button.Name!.Replace("BrowseButton", "TextBox"),
                     out var control
                 )
                 || control is not TextBox textBox
@@ -202,7 +202,7 @@ namespace PD3AudioModder
             if (
                 sender is Button button
                 && _controls.TryGetValue(
-                    button.Name.Replace("ClearButton", "TextBox"),
+                    button.Name!.Replace("ClearButton", "TextBox"),
                     out var control
                 )
                 && control is TextBox textBox
