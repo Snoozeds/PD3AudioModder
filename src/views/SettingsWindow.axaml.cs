@@ -186,6 +186,25 @@ namespace PD3AudioModder
             _mainWindow!.UpdateExportFolderCheckboxes();
         }
 
+        private void OnExportFolderClearButtonClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+        {
+            if (_exportFolderTextBox != null)
+            {
+                _exportFolderTextBox.Text = string.Empty;
+                AppConfig.Instance.DefaultExportFolder = string.Empty;
+                AppConfig.Instance.Save();
+                _mainWindow?.UpdateExportFolderCheckboxes();
+
+                if (_useExportFolderToggle != null)
+                {
+                    _useExportFolderToggle.IsChecked = false;
+                    _useExportFolderToggle.IsEnabled = false;
+                    AppConfig.Instance.UseDefaultExportFolder = false;
+                    AppConfig.Instance.Save();
+                }
+            }
+        }
+
         private async void OnRepakPathBrowseButtonClick(
             object? sender,
             Avalonia.Interactivity.RoutedEventArgs e
@@ -210,6 +229,16 @@ namespace PD3AudioModder
             {
                 _repakPathTextBox.Text = result[0];
                 AppConfig.Instance.RepakPath = result[0];
+                AppConfig.Instance.Save();
+            }
+        }
+
+        private void OnRepakPathClearButtonClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+        {
+            if (_repakPathTextBox != null)
+            {
+                _repakPathTextBox.Text = string.Empty;
+                AppConfig.Instance.RepakPath = string.Empty;
                 AppConfig.Instance.Save();
             }
         }
@@ -261,6 +290,16 @@ namespace PD3AudioModder
             {
                 _ffmpegPathTextBox.Text = result[0];
                 AppConfig.Instance.FfmpegPath = result[0];
+                AppConfig.Instance.Save();
+            }
+        }
+
+        private void OnFFmpegPathClearButtonClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+        {
+            if (_ffmpegPathTextBox != null)
+            {
+                _ffmpegPathTextBox.Text = string.Empty;
+                AppConfig.Instance.FfmpegPath = string.Empty;
                 AppConfig.Instance.Save();
             }
         }
