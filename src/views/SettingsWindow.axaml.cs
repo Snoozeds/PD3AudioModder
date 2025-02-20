@@ -15,7 +15,11 @@ namespace PD3AudioModder
         public string Version { get; set; } = "Version: Unknown";
         public string FFmpegOptions { get; set; } = "-acodec pcm_s16le -ar 48000 -ac 2";
 
-        public SettingsWindow() { }
+        public SettingsWindow()
+        {
+            InitializeComponent();
+            DataContext = this;
+        }
 
         public SettingsWindow(MainWindow mainWindow)
         {
