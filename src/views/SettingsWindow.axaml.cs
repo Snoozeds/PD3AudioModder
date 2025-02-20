@@ -116,6 +116,9 @@ namespace PD3AudioModder
                 useExportFolderToggle.IsEnabled = !string.IsNullOrWhiteSpace(
                     exportFolderTextBox.Text
                 );
+                useExportFolderToggle.IsChecked = !string.IsNullOrWhiteSpace(
+                    exportFolderTextBox.Text
+                );
             }
         }
 
@@ -243,6 +246,7 @@ namespace PD3AudioModder
                 )
                 {
                     useExportFolderToggle.IsEnabled = !string.IsNullOrWhiteSpace(textBox.Text);
+                    useExportFolderToggle.IsChecked = !string.IsNullOrWhiteSpace(textBox.Text);
                 }
 
                 AppConfig.Instance.Save();
