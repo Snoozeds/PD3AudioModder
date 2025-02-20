@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Avalonia.Threading;
 using Newtonsoft.Json.Linq;
 using PD3AudioModder;
 
@@ -16,6 +17,24 @@ public class PackFiles
     private static readonly string LocalizedPath =
         "PAYDAY3/Content/WwiseAudio/Localized/English_US_/Media";
     private static readonly string MediaPath = "PAYDAY3/Content/WwiseAudio/Media";
+
+    private static MainWindow? _mainWindow;
+
+    public static void Initialize(MainWindow mainWindow)
+    {
+        _mainWindow = mainWindow;
+    }
+
+    public static void UpdateStatus(string message)
+    {
+        if (_mainWindow?.globalStatusTextBlock != null)
+        {
+            Dispatcher.UIThread.Post(() =>
+            {
+                _mainWindow.globalStatusTextBlock.Text = message;
+            });
+        }
+    }
 
     private static string AppDataPath()
     {
@@ -57,6 +76,7 @@ public class PackFiles
 
     public static async Task DownloadMappings()
     {
+        UpdateStatus("Downloading ID mappings...");
         using var client = new HttpClient();
         try
         {
@@ -109,6 +129,7 @@ public class PackFiles
                 // If the file doesn't exist, write the new content
                 await File.WriteAllTextAsync(mediaFilePath, mediaJson);
             }
+            UpdateStatus("Mapping files downloaded successfully.");
         }
         catch (Exception ex)
         {
@@ -126,7 +147,10 @@ public class PackFiles
     {
         try
         {
+            UpdateStatus("Starting to pack files...");
+
             // Create the mod folder if it doesn't exist
+            UpdateStatus("Creating mod folder structure...");
             string modFolderPath = Path.Combine(folderPath, modName);
             Directory.CreateDirectory(modFolderPath);
 
@@ -148,6 +172,7 @@ public class PackFiles
             foreach (var filePath in files)
             {
                 string fileName = Path.GetFileName(filePath);
+                UpdateStatus($"Processing file: {fileName}");
                 string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(filePath);
 
                 // Skip non uassset, json, ubulk, and uexp files
@@ -217,6 +242,7 @@ public class PackFiles
                     warningDialog.Show();
                 }
             }
+            UpdateStatus("Files packed successfully.");
         }
         catch (Exception ex)
         {
@@ -233,16 +259,19 @@ public class PackFiles
     {
         try
         {
+            UpdateStatus("Starting repak...");
             string modFolderPath = Path.Combine(folderPath, modName);
             string repakArguments = $"pack \"{modFolderPath}\"";
 
             if (compression)
             {
                 repakArguments += " -compression Zlib";
+                UpdateStatus("Using Zlib compression...");
             }
 
             await Task.Run(() =>
             {
+                UpdateStatus("Running repak command...");
                 using var process = new System.Diagnostics.Process
                 {
                     StartInfo = new System.Diagnostics.ProcessStartInfo
@@ -259,14 +288,18 @@ public class PackFiles
                 process.Start();
                 process.WaitForExit();
             });
+            UpdateStatus("Repak process completed successfully.");
         }
         catch (Exception ex)
         {
-            throw new Exception($"Error running repak: {ex.Message}");
+            UpdateStatus($"Error during repak process: {ex.Message}");
+            throw;
         }
         finally
         {
+            UpdateStatus("Cleaning up temporary files...");
             Directory.Delete(Path.Combine(folderPath, modName), true);
+            UpdateStatus($"{modName} packing process complete.");
         }
     }
 }

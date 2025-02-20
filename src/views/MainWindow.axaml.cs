@@ -86,6 +86,8 @@ namespace PD3AudioModder
             {
                 CheckForUpdatesAsync();
             }
+
+            PackFiles.Initialize(this);
         }
 
         private async void CheckForUpdatesAsync()
@@ -231,15 +233,13 @@ namespace PD3AudioModder
                 switch (selectedTab)
                 {
                     case "Single File":
-                        if (statusTextBlock != null)
-                            globalStatusTextBlock!.Text = statusTextBlock.Text;
+                        globalStatusTextBlock!.Text = "Status: Waiting for input...";
                         break;
                     case "Batch Conversion":
-                        if (batchStatusTextBlock != null)
-                            globalStatusTextBlock!.Text = batchStatusTextBlock.Text;
+                        globalStatusTextBlock!.Text = "Status: Waiting for input...";
                         break;
                     case "Pack Files":
-                        globalStatusTextBlock!.Text = string.Empty;
+                        globalStatusTextBlock!.Text = "Ready to pack files.";
                         break;
                 }
             };
@@ -563,11 +563,7 @@ namespace PD3AudioModder
         // Status
         public void UpdateGlobalStatus(string message, string sourceTab)
         {
-            if (
-                currentTab == sourceTab
-                && globalStatusTextBlock != null
-                && sourceTab != "Pack Files"
-            )
+            if (currentTab == sourceTab && globalStatusTextBlock != null)
             {
                 globalStatusTextBlock.Text = message;
             }
