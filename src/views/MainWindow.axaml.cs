@@ -239,7 +239,7 @@ namespace PD3AudioModder
                         globalStatusTextBlock!.Text = "Status: Waiting for input...";
                         break;
                     case "Pack Files":
-                        globalStatusTextBlock!.Text = "Ready to pack files.";
+                        globalStatusTextBlock!.Text = "Status: Ready to pack files...";
                         break;
                 }
             };
