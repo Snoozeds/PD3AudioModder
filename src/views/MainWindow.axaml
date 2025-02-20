@@ -272,7 +272,7 @@
                                           VerticalAlignment="Center"
                                           FontSize="16"
                                           Foreground="#BBE1FA"
-                                          Margin="0,5,0,0"
+                                          Margin="0,5,0,35"
                                           Grid.Row="2"/>
 							</Grid>
 						</Border>
