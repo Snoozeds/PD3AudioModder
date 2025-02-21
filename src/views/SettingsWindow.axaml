@@ -17,7 +17,14 @@
 
 		<TabControl Grid.Row="0">
 			<!-- General Tab -->
-			<TabItem Header="General">
+			<TabItem>
+				<TabItem.Header>
+					<StackPanel Orientation="Horizontal" Spacing="5">
+						<Image Source="{SvgImage avares://PD3AudioModder/assets/icons/tabler-icons/settings.svg}"
+							   Width="28" Height="28"/>
+						<TextBlock Text="General"/>
+					</StackPanel>
+				</TabItem.Header>
 				<ScrollViewer Margin="-20,10,0,0">
 					<StackPanel Margin="20,0">
 						<!-- Notifications -->
@@ -89,6 +96,39 @@
 							</StackPanel>
 						</Border>
 
+						<!-- Discord RPC -->
+						<Border Background="#2C3E50" CornerRadius="12" Padding="20" Margin="0,0,0,20">
+							<StackPanel Spacing="10">
+								<TextBlock Text="Discord RPC" Foreground="#BBE1FA" FontSize="20" FontWeight="Bold" Margin="0,0,0,-10"/>
+								<TextBlock Text="These settings require a restart to take effect." Foreground="#E6C400" FontSize="16" Margin="0,0,0,5"/>
+
+								<Grid ColumnDefinitions="*, Auto" Margin="0,0,0,10">
+									<StackPanel Grid.Column="0">
+										<TextBlock Text="Enable Discord RPC" Foreground="#BBE1FA" FontSize="16"/>
+										<TextBlock Text="Shows PD3AudioModder as your current activity in Discord." Foreground="#8B9DA7" FontSize="14"/>
+									</StackPanel>
+									<ToggleSwitch Grid.Column="1" Name="EnableDiscordRPCToggle" Foreground="#BBE1FA"/>
+								</Grid>
+
+								<Grid ColumnDefinitions="*, Auto" Margin="0,0,0,10">
+									<StackPanel Grid.Column="0">
+										<TextBlock Text="Display Current Tab" Foreground="#BBE1FA" FontSize="16"/>
+										<TextBlock Text="Shows which tab you are currently using in the status." Foreground="#8B9DA7" FontSize="14"/>
+									</StackPanel>
+									<ToggleSwitch Grid.Column="1" Name="DisplayCurrentTabToggle" Foreground="#BBE1FA"/>
+								</Grid>
+
+								<Grid ColumnDefinitions="*, Auto" Margin="0,0,0,10">
+									<StackPanel Grid.Column="0">
+										<TextBlock Text="Show Mod Name When Packing" Foreground="#BBE1FA" FontSize="16"/>
+										<TextBlock Text="Displays the mod name while packing files in the status." Foreground="#8B9DA7" FontSize="14"/>
+									</StackPanel>
+									<ToggleSwitch Grid.Column="1" Name="ShowModNameToggle" Foreground="#BBE1FA"/>
+								</Grid>
+
+							</StackPanel>
+						</Border>
+
 						<!-- Advanced Settings -->
 						<Border Background="#2C3E50" CornerRadius="12" Padding="20" Margin="0,0,0,20">
 							<StackPanel>
@@ -134,7 +174,14 @@
 			</TabItem>
 
 			<!-- Updates -->
-			<TabItem Header="Updates">
+			<TabItem>
+				<TabItem.Header>
+					<StackPanel Orientation="Horizontal" Spacing="5">
+						<Image Source="{SvgImage avares://PD3AudioModder/assets/icons/download.svg}"
+							   Width="32" Height="32"/>
+						<TextBlock Text="Updates"/>
+					</StackPanel>
+				</TabItem.Header>
 				<Grid VerticalAlignment="Center" HorizontalAlignment="Center">
 					<StackPanel Spacing="20" MaxWidth="400">
 						<Image Source="{SvgImage avares://PD3AudioModder/assets/icons/download.svg}"
@@ -171,7 +218,14 @@
 			</TabItem>
 
 			<!-- About -->
-			<TabItem Header="About">
+			<TabItem>
+				<TabItem.Header>
+					<StackPanel Orientation="Horizontal" Spacing="5">
+						<Image Source="{SvgImage avares://PD3AudioModder/assets/icons/tabler-icons/info-circle.svg}"
+							   Width="28" Height="28"/>
+						<TextBlock Text="About"/>
+					</StackPanel>
+				</TabItem.Header>
 				<Grid VerticalAlignment="Center" HorizontalAlignment="Center">
 					<StackPanel Spacing="20" MaxWidth="400">
 						<Image Source="{SvgImage avares://PD3AudioModder/assets/icons/audio.svg}"

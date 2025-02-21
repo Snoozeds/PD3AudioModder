@@ -18,6 +18,8 @@ namespace PD3AudioModder
             { "NAudioVorbis", "https://github.com/naudio/Vorbis" },
             { "NewtonsoftJson", "https://github.com/JamesNK/Newtonsoft.Json" },
             { "ReactiveUI", "https://github.com/reactiveui/reactiveui" },
+            { "TablerIcons", "https://github.com/tabler/tabler-icons" },
+            { "DiscordRichPresence", "https://github.com/Lachee/discord-rpc-csharp" },
         };
 
         public LicensesWindow()

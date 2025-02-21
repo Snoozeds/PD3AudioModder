@@ -40,13 +40,16 @@ namespace PD3AudioModder
         private ProgressBar? batchProgressBar;
 
         // Pack Files tab
-        private string? ModName;
+        public string? ModName;
         private bool? CompressionEnabled;
         private string? PackFolderPath;
 
         // Status text
         public TextBlock? globalStatusTextBlock;
         public string currentTab = "Single File";
+
+        // Discord RPC
+        private readonly DiscordRPC _discordRPC;
 
         public MainWindow()
         {
@@ -86,6 +89,10 @@ namespace PD3AudioModder
             {
                 CheckForUpdatesAsync();
             }
+
+            // Discord RPC
+            _discordRPC = new DiscordRPC();
+            _discordRPC.Initialize();
 
             PackFiles.Initialize(this);
         }
@@ -203,16 +210,11 @@ namespace PD3AudioModder
                 repakPathTextBlock.Text = "Repak path: " + _appConfig.RepakPath;
             }
 
+            var mainTabControl = this.FindControl<TabControl>("MainTabControl")!;
             ModNameTextBox.TextChanged += (_, _) =>
             {
-                if (!string.IsNullOrEmpty(ModNameTextBox.Text))
-                {
-                    ModName = ModNameTextBox.Text;
-                }
-                else
-                {
-                    ModName = "MyPD3Mod";
-                }
+                ModName = !string.IsNullOrEmpty(ModNameTextBox.Text) ? ModNameTextBox.Text : "MyPD3Mod";
+                _discordRPC.UpdatePresence(mainTabControl, ModName);
             };
             selectRepakButton.Click += (_, _) => SelectRepakButton_Click(repakPathTextBlock);
             compressCheckBox.IsCheckedChanged += (_, _) =>
@@ -220,14 +222,19 @@ namespace PD3AudioModder
             selectFolderButton.Click += (_, _) => SelectFolderButton_Click(packButton);
             packButton.Click += (_, _) => PackButton_Click(PackFolderPath!);
 
-            // Status text
+            // Status text & Discord RPC based off of selected tab.
             globalStatusTextBlock = this.FindControl<TextBlock>("StatusTextBlock")!;
-            var mainTabControl = this.FindControl<TabControl>("MainTabControl")!;
 
             mainTabControl.SelectionChanged += (sender, e) =>
             {
                 var selectedTab = ((TabItem)mainTabControl.SelectedItem!).Header!.ToString()!;
                 currentTab = selectedTab;
+
+                // Update Discord RPC
+                if (!String.IsNullOrEmpty(ModName))
+                {
+                    _discordRPC.UpdatePresence(mainTabControl, ModName);
+                }
 
                 // Update global status based on current tab's status
                 switch (selectedTab)
@@ -595,6 +602,11 @@ namespace PD3AudioModder
         {
             var settingsWindow = new SettingsWindow(this);
             settingsWindow.ShowDialog(this);
+        }
+
+        private void OnWindowClosing(object sender, WindowClosingEventArgs e)
+        {
+            _discordRPC.Dispose();
         }
     }
 }

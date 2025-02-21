@@ -13,6 +13,8 @@
     <None Remove="assets\icons\audio.ico" />
     <None Remove="assets\icons\audio.svg" />
     <None Remove="assets\icons\download.svg" />
+    <None Remove="assets\icons\tabler-icons\info-circle.svg" />
+    <None Remove="assets\icons\tabler-icons\settings.svg" />
     <None Remove="assets\sounds\error.ogg" />
     <None Remove="assets\twemoji\26a0.svg" />
   </ItemGroup>
@@ -20,6 +22,8 @@
     <AvaloniaResource Include="assets\icons\audio.ico" />
     <AvaloniaResource Include="assets\icons\audio.svg" />
     <AvaloniaResource Include="assets\icons\download.svg" />
+    <AvaloniaResource Include="assets\icons\tabler-icons\info-circle.svg" />
+    <AvaloniaResource Include="assets\icons\tabler-icons\settings.svg" />
     <AvaloniaResource Include="assets\twemoji\26a0.svg" />
   </ItemGroup>
 
@@ -34,6 +38,7 @@
       <IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
       <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="DiscordRichPresence" Version="1.2.1.24" />
     <PackageReference Include="NAudio" Version="2.2.1" />
     <PackageReference Include="NAudio.Vorbis" Version="1.5.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />

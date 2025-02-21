@@ -446,6 +446,118 @@
 						</ScrollViewer>
 					</Grid>
 				</Border>
+
+				<!-- Tabler Card -->
+				<Border Margin="10" BorderBrush="#3282B8" BorderThickness="1" CornerRadius="8"
+                        Background="#1B262C" Width="350" Height="350">
+					<Grid RowDefinitions="Auto,*">
+						<Button Grid.Row="0"
+								Name="TablerIcons"
+								Click="HandleUrlClick"
+                                Margin="10,10,10,5"
+                                HorizontalAlignment="Center">
+							<Button.Styles>
+								<Style Selector="Button">
+									<Setter Property="Background" Value="Transparent"/>
+									<Setter Property="BorderThickness" Value="0"/>
+									<Setter Property="Padding" Value="5"/>
+									<Setter Property="Cursor" Value="Hand"/>
+									<Setter Property="Foreground" Value="#BBE1FA"/>
+								</Style>
+								<Style Selector="Button:pointerover /template/ ContentPresenter">
+									<Setter Property="TextBlock.TextDecorations" Value="Underline"/>
+								</Style>
+							</Button.Styles>
+							<TextBlock Text="Tabler Icons" FontSize="18"/>
+						</Button>
+
+
+						<!-- License Text -->
+						<ScrollViewer Grid.Row="1" Margin="10,5,10,10">
+							<SelectableTextBlock FontSize="12" Foreground="#BBE1FA" TextWrapping="Wrap">
+								MIT License <LineBreak />
+								Copyright (c) 2020-2024 Paweł Kuna
+								<LineBreak />
+								<LineBreak />
+								Permission is hereby granted, free of charge, to any person obtaining a copy
+								of this software and associated documentation files (the 'Software'), to deal
+								in the Software without restriction, including without limitation the rights
+								to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+								copies of the Software, and to permit persons to whom the Software is
+								furnished to do so, subject to the following conditions:
+								<LineBreak />
+								<LineBreak />
+								The above copyright notice and this permission notice shall be included
+								in all copies or substantial portions of the Software.
+								<LineBreak />
+								<LineBreak />
+								THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+								IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+								FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+								AUTHORS OR COPYRIGHT HOLDERS
+								BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+								CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+								SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+							</SelectableTextBlock>
+						</ScrollViewer>
+					</Grid>
+				</Border>
+
+				<!-- DiscordRichPresence Card-->
+				<Border Margin="10" BorderBrush="#3282B8" BorderThickness="1" CornerRadius="8"
+                        Background="#1B262C" Width="350" Height="350">
+					<Grid RowDefinitions="Auto,*">
+						<Button Grid.Row="0"
+								Name="DiscordRichPresence"
+								Click="HandleUrlClick"
+                                Margin="10,10,10,5"
+                                HorizontalAlignment="Center">
+							<Button.Styles>
+								<Style Selector="Button">
+									<Setter Property="Background" Value="Transparent"/>
+									<Setter Property="BorderThickness" Value="0"/>
+									<Setter Property="Padding" Value="5"/>
+									<Setter Property="Cursor" Value="Hand"/>
+									<Setter Property="Foreground" Value="#BBE1FA"/>
+								</Style>
+								<Style Selector="Button:pointerover /template/ ContentPresenter">
+									<Setter Property="TextBlock.TextDecorations" Value="Underline"/>
+								</Style>
+							</Button.Styles>
+							<TextBlock Text="DiscordRichPresence" FontSize="18"/>
+						</Button>
+
+						<!-- License Text -->
+						<ScrollViewer Grid.Row="1" Margin="10,5,10,10">
+							<SelectableTextBlock FontSize="12" Foreground="#BBE1FA" TextWrapping="Wrap">
+								MIT License <LineBreak />
+								Copyright (c) 2021 Lachee
+								<LineBreak />
+								<LineBreak />
+								Permission is hereby granted, free of charge, to any person obtaining a copy
+								of this software and associated documentation files (the 'Software'), to deal
+								in the Software without restriction, including without limitation the rights
+								to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+								copies of the Software, and to permit persons to whom the Software is
+								furnished to do so, subject to the following conditions:
+								<LineBreak />
+								<LineBreak />
+								The above copyright notice and this permission notice shall be included
+								in all copies or substantial portions of the Software.
+								<LineBreak />
+								<LineBreak />
+								THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+								IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+								FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+								AUTHORS OR COPYRIGHT HOLDERS
+								BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+								CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+								SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+							</SelectableTextBlock>
+						</ScrollViewer>
+					</Grid>
+				</Border>
+				
 			</UniformGrid>
 		</ScrollViewer>
 

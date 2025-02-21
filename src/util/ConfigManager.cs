@@ -15,6 +15,9 @@ namespace PD3AudioModder
         public static readonly string? DefaultExportFolder = null;
         public static readonly bool UseDefaultExportFolder = false;
         public static readonly bool MuteNotificationSound = false;
+        public static readonly bool RPCEnabled = false;
+        public static readonly bool RPCDisplayTab = false;
+        public static readonly bool RPCDisplayModName = false;
     }
 
     public class AppConfig
@@ -29,6 +32,9 @@ namespace PD3AudioModder
         public string? DefaultExportFolder { get; set; }
         public bool UseDefaultExportFolder { get; set; }
         public bool MuteNotificationSound { get; set; }
+        public bool RPCEnabled { get; set; }
+        public bool RPCDisplayTab { get; set; }
+        public bool RPCDisplayModName { get; set; }
 
         public static AppConfig Instance
         {
@@ -87,11 +93,21 @@ namespace PD3AudioModder
                 },
                 {
                     "RepakPath",
-                    config => config.RepakPath == null || File.Exists(config.RepakPath)
+                    config =>
+                        string.IsNullOrEmpty(config.RepakPath) || File.Exists(config.RepakPath)
                 },
-                { "FfmpegOptions", config => true },
-                { "FfmpegPath", config => true },
-                { "DefaultExportFolder", config => true },
+                { "FfmpegOptions", config => !string.IsNullOrWhiteSpace(config.FfmpegOptions) },
+                {
+                    "FfmpegPath",
+                    config =>
+                        string.IsNullOrEmpty(config.FfmpegPath) || File.Exists(config.FfmpegPath)
+                },
+                {
+                    "DefaultExportFolder",
+                    config =>
+                        string.IsNullOrEmpty(config.DefaultExportFolder)
+                        || Directory.Exists(config.DefaultExportFolder)
+                },
                 {
                     "UseDefaultExportFolder",
                     config =>
@@ -103,6 +119,15 @@ namespace PD3AudioModder
                     config =>
                         config.MuteNotificationSound == true
                         || config.MuteNotificationSound == false
+                },
+                { "RPCEnabled", config => config.RPCEnabled == true || config.RPCEnabled == false },
+                {
+                    "RPCDisplayTab",
+                    config => config.RPCDisplayTab == true || config.RPCDisplayTab == false
+                },
+                {
+                    "RPCDisplayModName",
+                    config => config.RPCDisplayModName == true || config.RPCDisplayModName == false
                 },
             };
         }

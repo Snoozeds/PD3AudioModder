@@ -52,6 +52,9 @@ namespace PD3AudioModder
                 "RepakPathTextBox",
                 "FFmpegOptionsTextBox",
                 "FFmpegPathTextBox",
+                "EnableDiscordRPCToggle",
+                "DisplayCurrentTabToggle",
+                "ShowModNameToggle",
             };
             foreach (var name in controlNames)
             {
@@ -70,6 +73,9 @@ namespace PD3AudioModder
                     "AskUpdateToggle",
                     "MuteNotificationSoundToggle",
                     "UseExportFolderToggle",
+                    "EnableDiscordRPCToggle",
+                    "DisplayCurrentTabToggle",
+                    "ShowModNameToggle",
                 }
             )
             {
@@ -92,6 +98,9 @@ namespace PD3AudioModder
                     { "RepakPathTextBox", config.RepakPath },
                     { "FFmpegOptionsTextBox", config.FfmpegOptions },
                     { "FFmpegPathTextBox", config.FfmpegPath },
+                    { "EnableDiscordRPCToggle", config.RPCEnabled },
+                    { "DisplayCurrentTabToggle", config.RPCDisplayTab },
+                    { "ShowModNameToggle", config.RPCDisplayModName },
                 }
             )
             {
@@ -128,24 +137,40 @@ namespace PD3AudioModder
 
         private void HandleToggleChanged(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
-            if (sender is ToggleSwitch toggle && _controls.TryGetValue(toggle.Name!, out _))
+            if (
+                sender is ToggleSwitch toggle
+                && !string.IsNullOrEmpty(toggle.Name)
+                && _controls.TryGetValue(toggle.Name, out _)
+            )
             {
+                var config = AppConfig.Instance;
+                var condition = toggle.IsChecked ?? false;
+
                 switch (toggle.Name)
                 {
                     case "UpdateToggle":
-                        AppConfig.Instance.AutoUpdateEnabled = toggle.IsChecked ?? false;
+                        config.AutoUpdateEnabled = condition;
                         break;
                     case "AskUpdateToggle":
-                        AppConfig.Instance.AskToUpdate = toggle.IsChecked ?? false;
+                        config.AskToUpdate = condition;
                         break;
                     case "MuteNotificationSoundToggle":
-                        AppConfig.Instance.MuteNotificationSound = toggle.IsChecked ?? false;
+                        config.MuteNotificationSound = condition;
                         break;
                     case "UseExportFolderToggle":
-                        AppConfig.Instance.UseDefaultExportFolder = toggle.IsChecked ?? false;
+                        config.UseDefaultExportFolder = condition;
+                        break;
+                    case "EnableDiscordRPCToggle":
+                        config.RPCEnabled = condition;
+                        break;
+                    case "DisplayCurrentTabToggle":
+                        config.RPCDisplayTab = condition;
+                        break;
+                    case "ShowModNameToggle":
+                        config.RPCDisplayModName = condition;
                         break;
                 }
-                AppConfig.Instance.Save();
+                config.Save();
             }
         }
 
