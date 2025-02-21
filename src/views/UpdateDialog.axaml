@@ -18,7 +18,7 @@
                        FontWeight="Bold"
                        Foreground="#BBE1FA"/>
 			<TextBlock x:Name="CurrentVersionText"
-                       Text="Current version: {0}"
+                       Text="Current version: {1}"
                        HorizontalAlignment="Center"
                        FontSize="16"
                        Foreground="#BBE1FA"/>
