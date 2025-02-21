@@ -34,8 +34,8 @@ You may find instructions on how to use the app by clicking on the "Help" button
 
 | Single File Mode | Batch Conversion Mode |
 | ---------------- | --------------------- |
-| [![Single File Mode](https://storage.modworkshop.net/mods/images/BC6iPRrJ4JafHwuMophDeBc0O1h47WEqLLN0aXdc.webp)](https://storage.modworkshop.net/mods/images/BC6iPRrJ4JafHwuMophDeBc0O1h47WEqLLN0aXdc.webp) | [![Batch Conversion Mode](https://storage.modworkshop.net/mods/images/qNORHnLqKTrNtTSsnPB8exwzJsUlrmESB8LX3rX4.webp)](https://storage.modworkshop.net/mods/images/qNORHnLqKTrNtTSsnPB8exwzJsUlrmESB8LX3rX4.webp) |
+| [![Single File Mode](https://storage.modworkshop.net/mods/images/GiQIzJym6mKB02sccdiHJS8Ji5kjTyWxeyG65VVh.webp)](https://storage.modworkshop.net/mods/images/GiQIzJym6mKB02sccdiHJS8Ji5kjTyWxeyG65VVh.webp) | [![Batch Conversion Mode](https://storage.modworkshop.net/mods/images/pXmXd6jILfMCDr3maiwTRxiX2gNMNaZhUVrrZytK.webp)](https://storage.modworkshop.net/mods/images/pXmXd6jILfMCDr3maiwTRxiX2gNMNaZhUVrrZytK.webp) |
 
 | Pack Files | Settings Window |
 | ---------- | --------------- |
-| [![Pack Files](https://storage.modworkshop.net/mods/images/InzkAPBPZEleJ2Jr5hnWSmNBzHp16g72eIM2H6Cz.webp)](https://storage.modworkshop.net/mods/images/InzkAPBPZEleJ2Jr5hnWSmNBzHp16g72eIM2H6Cz.webp) | [![Settings Window](https://storage.modworkshop.net/mods/images/Bs6IV07MgLvykO2AaHyvV0zZLVKK2vRivVI5IQzS.webp)](https://storage.modworkshop.net/mods/images/Bs6IV07MgLvykO2AaHyvV0zZLVKK2vRivVI5IQzS.webp) |
+| [![Pack Files](https://storage.modworkshop.net/mods/images/SQnjdZLlQKaQkgV22UH4HEphopG3LWUJ96S7QUvi.webp)](https://storage.modworkshop.net/mods/images/SQnjdZLlQKaQkgV22UH4HEphopG3LWUJ96S7QUvi.webp) | [![Settings Window](https://storage.modworkshop.net/mods/images/1HTmiUdbSX3Bko9CJxlWZZtcHWrO82JHgjgAkmZW.webp)](https://storage.modworkshop.net/mods/images/1HTmiUdbSX3Bko9CJxlWZZtcHWrO82JHgjgAkmZW.webp) |
