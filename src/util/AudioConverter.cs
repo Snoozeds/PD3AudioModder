@@ -131,7 +131,7 @@ public class AudioConverter
             FileName = ffmpegPath,
             Arguments = $"-i \"{inputPath}\" {FfmpegOptions} \"{outputPath}\" -y",
             UseShellExecute = true,
-            WindowStyle = ProcessWindowStyle.Hidden,
+            WindowStyle = ProcessWindowStyle.Minimized,
         };
 
         using var process =
