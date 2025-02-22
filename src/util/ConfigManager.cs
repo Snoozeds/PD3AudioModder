@@ -29,12 +29,12 @@ namespace PD3AudioModder
         public string? RepakPath { get; set; } = DefaultConfig.RepakPath;
         public string? FfmpegOptions { get; set; } = DefaultConfig.FfmpegOptions;
         public string? FfmpegPath { get; set; } = DefaultConfig.FfmpegPath;
-        public string? DefaultExportFolder { get; set; }
-        public bool UseDefaultExportFolder { get; set; }
-        public bool MuteNotificationSound { get; set; }
-        public bool RPCEnabled { get; set; }
-        public bool RPCDisplayTab { get; set; }
-        public bool RPCDisplayModName { get; set; }
+        public string? DefaultExportFolder { get; set; } = DefaultConfig.DefaultExportFolder;
+        public bool UseDefaultExportFolder { get; set; } = DefaultConfig.UseDefaultExportFolder;
+        public bool MuteNotificationSound { get; set; } = DefaultConfig.MuteNotificationSound;
+        public bool RPCEnabled { get; set; } = DefaultConfig.RPCEnabled;
+        public bool RPCDisplayTab { get; set; } = DefaultConfig.RPCDisplayTab;
+        public bool RPCDisplayModName { get; set; } = DefaultConfig.RPCDisplayModName;
 
         public static AppConfig Instance
         {
