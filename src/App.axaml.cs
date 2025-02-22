@@ -1,5 +1,7 @@
 using System;
 using System.IO;
+using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
@@ -9,8 +11,27 @@ namespace PD3AudioModder
 {
     public partial class App : Application
     {
+        // Allow launching the app with "-console argument"
+        [DllImport("kernel32.dll", SetLastError = true)]
+        private static extern bool AllocConsole();
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        private static extern bool FreeConsole();
+
+        private bool _consoleAllocated = false;
+
         public override void Initialize()
         {
+            // Check for command-line arguments
+            if (Environment.GetCommandLineArgs().Contains("-console"))
+            {
+                if (AllocConsole())
+                {
+                    _consoleAllocated = true;
+                    Console.WriteLine("Console initialized due to -console argument.");
+                }
+            }
+
             AvaloniaXamlLoader.Load(this);
         }
 
@@ -25,6 +46,11 @@ namespace PD3AudioModder
             }
 
             base.OnFrameworkInitializationCompleted();
+
+            if (_consoleAllocated)
+            {
+                AppDomain.CurrentDomain.ProcessExit += (sender, args) => FreeConsole();
+            }
         }
 
         private void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)
