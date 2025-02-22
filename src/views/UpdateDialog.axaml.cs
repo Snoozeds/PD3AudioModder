@@ -16,7 +16,7 @@ namespace PD3AudioModder
         {
             InitializeComponent();
             this.FindControl<TextBlock>("CurrentVersionText")!.Text = string.Format(
-                "Current version: {1}",
+                "Current version: {0}",
                 currentVersion
             );
             this.FindControl<TextBlock>("VersionText")!.Text = string.Format(
