@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Platform.Storage;
+using static SkiaSharp.HarfBuzz.SKShaper;
 
 namespace PD3AudioModder.util
 {
@@ -18,6 +19,9 @@ namespace PD3AudioModder.util
 
         // track skipped files and reason for skipping them
         private Dictionary<string, string> _skippedFiles = new Dictionary<string, string>();
+
+        // used to track clicking the "yes to all" button in the warning dialog when files exist in export dir.
+        private bool _yesToAllFiles = false;
 
         public BatchProcessor(MainWindow mainWindow)
         {
@@ -78,7 +82,7 @@ namespace PD3AudioModder.util
             try
             {
                 // Ask for output directory, or use the default export path
-                _appConfig = AppConfig.Load();
+                _appConfig = AppConfig.Instance;
                 IStorageFolder? folderResult = null;
 
                 if (!String.IsNullOrEmpty(_appConfig.DefaultExportFolder) && useDefaultExportPath)
@@ -276,6 +280,23 @@ namespace PD3AudioModder.util
             string baseName
         )
         {
+            _appConfig = AppConfig.Instance;
+            // Check for existing files before proceeding if the user has the setting enabled.
+            if (
+                _appConfig != null
+                && _appConfig.DisplayFilesInExportWarning == true
+                && !_yesToAllFiles
+            )
+            {
+                var result = await _fileProcessor.CheckExistingFiles(outputDirectory, baseName);
+                if (!result.ShouldProceed)
+                {
+                    _skippedFiles[baseName] = "User skipped due to existing files";
+                    return;
+                }
+                _yesToAllFiles = result.YesToAll;
+            }
+
             // Copy the original ubulk file to temp directory
             string tempUbulkPath = Path.Combine(tempDirectory, Path.GetFileName(ubulkPath));
             File.Copy(ubulkPath, tempUbulkPath, true);
@@ -302,7 +323,7 @@ namespace PD3AudioModder.util
             long oldSize = -1;
             if (!string.IsNullOrEmpty(jsonPath))
             {
-                oldSize = _fileProcessor.GetOldSizeFromJson(jsonPath, null!);
+                oldSize = _fileProcessor.GetOldSizeFromJson(jsonPath);
             }
 
             // Get the new size from the wem file
@@ -346,6 +367,7 @@ namespace PD3AudioModder.util
                     File.Delete(tempUbulkPath);
                 if (File.Exists(tempUexpPath))
                     File.Delete(tempUexpPath);
+                _yesToAllFiles = false;
             }
             catch
             {

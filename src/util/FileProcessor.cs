@@ -7,6 +7,12 @@ using Newtonsoft.Json;
 
 namespace PD3AudioModder.util
 {
+    public class FileCheckResult
+    {
+        public bool ShouldProceed { get; set; }
+        public bool YesToAll { get; set; }
+    }
+
     internal class FileProcessor
     {
         private readonly MainWindow? _mainWindow;
@@ -17,12 +23,44 @@ namespace PD3AudioModder.util
             _mainWindow = mainWindow;
         }
 
-        public void UpdateStatus(string message, TextBlock statusTextBlock)
+        public void UpdateStatus(string message)
         {
             if (_mainWindow != null)
             {
                 _mainWindow.UpdateGlobalStatus(message, "Single File");
             }
+        }
+
+        // Task for checking if files exist when exporting, and if they do display a warning dialog.
+        public async Task<FileCheckResult> CheckExistingFiles(
+            string saveDirectory,
+            string baseFileName
+        )
+        {
+            // Check if any of the target files already exist
+            bool filesExist =
+                File.Exists(Path.Combine(saveDirectory, baseFileName + ".ubulk"))
+                || File.Exists(Path.Combine(saveDirectory, baseFileName + ".uexp"))
+                || File.Exists(Path.Combine(saveDirectory, baseFileName + ".uasset"))
+                || File.Exists(Path.Combine(saveDirectory, baseFileName + ".json"));
+
+            if (filesExist)
+            {
+                UpdateStatus("Warning: Some files already exist in the target directory...");
+                var warningDialog = new WarningConfirmDialog(
+                    "Some files already exist in the target directory.",
+                    "Do you want to overwrite them?"
+                );
+                await warningDialog.ShowDialog(_mainWindow!);
+
+                return new FileCheckResult
+                {
+                    ShouldProceed = warningDialog.UserResponse,
+                    YesToAll = warningDialog.YesToAllResponse,
+                };
+            }
+
+            return new FileCheckResult { ShouldProceed = true, YesToAll = false };
         }
 
         public async Task ProcessFiles(
@@ -45,7 +83,7 @@ namespace PD3AudioModder.util
                 || (uploadedJsonPath == null && uploadedUassetPath == null)
             )
             {
-                UpdateStatus("Error: Please upload all required files first", statusTextBlock);
+                UpdateStatus("Error: Please upload all required files first");
                 return;
             }
 
@@ -57,7 +95,7 @@ namespace PD3AudioModder.util
                     Path.GetFileName(uploadedUbulkPath)
                 );
                 File.Copy(uploadedUbulkPath, tempUbulkPath, true);
-                UpdateStatus("Created backup of original ubulk file...", statusTextBlock);
+                UpdateStatus("Created backup of original ubulk file...");
 
                 // Copy the original uexp file to temp directory
                 string tempUexpPath = Path.Combine(
@@ -65,10 +103,10 @@ namespace PD3AudioModder.util
                     Path.GetFileName(uploadedUexpPath)
                 );
                 File.Copy(uploadedUexpPath, tempUexpPath, true);
-                UpdateStatus("Created backup of original uexp file...", statusTextBlock);
+                UpdateStatus("Created backup of original uexp file...");
 
                 // Convert audio to WAV using MediaFoundation
-                UpdateStatus("Converting audio to WAV format...", statusTextBlock);
+                UpdateStatus("Converting audio to WAV format...");
                 string wavPath = Path.Combine(
                     tempDirectory,
                     Path.GetFileNameWithoutExtension(uploadedAudioPath) + ".wav"
@@ -86,7 +124,7 @@ namespace PD3AudioModder.util
                 }
 
                 // Convert WAV to WEM
-                UpdateStatus("Converting WAV to WEM format...", statusTextBlock);
+                UpdateStatus("Converting WAV to WEM format...");
                 string wemPath = Path.Combine(
                     tempDirectory,
                     Path.GetFileNameWithoutExtension(wavPath) + ".wem"
@@ -97,28 +135,28 @@ namespace PD3AudioModder.util
                 long oldSize = -1;
                 if (uploadedJsonPath != null)
                 {
-                    UpdateStatus("Reading original size from JSON...", statusTextBlock);
-                    oldSize = GetOldSizeFromJson(uploadedJsonPath, statusTextBlock);
+                    UpdateStatus("Reading original size from JSON...");
+                    oldSize = GetOldSizeFromJson(uploadedJsonPath);
                     if (oldSize == -1)
                     {
-                        UpdateStatus("Error: Size not found in JSON file", statusTextBlock);
+                        UpdateStatus("Error: Size not found in JSON file");
                         return;
                     }
                 }
 
                 // Get the new size from the wem file
-                UpdateStatus("Processing file sizes...", statusTextBlock);
+                UpdateStatus("Processing file sizes...");
                 long newSize = new FileInfo(wemPath).Length;
 
                 // Modify the temporary uexp file if we have the old size
                 if (oldSize != -1)
                 {
-                    UpdateStatus("Modifying temporary uexp file size...", statusTextBlock);
+                    UpdateStatus("Modifying temporary uexp file size...");
                     ModifyUexpSize(tempUexpPath, oldSize, newSize);
                 }
 
                 // Replace the temporary ubulk file with the new wem file
-                UpdateStatus("Replacing temporary ubulk file with new WEM...", statusTextBlock);
+                UpdateStatus("Replacing temporary ubulk file with new WEM...");
                 File.Copy(wemPath, tempUbulkPath, true);
 
                 // Ask user where to save the files, or use the default export path
@@ -134,7 +172,7 @@ namespace PD3AudioModder.util
 
                 if (folderResult == null || !useDefaultExportPath)
                 {
-                    UpdateStatus("Select where to save converted files...", statusTextBlock);
+                    UpdateStatus("Select where to save converted files...");
                     var fileResult = await ParentWindow.StorageProvider.SaveFilePickerAsync(
                         new FilePickerSaveOptions
                         {
@@ -147,7 +185,7 @@ namespace PD3AudioModder.util
 
                     if (fileResult == null)
                     {
-                        UpdateStatus("Save operation cancelled", statusTextBlock);
+                        UpdateStatus("Save operation cancelled");
                         return;
                     }
                     folderResult = await fileResult.GetParentAsync();
@@ -158,8 +196,19 @@ namespace PD3AudioModder.util
                     string saveDirectory = Path.GetDirectoryName(folderResult.Path.LocalPath)!;
                     string baseFileName = Path.GetFileNameWithoutExtension(uploadedUbulkPath);
 
+                    // Check for existing files in the export directory if user has the setting enabled.
+                    if (_appConfig.DisplayFilesInExportWarning == true)
+                    {
+                        var result = await CheckExistingFiles(saveDirectory, baseFileName);
+                        if (!result.ShouldProceed)
+                        {
+                            UpdateStatus("Operation cancelled by user");
+                            return;
+                        }
+                    }
+
                     // Save all files with the chosen base filename
-                    UpdateStatus("Saving converted files...", statusTextBlock);
+                    UpdateStatus("Saving converted files...");
 
                     // Save ubulk
                     string ubulkSavePath = Path.Combine(saveDirectory, baseFileName + ".ubulk");
@@ -185,13 +234,12 @@ namespace PD3AudioModder.util
                     }
 
                     UpdateStatus(
-                        $"Conversion completed successfully! Files saved to {saveDirectory}",
-                        statusTextBlock
+                        $"Conversion completed successfully! Files saved to {saveDirectory}"
                     );
                 }
                 else
                 {
-                    UpdateStatus("Save operation cancelled", statusTextBlock);
+                    UpdateStatus("Save operation cancelled");
                 }
 
                 // Clean up temp files
@@ -227,7 +275,7 @@ namespace PD3AudioModder.util
             }
             catch (Exception ex)
             {
-                UpdateStatus($"Error: {ex.Message}", statusTextBlock);
+                UpdateStatus($"Error: {ex.Message}");
             }
         }
 
@@ -256,7 +304,7 @@ namespace PD3AudioModder.util
             }
         }
 
-        public long GetOldSizeFromJson(string jsonFile, TextBlock statusTextBlock)
+        public long GetOldSizeFromJson(string jsonFile)
         {
             try
             {
@@ -270,15 +318,12 @@ namespace PD3AudioModder.util
                     }
                 }
 
-                UpdateStatus(
-                    "Error: Could not find AkMediaAssetData in JSON file",
-                    statusTextBlock
-                );
+                UpdateStatus("Error: Could not find AkMediaAssetData in JSON file");
                 return -1;
             }
             catch (Exception ex)
             {
-                UpdateStatus($"Error reading JSON: {ex.Message}", statusTextBlock);
+                UpdateStatus($"Error reading JSON: {ex.Message}");
                 return -1;
             }
         }

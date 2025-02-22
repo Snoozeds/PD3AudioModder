@@ -75,6 +75,16 @@
 												  IsCheckedChanged="HandleToggleChanged"/>
 								</Grid>
 
+								<Grid ColumnDefinitions="*, Auto" Margin="0,0,0,10">
+									<StackPanel Grid.Column="0" Margin="0,0,0,20">
+										<TextBlock Text="Display files exist warning" Foreground="#BBE1FA" FontSize="16"/>
+										<TextBlock Text="Displays a warning window when files already exist inside the export folder."
+                                                 Foreground="#8B9DA7" FontSize="14"/>
+									</StackPanel>
+									<ToggleSwitch Grid.Column="1" Name="DisplayFileExistToggle" Foreground="#BBE1FA"
+												  IsCheckedChanged="HandleToggleChanged"/>
+								</Grid>
+
 								<StackPanel Margin="0,0,0,20">
 									<TextBlock Text="Repak Path" Foreground="#BBE1FA" FontSize="16"/>
 									<TextBlock Text="repak.exe path that is used in the Pack Files section."

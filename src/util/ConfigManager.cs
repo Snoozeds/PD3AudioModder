@@ -18,6 +18,7 @@ namespace PD3AudioModder
         public static readonly bool RPCEnabled = false;
         public static readonly bool RPCDisplayTab = false;
         public static readonly bool RPCDisplayModName = false;
+        public static readonly bool DisplayFilesInExportWarning = true;
     }
 
     public class AppConfig
@@ -35,6 +36,8 @@ namespace PD3AudioModder
         public bool RPCEnabled { get; set; } = DefaultConfig.RPCEnabled;
         public bool RPCDisplayTab { get; set; } = DefaultConfig.RPCDisplayTab;
         public bool RPCDisplayModName { get; set; } = DefaultConfig.RPCDisplayModName;
+        public bool DisplayFilesInExportWarning { get; set; } =
+            DefaultConfig.DisplayFilesInExportWarning;
 
         public static AppConfig Instance
         {
@@ -128,6 +131,12 @@ namespace PD3AudioModder
                 {
                     "RPCDisplayModName",
                     config => config.RPCDisplayModName == true || config.RPCDisplayModName == false
+                },
+                {
+                    "DisplayFilesInExportWarning",
+                    config =>
+                        config.DisplayFilesInExportWarning == true
+                        || config.DisplayFilesInExportWarning == false
                 },
             };
         }

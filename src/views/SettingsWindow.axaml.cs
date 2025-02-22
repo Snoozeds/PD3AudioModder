@@ -49,6 +49,7 @@ namespace PD3AudioModder
                 "MuteNotificationSoundToggle",
                 "ExportFolderTextBox",
                 "UseExportFolderToggle",
+                "DisplayFileExistToggle",
                 "RepakPathTextBox",
                 "FFmpegOptionsTextBox",
                 "FFmpegPathTextBox",
@@ -73,6 +74,7 @@ namespace PD3AudioModder
                     "AskUpdateToggle",
                     "MuteNotificationSoundToggle",
                     "UseExportFolderToggle",
+                    "DisplayFileExistToggle",
                     "EnableDiscordRPCToggle",
                     "DisplayCurrentTabToggle",
                     "ShowModNameToggle",
@@ -95,6 +97,7 @@ namespace PD3AudioModder
                     { "MuteNotificationSoundToggle", config.MuteNotificationSound },
                     { "ExportFolderTextBox", config.DefaultExportFolder },
                     { "UseExportFolderToggle", config.UseDefaultExportFolder },
+                    { "DisplayFileExistToggle", config.DisplayFilesInExportWarning },
                     { "RepakPathTextBox", config.RepakPath },
                     { "FFmpegOptionsTextBox", config.FfmpegOptions },
                     { "FFmpegPathTextBox", config.FfmpegPath },
@@ -159,6 +162,9 @@ namespace PD3AudioModder
                         break;
                     case "UseExportFolderToggle":
                         config.UseDefaultExportFolder = condition;
+                        break;
+                    case "DisplayFileExistToggle":
+                        config.DisplayFilesInExportWarning = condition;
                         break;
                     case "EnableDiscordRPCToggle":
                         config.RPCEnabled = condition;

@@ -1,0 +1,95 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="using:PD3AudioModder"
+        x:DataType="local:WarningConfirmDialog"
+        x:Class="PD3AudioModder.WarningConfirmDialog"
+        Title="Warning!"
+        Background="#1B262C"
+        Icon="avares://PD3AudioModder/assets/icons/audio.ico"
+        WindowStartupLocation="CenterScreen"
+        Height="450"
+        Width="600">
+	<Border Padding="20">
+		<StackPanel Spacing="10">
+			<!-- Header -->
+			<StackPanel Orientation="Horizontal"
+                      HorizontalAlignment="Center"
+                      Spacing="10">
+				<Image Source="{SvgImage avares://PD3AudioModder/assets/twemoji/26a0.svg}"
+                       Width="32"
+                       Height="32"/>
+				<TextBlock Text="Warning!"
+                         FontSize="32"
+                         FontWeight="Bold"
+                         Foreground="#BBE1FA"/>
+			</StackPanel>
+
+			<!-- Message Content -->
+			<ScrollViewer Height="200"
+                        Width="500"
+                        Margin="0,10">
+				<StackPanel VerticalAlignment="Center">
+					<TextBlock Name="MessageTextBlock"
+                             Text="{Binding Message}"
+                             FontSize="20"
+                             Foreground="#BBE1FA"
+                             TextWrapping="Wrap"
+                             TextAlignment="Center"
+                             Margin="0,0,0,15"/>
+					<TextBlock Name="Message2TextBlock"
+                             Text="{Binding Message2}"
+                             FontSize="20"
+                             Foreground="#BBE1FA"
+                             TextWrapping="Wrap"
+                             TextAlignment="Center"/>
+				</StackPanel>
+			</ScrollViewer>
+
+			<!-- Main Buttons -->
+			<StackPanel Orientation="Horizontal"
+                      HorizontalAlignment="Center"
+                      Spacing="10">
+				<Button Click="OnYesClick"
+                        FontSize="18"
+                        Background="#3282B8"
+                        BorderThickness="0"
+                        Padding="10,5"
+                        Foreground="White"
+                        CornerRadius="10">
+					<TextBlock Text="Yes"/>
+				</Button>
+				<Button Click="OnNoClick"
+                        FontSize="18"
+                        Background="#3282B8"
+                        BorderThickness="0"
+                        Padding="10,5"
+                        Foreground="White"
+                        CornerRadius="10">
+					<TextBlock Text="No"/>
+				</Button>
+			</StackPanel>
+
+			<!-- Yes to All Button -->
+			<Button Click="YesToAllClick"
+                    FontSize="18"
+                    Background="#3282B8"
+                    BorderThickness="0"
+                    Padding="10,5"
+                    Foreground="White"
+                    CornerRadius="10"
+                    HorizontalAlignment="Center">
+				<TextBlock Text="Yes to all"/>
+			</Button>
+
+			<!-- Checkbox -->
+			<CheckBox HorizontalAlignment="Center"
+                     FontSize="16"
+                     Foreground="#BBE1FA"
+                     IsCheckedChanged="WarningCheckChanged">
+				<TextBlock Text="Disable these warnings"/>
+			</CheckBox>
+		</StackPanel>
+	</Border>
+</Window>

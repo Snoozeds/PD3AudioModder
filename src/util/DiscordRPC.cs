@@ -1,5 +1,6 @@
 ﻿using Avalonia.Controls;
 using DiscordRPC;
+
 namespace PD3AudioModder
 {
     internal class DiscordRPC
@@ -7,6 +8,7 @@ namespace PD3AudioModder
         private AppConfig? _appConfig;
         private DiscordRpcClient? client;
         private RichPresence? presence;
+
         public void Initialize()
         {
             _appConfig = AppConfig.Load();
@@ -27,7 +29,7 @@ namespace PD3AudioModder
                         LargeImageKey = "pam-1024",
                         LargeImageText = "PD3AudioModder",
                         SmallImageKey = smallImageKey,
-                        SmallImageText = smallImageText
+                        SmallImageText = smallImageText,
                     },
                     Timestamps = Timestamps.Now,
                 };

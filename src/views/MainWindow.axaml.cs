@@ -213,7 +213,9 @@ namespace PD3AudioModder
             var mainTabControl = this.FindControl<TabControl>("MainTabControl")!;
             ModNameTextBox.TextChanged += (_, _) =>
             {
-                ModName = !string.IsNullOrEmpty(ModNameTextBox.Text) ? ModNameTextBox.Text : "MyPD3Mod";
+                ModName = !string.IsNullOrEmpty(ModNameTextBox.Text)
+                    ? ModNameTextBox.Text
+                    : "MyPD3Mod";
                 _discordRPC.UpdatePresence(mainTabControl, ModName);
             };
             selectRepakButton.Click += (_, _) => SelectRepakButton_Click(repakPathTextBlock);
@@ -272,7 +274,7 @@ namespace PD3AudioModder
 
         private async Task UploadFile()
         {
-            _fileProcessor.UpdateStatus("Selecting files...", StatusTextBlock);
+            _fileProcessor.UpdateStatus("Selecting files...");
             var files = await StorageProvider.OpenFilePickerAsync(
                 new FilePickerOpenOptions { AllowMultiple = true }
             );
@@ -308,8 +310,7 @@ namespace PD3AudioModder
                         case ".opus":
                             audioFiles.Add(filePath);
                             _fileProcessor.UpdateStatus(
-                                $"Audio file uploaded: {Path.GetFileName(filePath)}",
-                                StatusTextBlock
+                                $"Audio file uploaded: {Path.GetFileName(filePath)}"
                             );
                             break;
                         case ".ubulk":
@@ -326,10 +327,7 @@ namespace PD3AudioModder
                             jsonFiles.Add(filePath);
                             break;
                         default:
-                            _fileProcessor.UpdateStatus(
-                                $"Unsupported file type: {extension}",
-                                StatusTextBlock
-                            );
+                            _fileProcessor.UpdateStatus($"Unsupported file type: {extension}");
                             break;
                     }
                 }
@@ -369,8 +367,7 @@ namespace PD3AudioModder
                     {
                         uploadedAudioPath = audioFiles[0];
                         _fileProcessor.UpdateStatus(
-                            $"Audio file uploaded: {Path.GetFileName(audioFiles[0])}",
-                            StatusTextBlock
+                            $"Audio file uploaded: {Path.GetFileName(audioFiles[0])}"
                         );
                     }
 
@@ -385,29 +382,25 @@ namespace PD3AudioModder
                             case ".ubulk":
                                 uploadedUbulkPath = filePath;
                                 _fileProcessor.UpdateStatus(
-                                    $"Ubulk file uploaded: {Path.GetFileName(filePath)}",
-                                    StatusTextBlock
+                                    $"Ubulk file uploaded: {Path.GetFileName(filePath)}"
                                 );
                                 break;
                             case ".uexp":
                                 uploadedUexpPath = filePath;
                                 _fileProcessor.UpdateStatus(
-                                    $"Uexp file uploaded: {Path.GetFileName(filePath)}",
-                                    StatusTextBlock
+                                    $"Uexp file uploaded: {Path.GetFileName(filePath)}"
                                 );
                                 break;
                             case ".uasset":
                                 uploadedUassetPath = filePath;
                                 _fileProcessor.UpdateStatus(
-                                    $"Uasset file uploaded: {Path.GetFileName(filePath)}",
-                                    StatusTextBlock
+                                    $"Uasset file uploaded: {Path.GetFileName(filePath)}"
                                 );
                                 break;
                             case ".json":
                                 uploadedJsonPath = filePath;
                                 _fileProcessor.UpdateStatus(
-                                    $"Json file uploaded: {Path.GetFileName(filePath)}",
-                                    StatusTextBlock
+                                    $"Json file uploaded: {Path.GetFileName(filePath)}"
                                 );
                                 break;
                         }
@@ -416,8 +409,7 @@ namespace PD3AudioModder
                 else
                 {
                     _fileProcessor.UpdateStatus(
-                        "Error: .ubulk, .uasset, .uexp, and .json files must share the same base filename (excluding extensions).",
-                        StatusTextBlock
+                        "Error: .ubulk, .uasset, .uexp, and .json files must share the same base filename (excluding extensions)."
                     );
                 }
 
@@ -432,7 +424,7 @@ namespace PD3AudioModder
             }
             else
             {
-                _fileProcessor.UpdateStatus("File selection cancelled", StatusTextBlock);
+                _fileProcessor.UpdateStatus("File selection cancelled");
             }
         }
 
