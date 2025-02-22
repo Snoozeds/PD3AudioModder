@@ -15,9 +15,11 @@ namespace PD3AudioModder
         private const string LocalVersionFile = "version.txt";
         private const string TempUpdatePath = "update.zip";
         private readonly MainWindow _mainWindow;
+        private WindowNotificationManager _notificationManager;
 
         public AutoUpdater(WindowNotificationManager notificationManager, MainWindow mainWindow)
         {
+            _notificationManager = notificationManager;
             _mainWindow = mainWindow;
         }
 
@@ -180,6 +182,15 @@ done";
 
         public async Task DownloadUpdate()
         {
+            _notificationManager?.Show(
+                new Notification(
+                    "Update in Progress",
+                    "An update is in progress. Please wait...",
+                    NotificationType.Information,
+                    TimeSpan.FromSeconds(9999) // Expiration
+                )
+            );
+
             string url =
                 "https://github.com/Snoozeds/PD3AudioModder/releases/latest/download/PD3AudioModder.zip";
 

@@ -101,7 +101,7 @@ namespace PD3AudioModder
         {
             try
             {
-                AutoUpdater updater = new AutoUpdater(_notificationManager!, this);
+                AutoUpdater updater = new AutoUpdater(new WindowNotificationManager(this), this);
                 var (updateAvailable, newVersion) = await updater.CheckForUpdates();
 
                 if (updateAvailable)
