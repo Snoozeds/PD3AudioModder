@@ -5,7 +5,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Platform.Storage;
-using static SkiaSharp.HarfBuzz.SKShaper;
 
 namespace PD3AudioModder.util
 {
@@ -156,14 +155,19 @@ namespace PD3AudioModder.util
                     .GroupBy(file => Path.GetFileNameWithoutExtension(file).ToLower())
                     .ToDictionary(g => g.Key, g => g.ToList());
 
-                double totalFiles = audioFiles.Count;
-                double processedFiles = 0;
-
+                // Collect all files that need processing
+                var filesToProcess =
+                    new List<(
+                        string audioPath,
+                        string ubulkPath,
+                        string uexpPath,
+                        string uassetPath,
+                        string jsonPath,
+                        string baseName
+                    )>();
                 foreach (var audioFile in audioFiles)
                 {
                     string audioBaseName = Path.GetFileNameWithoutExtension(audioFile);
-
-                    // Find matching game files
                     if (gameFileGroups.TryGetValue(audioBaseName.ToLower(), out var matchingFiles))
                     {
                         string? ubulkPath = matchingFiles.FirstOrDefault(f =>
@@ -185,69 +189,57 @@ namespace PD3AudioModder.util
                             && (uassetPath != null || jsonPath != null)
                         )
                         {
-                            UpdateStatus(
-                                $"Processing {audioBaseName}...",
-                                statusTextBlock,
-                                progressBar,
-                                (processedFiles / totalFiles) * 100
-                            );
-
-                            try
-                            {
-                                // Process the file conversion
-                                await ProcessSingleFile(
+                            filesToProcess.Add(
+                                (
                                     audioFile,
                                     ubulkPath,
                                     uexpPath,
                                     uassetPath!,
                                     jsonPath!,
-                                    tempDirectory,
-                                    outputDirectory,
                                     audioBaseName
-                                );
-                            }
-                            catch (Exception ex)
-                            {
-                                UpdateStatus(
-                                    $"Error processing {audioBaseName}: {ex.Message}",
-                                    statusTextBlock
-                                );
-                                // Continue with next file
-                            }
+                                )
+                            );
                         }
                         else
                         {
-                            UpdateStatus(
-                                $"Skipping {audioBaseName}: Missing required game files",
-                                statusTextBlock
-                            );
                             _skippedFiles[audioBaseName] = "Missing required game files";
                         }
                     }
                     else
                     {
-                        UpdateStatus(
-                            $"Skipping {audioBaseName}: No matching game files found",
-                            statusTextBlock
-                        );
                         _skippedFiles[audioBaseName] = "No matching game files found";
                     }
-
-                    processedFiles++;
-                    UpdateStatus(
-                        $"Processed {processedFiles} of {totalFiles} files",
-                        statusTextBlock,
-                        progressBar,
-                        (processedFiles / totalFiles) * 100
-                    );
                 }
 
-                UpdateStatus(
-                    $"Batch conversion completed! Processed {processedFiles} files",
-                    statusTextBlock,
-                    progressBar,
-                    100
-                );
+                if (filesToProcess.Count > 0)
+                {
+                    UpdateStatus(
+                        $"Processing {filesToProcess.Count} files...",
+                        statusTextBlock,
+                        progressBar,
+                        0
+                    );
+
+                    await ProcessFiles(
+                        filesToProcess,
+                        tempDirectory,
+                        outputDirectory,
+                        statusTextBlock,
+                        progressBar
+                    );
+
+                    UpdateStatus(
+                        $"Batch conversion completed! Processed {filesToProcess.Count} files",
+                        statusTextBlock,
+                        progressBar,
+                        100
+                    );
+                }
+                else
+                {
+                    UpdateStatus("No files to process", statusTextBlock);
+                }
+
                 _audioFolderPath = string.Empty;
                 _gameFilesFolderPath = string.Empty;
 
@@ -269,109 +261,158 @@ namespace PD3AudioModder.util
             }
         }
 
-        private async Task ProcessSingleFile(
-            string audioPath,
-            string ubulkPath,
-            string uexpPath,
-            string uassetPath,
-            string jsonPath,
+        private async Task ProcessFiles(
+            List<(
+                string audioPath,
+                string ubulkPath,
+                string uexpPath,
+                string uassetPath,
+                string jsonPath,
+                string baseName
+            )> filesToProcess,
             string tempDirectory,
             string outputDirectory,
-            string baseName
+            TextBlock statusTextBlock,
+            ProgressBar progressBar
         )
         {
-            _appConfig = AppConfig.Instance;
-            // Check for existing files before proceeding if the user has the setting enabled.
-            if (
-                _appConfig != null
-                && _appConfig.DisplayFilesInExportWarning == true
-                && !_yesToAllFiles
-            )
-            {
-                var result = await _fileProcessor.CheckExistingFiles(outputDirectory, baseName);
-                if (!result.ShouldProceed)
-                {
-                    _skippedFiles[baseName] = "User skipped due to existing files";
-                    return;
-                }
-                _yesToAllFiles = result.YesToAll;
-            }
+            var audioInputPaths = filesToProcess.Select(f => f.audioPath).ToArray();
+            double totalFiles = filesToProcess.Count;
+            double processedFiles = 0;
 
-            // Copy the original ubulk file to temp directory
-            string tempUbulkPath = Path.Combine(tempDirectory, Path.GetFileName(ubulkPath));
-            File.Copy(ubulkPath, tempUbulkPath, true);
-
-            // Copy the original uexp file to temp directory
-            string tempUexpPath = Path.Combine(tempDirectory, Path.GetFileName(uexpPath));
-            File.Copy(uexpPath, tempUexpPath, true);
-
-            // Convert audio to WAV
-            string wavPath = Path.Combine(
-                tempDirectory,
-                Path.GetFileNameWithoutExtension(audioPath) + ".wav"
-            );
-            await AudioConverter.ConvertToWAV(audioPath, wavPath);
-
-            // Convert WAV to WEM
-            string wemPath = Path.Combine(
-                tempDirectory,
-                Path.GetFileNameWithoutExtension(wavPath) + ".wem"
-            );
-            await Task.Run(() => WwisePD3.EncodeToWem(wavPath, wemPath));
-
-            // Get the original size from the JSON file if it exists
-            long oldSize = -1;
-            if (!string.IsNullOrEmpty(jsonPath))
-            {
-                oldSize = _fileProcessor.GetOldSizeFromJson(jsonPath);
-            }
-
-            // Get the new size from the wem file
-            long newSize = new FileInfo(wemPath).Length;
-
-            // Modify the temporary uexp file if we have the old size
-            if (oldSize != -1)
-            {
-                _fileProcessor.ModifyUexpSize(tempUexpPath, oldSize, newSize);
-            }
-
-            // Replace the temporary ubulk file with the new wem file
-            File.Copy(wemPath, tempUbulkPath, true);
-
-            // Save the converted files
-            string ubulkSavePath = Path.Combine(outputDirectory, Path.GetFileName(ubulkPath));
-            string uexpSavePath = Path.Combine(outputDirectory, Path.GetFileName(uexpPath));
-
-            File.Copy(tempUbulkPath, ubulkSavePath, true);
-            File.Copy(tempUexpPath, uexpSavePath, true);
-
-            if (!string.IsNullOrEmpty(uassetPath))
-            {
-                string uassetSavePath = Path.Combine(outputDirectory, baseName + ".uasset");
-                File.Copy(uassetPath, uassetSavePath, true);
-            }
-            else if (!string.IsNullOrEmpty(jsonPath))
-            {
-                string jsonSavePath = Path.Combine(outputDirectory, baseName + ".json");
-                File.Copy(jsonPath, jsonSavePath, true);
-            }
-
-            // Clean up temp files
             try
             {
-                if (File.Exists(wavPath))
-                    File.Delete(wavPath);
-                if (File.Exists(wemPath))
-                    File.Delete(wemPath);
-                if (File.Exists(tempUbulkPath))
-                    File.Delete(tempUbulkPath);
-                if (File.Exists(tempUexpPath))
-                    File.Delete(tempUexpPath);
-                _yesToAllFiles = false;
+                // Convert all audio files to WAV format
+                await AudioConverter.BatchConvertToWAV(audioInputPaths, tempDirectory);
+
+                // Process each file pair
+                foreach (var fileSet in filesToProcess)
+                {
+                    try
+                    {
+                        UpdateStatus(
+                            $"Processing {fileSet.baseName}...",
+                            statusTextBlock,
+                            progressBar,
+                            (processedFiles / totalFiles) * 100
+                        );
+
+                        // Check for existing files
+                        if (_appConfig?.DisplayFilesInExportWarning == true && !_yesToAllFiles)
+                        {
+                            var result = await _fileProcessor.CheckExistingFiles(
+                                outputDirectory,
+                                fileSet.baseName
+                            );
+                            if (!result.ShouldProceed)
+                            {
+                                _skippedFiles[fileSet.baseName] =
+                                    "User skipped due to existing files";
+                                continue;
+                            }
+                            _yesToAllFiles = result.YesToAll;
+                        }
+
+                        string wavPath = Path.Combine(
+                            tempDirectory,
+                            Path.GetFileNameWithoutExtension(fileSet.audioPath) + ".wav"
+                        );
+
+                        // Convert WAV to WEM
+                        string wemPath = Path.Combine(
+                            tempDirectory,
+                            Path.GetFileNameWithoutExtension(wavPath) + ".wem"
+                        );
+                        await Task.Run(() => WwisePD3.EncodeToWem(wavPath, wemPath));
+
+                        // Process UBULK and UEXP files
+                        string tempUbulkPath = Path.Combine(
+                            tempDirectory,
+                            Path.GetFileName(fileSet.ubulkPath)
+                        );
+                        string tempUexpPath = Path.Combine(
+                            tempDirectory,
+                            Path.GetFileName(fileSet.uexpPath)
+                        );
+
+                        File.Copy(fileSet.ubulkPath, tempUbulkPath, true);
+                        File.Copy(fileSet.uexpPath, tempUexpPath, true);
+
+                        // Handle file sizes
+                        long oldSize = -1;
+                        if (!string.IsNullOrEmpty(fileSet.jsonPath))
+                        {
+                            oldSize = _fileProcessor.GetOldSizeFromJson(fileSet.jsonPath);
+                        }
+
+                        long newSize = new FileInfo(wemPath).Length;
+
+                        if (oldSize != -1)
+                        {
+                            _fileProcessor.ModifyUexpSize(tempUexpPath, oldSize, newSize);
+                        }
+
+                        // Replace UBULK with new WEM file
+                        File.Copy(wemPath, tempUbulkPath, true);
+
+                        // Save converted files
+                        string ubulkSavePath = Path.Combine(
+                            outputDirectory,
+                            Path.GetFileName(fileSet.ubulkPath)
+                        );
+                        string uexpSavePath = Path.Combine(
+                            outputDirectory,
+                            Path.GetFileName(fileSet.uexpPath)
+                        );
+
+                        File.Copy(tempUbulkPath, ubulkSavePath, true);
+                        File.Copy(tempUexpPath, uexpSavePath, true);
+
+                        if (!string.IsNullOrEmpty(fileSet.uassetPath))
+                        {
+                            string uassetSavePath = Path.Combine(
+                                outputDirectory,
+                                fileSet.baseName + ".uasset"
+                            );
+                            File.Copy(fileSet.uassetPath, uassetSavePath, true);
+                        }
+                        else if (!string.IsNullOrEmpty(fileSet.jsonPath))
+                        {
+                            string jsonSavePath = Path.Combine(
+                                outputDirectory,
+                                fileSet.baseName + ".json"
+                            );
+                            File.Copy(fileSet.jsonPath, jsonSavePath, true);
+                        }
+
+                        // Clean up temp files
+                        try
+                        {
+                            File.Delete(wavPath);
+                            File.Delete(wemPath);
+                            File.Delete(tempUbulkPath);
+                            File.Delete(tempUexpPath);
+                        }
+                        catch
+                        {
+                            // Ignore cleanup errors
+                        }
+
+                        processedFiles++;
+                    }
+                    catch (Exception ex)
+                    {
+                        _skippedFiles[fileSet.baseName] = $"Error during processing: {ex.Message}";
+                    }
+                }
             }
-            catch
+            catch (Exception ex)
             {
-                // Ignore cleanup errors
+                throw new Exception($"Batch conversion failed: {ex.Message}", ex);
+            }
+            finally
+            {
+                _yesToAllFiles = false;
             }
         }
 
