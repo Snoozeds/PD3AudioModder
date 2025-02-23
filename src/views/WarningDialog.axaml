@@ -24,7 +24,7 @@
                            HorizontalAlignment="Center" />
 			</StackPanel>
 	
-			<ScrollViewer VerticalAlignment="Center" Height="200" Width="500">
+			<ScrollViewer HorizontalScrollBarVisibility="Visible" VerticalAlignment="Center" Height="200" Width="500">
 				<TextBlock
 					Name="MessageTextBlock"
 					Text="{Binding Message}"
