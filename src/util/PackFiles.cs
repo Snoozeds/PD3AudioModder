@@ -276,7 +276,7 @@ public class PackFiles
                 {
                     StartInfo = new System.Diagnostics.ProcessStartInfo
                     {
-                        FileName = "repak",
+                        FileName = repakPath,
                         Arguments = repakArguments,
                         RedirectStandardOutput = true,
                         RedirectStandardError = true,
