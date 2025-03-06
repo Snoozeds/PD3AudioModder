@@ -9,11 +9,6 @@ using PD3AudioModder;
 
 public class PackFiles
 {
-    private static readonly string LocalizedMappings =
-        "https://raw.githubusercontent.com/Snoozeds/PD3WwiseMappings/refs/heads/main/localized.json";
-    private static readonly string MediaMappings =
-        "https://raw.githubusercontent.com/Snoozeds/PD3WwiseMappings/refs/heads/main/media.json";
-
     private static readonly string LocalizedPath =
         "PAYDAY3/Content/WwiseAudio/Localized/English_US_/Media";
     private static readonly string MediaPath = "PAYDAY3/Content/WwiseAudio/Media";
@@ -76,6 +71,20 @@ public class PackFiles
 
     public static async Task DownloadMappings()
     {
+        string LocalizedMappings = AppConfig.Instance.WwiseLocalizedMappingsURL;
+        string MediaMappings = AppConfig.Instance.WwiseMediaMappingsURL;
+
+        // Revert to default if empty
+        if (string.IsNullOrWhiteSpace(LocalizedMappings))
+        {
+            LocalizedMappings = DefaultConfig.WwiseLocalizedMappingsURl;
+        }
+
+        if (string.IsNullOrWhiteSpace(MediaMappings))
+        {
+            MediaMappings = DefaultConfig.WwiseMediaMappingsURL;
+        }
+
         UpdateStatus("Downloading ID mappings...");
         using var client = new HttpClient();
         try

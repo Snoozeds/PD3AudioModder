@@ -176,6 +176,32 @@
 												Click="HandleClearButtonClick"/>
 									</Grid>
 								</StackPanel>
+
+								<StackPanel Margin="0,0,0,20">
+									<TextBlock Text="Wwise ID Mappings - Media" Foreground="#BBE1FA" FontSize="16"/>
+									<TextBlock Text="URL to a .json file that contains all IDs of the files that go in the game's Media folder (used in Pack Files.)"
+											  Foreground="#8B9DA7" FontSize="14" TextWrapping="Wrap" Margin="0,0,0,10"/>
+									<TextBox Name="MediaMappingsTextBox" Background="#1B262C" Foreground="#BBE1FA" Margin="0,0,0,10"
+											 TextChanged="HandleTextChanged"/>
+									<Button Content="Reset" Name="ResetMediaMappingsButton"
+                                            Width="80" Height="30" Background="#3282B8" Foreground="White"
+                                            FontSize="16" Padding="5" CornerRadius="10"
+                                            VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+											Click="HandleClearButtonClick"/>
+								</StackPanel>
+
+								<StackPanel Margin="0,0,0,20">
+									<TextBlock Text="Wwise ID Mappings - Localized" Foreground="#BBE1FA" FontSize="16"/>
+									<TextBlock Text="URl to a .json file that contains all IDs of the files that go in the game's Localized media folder (used in Pack Files.)"
+											  Foreground="#8B9DA7" FontSize="14" TextWrapping="Wrap" Margin="0,0,0,10"/>
+									<TextBox Name="LocalizedMappingsTextBox" Background="#1B262C" Foreground="#BBE1FA" Margin="0,0,0,10"
+											 TextChanged="HandleTextChanged"/>
+									<Button Content="Reset" Name="ResetLocalizedMappingsButton"
+                                            Width="80" Height="30" Background="#3282B8" Foreground="White"
+                                            FontSize="16" Padding="5" CornerRadius="10"
+                                            VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+											Click="HandleClearButtonClick"/>
+								</StackPanel>
 								
 							</StackPanel>
 						</Border>

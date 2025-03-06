@@ -19,6 +19,10 @@ namespace PD3AudioModder
         public static readonly bool RPCDisplayTab = false;
         public static readonly bool RPCDisplayModName = false;
         public static readonly bool DisplayFilesInExportWarning = true;
+        public static readonly string WwiseMediaMappingsURL =
+            "https://raw.githubusercontent.com/Snoozeds/PD3WwiseMappings/refs/heads/main/media.json";
+        public static readonly string WwiseLocalizedMappingsURl =
+            "https://raw.githubusercontent.com/Snoozeds/PD3WwiseMappings/refs/heads/main/localized.json";
     }
 
     public class AppConfig
@@ -38,6 +42,9 @@ namespace PD3AudioModder
         public bool RPCDisplayModName { get; set; } = DefaultConfig.RPCDisplayModName;
         public bool DisplayFilesInExportWarning { get; set; } =
             DefaultConfig.DisplayFilesInExportWarning;
+        public string WwiseMediaMappingsURL { get; set; } = DefaultConfig.WwiseMediaMappingsURL;
+        public string WwiseLocalizedMappingsURL { get; set; } =
+            DefaultConfig.WwiseLocalizedMappingsURl;
 
         public static AppConfig Instance
         {
@@ -138,7 +145,44 @@ namespace PD3AudioModder
                         config.DisplayFilesInExportWarning == true
                         || config.DisplayFilesInExportWarning == false
                 },
+                {
+                    "WwiseMediaMappingsURL",
+                    config =>
+                        IsValidUrl(
+                            config.WwiseMediaMappingsURL,
+                            DefaultConfig.WwiseMediaMappingsURL
+                        )
+                },
+                {
+                    "WwiseLocalizedMappingsURL",
+                    config =>
+                        IsValidUrl(
+                            config.WwiseLocalizedMappingsURL,
+                            DefaultConfig.WwiseLocalizedMappingsURl
+                        )
+                },
             };
+        }
+
+        private static bool IsValidUrl(string url, string defaultUrl)
+        {
+            // If empty or null, fail validation and revert to default
+            if (string.IsNullOrWhiteSpace(url))
+                return false;
+
+            // Ensure it's https and .json format
+            try
+            {
+                var uri = new Uri(url);
+
+                return uri.Scheme == "https"
+                    && Path.GetExtension(uri.LocalPath)
+                        .Equals(".json", StringComparison.OrdinalIgnoreCase);
+            }
+            catch (UriFormatException)
+            {
+                return false;
+            }
         }
 
         public static AppConfig Load()

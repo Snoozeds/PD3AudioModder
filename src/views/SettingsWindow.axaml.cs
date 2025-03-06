@@ -56,6 +56,8 @@ namespace PD3AudioModder
                 "EnableDiscordRPCToggle",
                 "DisplayCurrentTabToggle",
                 "ShowModNameToggle",
+                "MediaMappingsTextBox",
+                "LocalizedMappingsTextBox",
             };
             foreach (var name in controlNames)
             {
@@ -104,6 +106,8 @@ namespace PD3AudioModder
                     { "EnableDiscordRPCToggle", config.RPCEnabled },
                     { "DisplayCurrentTabToggle", config.RPCDisplayTab },
                     { "ShowModNameToggle", config.RPCDisplayModName },
+                    { "MediaMappingsTextBox", config.WwiseMediaMappingsURL },
+                    { "LocalizedMappingsTextBox", config.WwiseLocalizedMappingsURL },
                 }
             )
             {
@@ -240,16 +244,49 @@ namespace PD3AudioModder
             if (sender is Button button)
             {
                 // FFmpeg options reset button
-                if (
-                    button.Name == "ResetFFmpegOptionsButton"
-                    && _controls.TryGetValue("FFmpegOptionsTextBox", out var control)
-                    && control is TextBox ffmpegTextBox
-                )
+                if (button.Name == "ResetFFmpegOptionsButton")
                 {
-                    ffmpegTextBox.Text = DefaultConfig.FfmpegOptions;
-                    AppConfig.Instance.FfmpegOptions = DefaultConfig.FfmpegOptions;
-                    AppConfig.Instance.Save();
-                    return;
+                    if (
+                        _controls.TryGetValue("FFmpegOptionsTextBox", out var ffmpegControl)
+                        && ffmpegControl is TextBox ffmpegTextBox
+                    )
+                    {
+                        ffmpegTextBox.Text = DefaultConfig.FfmpegOptions;
+                        AppConfig.Instance.FfmpegOptions = DefaultConfig.FfmpegOptions;
+                        AppConfig.Instance.Save();
+                        return;
+                    }
+                }
+
+                // Mapping URL reset buttons
+                if (button.Name == "ResetMediaMappingsButton")
+                {
+                    if (
+                        _controls.TryGetValue("MediaMappingsTextBox", out var mediaControl)
+                        && mediaControl is TextBox mediaMappingsTextBox
+                    )
+                    {
+                        mediaMappingsTextBox.Text = DefaultConfig.WwiseMediaMappingsURL;
+                        AppConfig.Instance.WwiseMediaMappingsURL =
+                            DefaultConfig.WwiseMediaMappingsURL;
+                        AppConfig.Instance.Save();
+                        return;
+                    }
+                }
+
+                if (button.Name == "ResetLocalizedMappingsButton")
+                {
+                    if (
+                        _controls.TryGetValue("LocalizedMappingsTextBox", out var localizedControl)
+                        && localizedControl is TextBox localizedMappingsTextBox
+                    )
+                    {
+                        localizedMappingsTextBox.Text = DefaultConfig.WwiseLocalizedMappingsURl;
+                        AppConfig.Instance.WwiseLocalizedMappingsURL =
+                            DefaultConfig.WwiseLocalizedMappingsURl;
+                        AppConfig.Instance.Save();
+                        return;
+                    }
                 }
 
                 // Other buttons
