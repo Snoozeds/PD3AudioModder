@@ -5,33 +5,58 @@
         SizeToContent="WidthAndHeight"
         Background="#1B262C"
         Icon="avares://PD3AudioModder/assets/icons/audio.ico"
-        WindowStartupLocation="CenterOwner">
-
+        WindowStartupLocation="CenterOwner"
+        MaxHeight="400"
+        MaxWidth="600">
 	<Border Padding="20" Background="#1B262C">
-		<StackPanel HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Spacing="15"
-                    MinWidth="300">
-			<TextBlock Text="A new update is available!"
+		<Grid RowDefinitions="Auto,Auto,Auto,*,Auto,Auto">
+			<TextBlock Grid.Row="0"
+                       Text="A new update is available!"
                        FontSize="18"
                        HorizontalAlignment="Center"
                        FontWeight="Bold"
                        Foreground="#BBE1FA"/>
-			<TextBlock x:Name="CurrentVersionText"
+			<TextBlock Grid.Row="1"
+                       x:Name="CurrentVersionText"
                        Text="Current version: {1}"
                        HorizontalAlignment="Center"
                        FontSize="16"
+                       Margin="0,15,0,0"
                        Foreground="#BBE1FA"/>
-			<TextBlock x:Name="VersionText"
+			<TextBlock Grid.Row="2"
+                       x:Name="VersionText"
                        Text="New version: {0}"
                        HorizontalAlignment="Center"
                        FontSize="16"
+                       Margin="0,5,0,15"
                        Foreground="#BBE1FA"/>
-			<TextBlock Text="Do you want to update now?"
+			<Border Grid.Row="3"
+                    Background="#0F4C75"
+                    CornerRadius="5"
+                    Padding="15"
+                    MinHeight="100"
+                    MaxHeight="180"
+                    MinWidth="400">
+				<ScrollViewer VerticalScrollBarVisibility="Auto"
+                              HorizontalScrollBarVisibility="Disabled">
+					<StackPanel x:Name="CommitsPanel"
+                                Spacing="5"
+                                Margin="0,0,25,0">
+						<SelectableTextBlock Text="Loading changes..."
+                                           Foreground="#BBE1FA"
+                                           FontSize="14"
+                                           TextWrapping="Wrap"/>
+					</StackPanel>
+				</ScrollViewer>
+			</Border>
+			<TextBlock Grid.Row="4"
+                       Text="Do you want to update now?"
                        HorizontalAlignment="Center"
                        FontSize="16"
+                       Margin="0,15,0,0"
                        Foreground="#BBE1FA"/>
-			<StackPanel Orientation="Horizontal"
+			<StackPanel Grid.Row="5"
+                        Orientation="Horizontal"
                         HorizontalAlignment="Center"
                         Spacing="15"
                         Margin="0,10,0,0">
@@ -44,8 +69,8 @@
                         Padding="10,5"
                         CornerRadius="10"
                         Click="OnYesClick"
-						VerticalContentAlignment="Center"
-						HorizontalContentAlignment="Center"/>
+                        VerticalContentAlignment="Center"
+                        HorizontalContentAlignment="Center"/>
 				<Button Content="No"
                         Width="75"
                         Height="40"
@@ -55,9 +80,9 @@
                         Padding="10,5"
                         CornerRadius="10"
                         Click="OnNoClick"
-						VerticalContentAlignment="Center"
-						HorizontalContentAlignment="Center"/>
+                        VerticalContentAlignment="Center"
+                        HorizontalContentAlignment="Center"/>
 			</StackPanel>
-		</StackPanel>
+		</Grid>
 	</Border>
 </Window>
