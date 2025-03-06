@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Platform.Storage;
+using Avalonia.Threading;
 
 namespace PD3AudioModder.util
 {
@@ -280,6 +281,9 @@ namespace PD3AudioModder.util
             double totalFiles = filesToProcess.Count;
             double processedFiles = 0;
 
+            // Track PCM errors
+            var pcmErrorFiles = new List<string>();
+
             try
             {
                 // Convert all audio files to WAV format
@@ -400,6 +404,12 @@ namespace PD3AudioModder.util
 
                         processedFiles++;
                     }
+                    catch (InvalidOperationException ex) when (ex.Message.Contains("PAYDAY 3 only supports PCM"))
+                    {
+                        pcmErrorFiles.Add(fileSet.baseName);
+                        _skippedFiles[fileSet.baseName] = $"Error: {ex.Message}";
+                        continue;
+                    }
                     catch (Exception ex)
                     {
                         _skippedFiles[fileSet.baseName] = $"Error during processing: {ex.Message}";
@@ -413,6 +423,21 @@ namespace PD3AudioModder.util
             finally
             {
                 _yesToAllFiles = false;
+
+
+                if (pcmErrorFiles.Count > 0)
+                {
+                    Dispatcher.UIThread?.InvokeAsync(() =>
+                    {
+                        var warningDialog = new WarningDialog(
+                            $"wwise_pd3 error:\nPAYDAY 3 only supports PCM format.\nThis will cause these files to NOT play.\n\n" +
+                            $"The following {pcmErrorFiles.Count} file(s) were skipped:\n" +
+                            string.Join("\n", pcmErrorFiles) +
+                            "\n\nThis may be caused by incorrect ffmpeg arguments."
+                        );
+                        warningDialog.Show();
+                    });
+                }
             }
         }
 

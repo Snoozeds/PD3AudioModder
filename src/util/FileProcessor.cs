@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Avalonia.Platform.Storage;
+using Avalonia.Threading;
 using Newtonsoft.Json;
 
 namespace PD3AudioModder.util
@@ -273,6 +274,21 @@ namespace PD3AudioModder.util
                     // Ignore cleanup errors
                 }
             }
+
+            catch (InvalidOperationException ex) when (ex.Message.Contains("PAYDAY 3 only supports PCM"))
+            {
+                Dispatcher.UIThread?.InvokeAsync(() =>
+                {
+                    var warningDialog = new WarningDialog(
+                        $"wwise_pd3 error:\nPAYDAY 3 only supports PCM, not the type of this audio file.\nThis will cause these files to NOT play.\n\nThis may be caused by incorrect ffmpeg arguments."
+                    );
+                    warningDialog.Show();
+                });
+
+                UpdateStatus($"Error: {ex.Message}");
+                return;
+            }
+
             catch (Exception ex)
             {
                 UpdateStatus($"Error: {ex.Message}");

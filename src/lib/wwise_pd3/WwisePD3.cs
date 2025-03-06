@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Avalonia.Threading;
+using System;
 using System.IO;
 
 namespace PD3AudioModder
@@ -13,17 +14,12 @@ namespace PD3AudioModder
 
             if (header.type != 1)
             {
-                var warningDialog = new WarningDialog(
-                    String.Format(
-                        "wwise_pd3 error:\nPAYDAY 3 only supports PCM, not type {0}",
-                        header.type
-                    )
-                );
-                warningDialog.Show();
-                Console.WriteLine(
-                    String.Format("PAYDAY 3 only supports PCM, not type {0}", header.type)
-                );
+                Console.WriteLine($"PAYDAY 3 only supports PCM, not type {header.type}");
+
+                br.Close();
+                throw new InvalidOperationException($"PAYDAY 3 only supports PCM, not type {header.type}");
             }
+
 
             Console.WriteLine(String.Format("Format Length: {0}", header.lengthofformatdata));
 
