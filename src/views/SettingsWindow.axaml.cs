@@ -233,33 +233,44 @@ namespace PD3AudioModder
         }
 
         private void HandleClearButtonClick(
-            object? sender,
-            Avalonia.Interactivity.RoutedEventArgs e
-        )
+    object? sender,
+    Avalonia.Interactivity.RoutedEventArgs e
+)
         {
-            if (
-                sender is Button button
-                && _controls.TryGetValue(
-                    button.Name!.Replace("ClearButton", "TextBox"),
-                    out var control
-                )
-                && control is TextBox textBox
-            )
+            if (sender is Button button)
             {
-                textBox.Text = string.Empty;
-                switch (button.Name)
+                // FFmpeg options reset button
+                if (button.Name == "ResetFFmpegOptionsButton" &&
+                    _controls.TryGetValue("FFmpegOptionsTextBox", out var control) &&
+                    control is TextBox ffmpegTextBox)
                 {
-                    case "ExportFolderClearButton":
-                        AppConfig.Instance.DefaultExportFolder = string.Empty;
-                        break;
-                    case "RepakPathClearButton":
-                        AppConfig.Instance.RepakPath = string.Empty;
-                        break;
-                    case "FFmpegPathClearButton":
-                        AppConfig.Instance.FfmpegPath = string.Empty;
-                        break;
+                    ffmpegTextBox.Text = DefaultConfig.FfmpegOptions;
+                    AppConfig.Instance.FfmpegOptions = DefaultConfig.FfmpegOptions;
+                    AppConfig.Instance.Save();
+                    return;
                 }
-                AppConfig.Instance.Save();
+
+                // Other buttons
+                if (_controls.TryGetValue(
+                    button.Name!.Replace("ClearButton", "TextBox"),
+                    out var textControl) &&
+                    textControl is TextBox textBox)
+                {
+                    textBox.Text = string.Empty;
+                    switch (button.Name)
+                    {
+                        case "ExportFolderClearButton":
+                            AppConfig.Instance.DefaultExportFolder = string.Empty;
+                            break;
+                        case "RepakPathClearButton":
+                            AppConfig.Instance.RepakPath = string.Empty;
+                            break;
+                        case "FFmpegPathClearButton":
+                            AppConfig.Instance.FfmpegPath = string.Empty;
+                            break;
+                    }
+                    AppConfig.Instance.Save();
+                }
             }
         }
 
