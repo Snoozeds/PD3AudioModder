@@ -274,8 +274,8 @@ namespace PD3AudioModder.util
                     // Ignore cleanup errors
                 }
             }
-
-            catch (InvalidOperationException ex) when (ex.Message.Contains("PAYDAY 3 only supports PCM"))
+            catch (InvalidOperationException ex)
+                when (ex.Message.Contains("PAYDAY 3 only supports PCM"))
             {
                 Dispatcher.UIThread?.InvokeAsync(() =>
                 {
@@ -288,7 +288,6 @@ namespace PD3AudioModder.util
                 UpdateStatus($"Error: {ex.Message}");
                 return;
             }
-
             catch (Exception ex)
             {
                 UpdateStatus($"Error: {ex.Message}");

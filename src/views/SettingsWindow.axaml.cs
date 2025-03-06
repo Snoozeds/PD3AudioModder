@@ -233,16 +233,18 @@ namespace PD3AudioModder
         }
 
         private void HandleClearButtonClick(
-    object? sender,
-    Avalonia.Interactivity.RoutedEventArgs e
-)
+            object? sender,
+            Avalonia.Interactivity.RoutedEventArgs e
+        )
         {
             if (sender is Button button)
             {
                 // FFmpeg options reset button
-                if (button.Name == "ResetFFmpegOptionsButton" &&
-                    _controls.TryGetValue("FFmpegOptionsTextBox", out var control) &&
-                    control is TextBox ffmpegTextBox)
+                if (
+                    button.Name == "ResetFFmpegOptionsButton"
+                    && _controls.TryGetValue("FFmpegOptionsTextBox", out var control)
+                    && control is TextBox ffmpegTextBox
+                )
                 {
                     ffmpegTextBox.Text = DefaultConfig.FfmpegOptions;
                     AppConfig.Instance.FfmpegOptions = DefaultConfig.FfmpegOptions;
@@ -251,10 +253,12 @@ namespace PD3AudioModder
                 }
 
                 // Other buttons
-                if (_controls.TryGetValue(
-                    button.Name!.Replace("ClearButton", "TextBox"),
-                    out var textControl) &&
-                    textControl is TextBox textBox)
+                if (
+                    _controls.TryGetValue(
+                        button.Name!.Replace("ClearButton", "TextBox"),
+                        out var textControl
+                    ) && textControl is TextBox textBox
+                )
                 {
                     textBox.Text = string.Empty;
                     switch (button.Name)

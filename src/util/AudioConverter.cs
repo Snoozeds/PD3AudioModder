@@ -20,6 +20,7 @@ public class AudioConverter
 
     [DllImport("kernel32.dll", SetLastError = true)]
     private static extern bool FreeConsole();
+
     private static string GetFfmpegPath()
     {
         // check config path
@@ -168,12 +169,18 @@ public class AudioConverter
     {
         if (inputPaths == null || inputPaths.Length == 0)
         {
-            throw new ArgumentException("Input paths array cannot be null or empty.", nameof(inputPaths));
+            throw new ArgumentException(
+                "Input paths array cannot be null or empty.",
+                nameof(inputPaths)
+            );
         }
 
         if (string.IsNullOrEmpty(outputDirectory))
         {
-            throw new ArgumentException("Output directory cannot be null or empty.", nameof(outputDirectory));
+            throw new ArgumentException(
+                "Output directory cannot be null or empty.",
+                nameof(outputDirectory)
+            );
         }
 
         Directory.CreateDirectory(outputDirectory);
@@ -185,7 +192,10 @@ public class AudioConverter
         }
         catch (Exception ex)
         {
-            throw new Exception("FFmpeg not found. Please install FFmpeg and ensure it's available in your system PATH.", ex);
+            throw new Exception(
+                "FFmpeg not found. Please install FFmpeg and ensure it's available in your system PATH.",
+                ex
+            );
         }
 
         if (string.IsNullOrEmpty(FfmpegOptions))
@@ -224,7 +234,10 @@ public class AudioConverter
                         throw new FileNotFoundException($"Input file not found: {inputPath}");
                     }
 
-                    string outputPath = Path.Combine(outputDirectory, Path.ChangeExtension(Path.GetFileName(inputPath), ".wav"));
+                    string outputPath = Path.Combine(
+                        outputDirectory,
+                        Path.ChangeExtension(Path.GetFileName(inputPath), ".wav")
+                    );
 
                     // Ensure the paths are properly quoted and escaped
                     string inputQuoted = $"\"{inputPath}\"";
@@ -239,7 +252,7 @@ public class AudioConverter
                         UseShellExecute = false,
                         RedirectStandardOutput = false,
                         RedirectStandardError = false,
-                        CreateNoWindow = false  // Keep window visible, otherwise Windows Defender thinks its a trojan. We love MS!!! :DD
+                        CreateNoWindow = false, // Keep window visible, otherwise Windows Defender thinks its a trojan. We love MS!!! :DD
                     };
 
                     using var process = new Process { StartInfo = processStartInfo };
@@ -257,7 +270,9 @@ public class AudioConverter
                         // Verify output file
                         if (!File.Exists(outputPath))
                         {
-                            throw new Exception($"Conversion completed but output file was not created: {outputPath}");
+                            throw new Exception(
+                                $"Conversion completed but output file was not created: {outputPath}"
+                            );
                         }
                     }
                     catch (Exception ex)

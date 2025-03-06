@@ -404,7 +404,8 @@ namespace PD3AudioModder.util
 
                         processedFiles++;
                     }
-                    catch (InvalidOperationException ex) when (ex.Message.Contains("PAYDAY 3 only supports PCM"))
+                    catch (InvalidOperationException ex)
+                        when (ex.Message.Contains("PAYDAY 3 only supports PCM"))
                     {
                         pcmErrorFiles.Add(fileSet.baseName);
                         _skippedFiles[fileSet.baseName] = $"Error: {ex.Message}";
@@ -424,16 +425,15 @@ namespace PD3AudioModder.util
             {
                 _yesToAllFiles = false;
 
-
                 if (pcmErrorFiles.Count > 0)
                 {
                     Dispatcher.UIThread?.InvokeAsync(() =>
                     {
                         var warningDialog = new WarningDialog(
-                            $"wwise_pd3 error:\nPAYDAY 3 only supports PCM format.\nThis will cause these files to NOT play.\n\n" +
-                            $"The following {pcmErrorFiles.Count} file(s) were skipped:\n" +
-                            string.Join("\n", pcmErrorFiles) +
-                            "\n\nThis may be caused by incorrect ffmpeg arguments."
+                            $"wwise_pd3 error:\nPAYDAY 3 only supports PCM format.\nThis will cause these files to NOT play.\n\n"
+                                + $"The following {pcmErrorFiles.Count} file(s) were skipped:\n"
+                                + string.Join("\n", pcmErrorFiles)
+                                + "\n\nThis may be caused by incorrect ffmpeg arguments."
                         );
                         warningDialog.Show();
                     });
