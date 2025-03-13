@@ -8,6 +8,7 @@
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
 	<StartupObject>PD3AudioModder.Program</StartupObject>
 	<ApplicationIcon>assets\icons\audio.ico</ApplicationIcon>
+	<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="assets\icons\audio.ico" />
