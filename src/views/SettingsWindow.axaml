@@ -257,7 +257,7 @@
 			<TabItem>
 				<TabItem.Header>
 					<StackPanel Orientation="Horizontal" Spacing="5">
-						<Image Source="{SvgImage avares://PD3AudioModder/assets/icons/tabler-icons/info-circle.svg}"
+						<Image Source="{SvgImage avares://PD3AudioModder/assets/icons/tabler-icons/help.svg}"
 							   Width="28" Height="28"/>
 						<TextBlock Text="About"/>
 					</StackPanel>
