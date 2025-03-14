@@ -58,6 +58,20 @@
                        MaxWidth="800"/>
 		</StackPanel>
 
+		<!-- ID Search Section -->
+		<StackPanel x:Name="IDSearchSection"  Grid.Row="0" IsVisible="False">
+			<TextBlock Text="ID Search"
+                       FontSize="28"
+                       FontWeight="Bold"
+                       Foreground="#BBE1FA"
+                       Margin="0,0,0,10"/>
+			<SelectableTextBlock Text="To use the ID Search tab, first click 'Load Pak Files', then navigate to wherever PAYDAY 3 is installed.&#x0a;They are usually located in PAYDAY3\PAYDAY3\Content\Paks&#x0a;&#x0a;You can select multiple or just one pak file at once. After a bit of waiting, all the pak files should load. You can then search, sort, and play the audio files."
+                       FontSize="16"
+                       Foreground="#BBE1FA"
+                       TextWrapping="Wrap"
+                       MaxWidth="800"/>
+		</StackPanel>
+
 		<!-- Close button -->
 		<Button Content="Close"
                 Width="75"

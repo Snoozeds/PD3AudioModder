@@ -666,6 +666,7 @@ namespace PD3AudioModder
                 "Single File" => "SingleFile",
                 "Batch Conversion" => "BatchConversion",
                 "Pack Files" => "PackFiles",
+                "ID Search" => "IDSearch",
                 _ => "single",
             };
 

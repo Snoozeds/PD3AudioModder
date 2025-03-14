@@ -20,6 +20,7 @@ namespace PD3AudioModder
                 { "SingleFile", this.FindControl<StackPanel>("SingleFileSection")! },
                 { "BatchConversion", this.FindControl<StackPanel>("BatchConversionSection")! },
                 { "PackFiles", this.FindControl<StackPanel>("PackFilesSection")! },
+                { "IDSearch", this.FindControl<StackPanel>("IDSearchSection")! },
             };
 
             foreach (var section in sections)
