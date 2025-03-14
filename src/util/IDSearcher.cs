@@ -256,7 +256,7 @@ namespace PD3AudioModder.util
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
                     UseShellExecute = false,
-                    CreateNoWindow = true,
+                    CreateNoWindow = false,
                 };
 
                 using (Process process = new Process { StartInfo = psi })
