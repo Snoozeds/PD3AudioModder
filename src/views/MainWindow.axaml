@@ -495,7 +495,8 @@
 												  IsReadOnly="True"
 												  AutoGenerateColumns="False"
 												  CanUserResizeColumns="True"
-												  CanUserReorderColumns="True">
+												  CanUserReorderColumns="True"
+												  ClipboardCopyMode="ExcludeHeader">
 											<DataGrid.Columns>
 												<DataGridTextColumn Header="ID"
 																	Binding="{Binding SoundId}"
