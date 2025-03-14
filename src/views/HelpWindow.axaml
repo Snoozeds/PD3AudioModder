@@ -65,7 +65,7 @@
                        FontWeight="Bold"
                        Foreground="#BBE1FA"
                        Margin="0,0,0,10"/>
-			<SelectableTextBlock Text="To use the ID Search tab, first click 'Load Pak Files', then navigate to wherever PAYDAY 3 is installed.&#x0a;They are usually located in PAYDAY3\PAYDAY3\Content\Paks&#x0a;&#x0a;You can select multiple or just one pak file at once. After a bit of waiting, all the pak files should load. You can then search, sort, and play the audio files."
+			<SelectableTextBlock Text="To use the ID Search tab, first click 'Load Pak Files', then navigate to wherever PAYDAY 3 is installed.&#x0a;They are usually located in PAYDAY3\PAYDAY3\Content\Paks&#x0a;&#x0a;You can select multiple or just one pak file at once. After a bit of waiting, all the pak files should load. You can then search, sort, and play the audio files.&#x0a;&#x0a;To play audio files, you need vgmstream-cli.exe.&#x0a;The download for this is available at:&#x0a;https://vgmstream.org/&#x0a;&#x0a;Place everything that is in the zip file in the same folder as PD3AudioModder.exe. Read USAGE.md if you'd like, it can de-clutter the folder."
                        FontSize="16"
                        Foreground="#BBE1FA"
                        TextWrapping="Wrap"
