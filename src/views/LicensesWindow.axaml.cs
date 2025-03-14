@@ -20,6 +20,7 @@ namespace PD3AudioModder
             { "ReactiveUI", "https://github.com/reactiveui/reactiveui" },
             { "TablerIcons", "https://github.com/tabler/tabler-icons" },
             { "DiscordRichPresence", "https://github.com/Lachee/discord-rpc-csharp" },
+            { "CUE4Parse", "https://github.com/FabianFG/CUE4Parse" },
         };
 
         public LicensesWindow()

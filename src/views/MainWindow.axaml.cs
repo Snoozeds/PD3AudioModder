@@ -1,15 +1,52 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Avalonia.Controls;
 using Avalonia.Controls.Notifications;
 using Avalonia.Markup.Xaml;
 using Avalonia.Platform.Storage;
+using Avalonia.VisualTree;
 using PD3AudioModder.util;
 
 namespace PD3AudioModder
 {
+    // Used in ID Search tab
+    public class SoundItem
+    {
+        public string SoundId { get; set; }
+        public string SoundDescription { get; set; }
+        public string SoundFolder { get; set; }
+        public string UbulkPath { get; set; }
+        public ICommand PlayCommand { get; set; }
+        public ICommand StopCommand { get; set; }
+
+        private readonly WindowNotificationManager _notificationManager;
+        private readonly IDSearcher _idSearcher;
+
+        public SoundItem(WindowNotificationManager notificationManager, IDSearcher idSearcher)
+        {
+            _notificationManager = notificationManager;
+            _idSearcher = idSearcher;
+
+            PlayCommand = new RelayCommand<SoundItem>(PlaySound);
+            StopCommand = new RelayCommand<object>(_ => StopSound());
+        }
+
+        private void PlaySound(SoundItem soundItem)
+        {
+            _idSearcher.PlaySound(soundItem);
+        }
+
+        private void StopSound()
+        {
+            _idSearcher.StopAudio();
+        }
+    }
+
     public partial class MainWindow : Window
     {
         // Default folder to save converted files to
@@ -26,7 +63,7 @@ namespace PD3AudioModder
         private Button? convertButton;
 
         private readonly string tempDirectory;
-        private readonly WindowNotificationManager? _notificationManager;
+        public readonly WindowNotificationManager? _notificationManager;
         private readonly AppConfig _appConfig;
         private readonly FileProcessor _fileProcessor;
 
@@ -50,6 +87,12 @@ namespace PD3AudioModder
 
         // Discord RPC
         private readonly DiscordRPC _discordRPC;
+
+        // ID Search tab
+        public ObservableCollection<SoundItem> _soundItems = new ObservableCollection<SoundItem>();
+        public ObservableCollection<SoundItem> SoundItems => _soundItems;
+        public string pd3InstallFolder;
+        public DataGrid? soundsDataGrid;
 
         public MainWindow()
         {
@@ -224,34 +267,18 @@ namespace PD3AudioModder
             selectFolderButton.Click += (_, _) => SelectFolderButton_Click(packButton);
             packButton.Click += (_, _) => PackButton_Click(PackFolderPath!);
 
-            // Status text & Discord RPC based off of selected tab.
-            globalStatusTextBlock = this.FindControl<TextBlock>("StatusTextBlock")!;
+            // ID Search Tab
+            soundsDataGrid = this.FindControl<DataGrid>("SoundsDataGrid");
+            var searchButton = this.FindControl<Button>("SearchButton")!;
+            var searchTextBox = this.FindControl<TextBox>("SearchTextBox")!;
+            searchButton.Click += (_, _) => PerformSearch(searchTextBox.Text);
 
-            mainTabControl.SelectionChanged += (sender, e) =>
-            {
-                var selectedTab = ((TabItem)mainTabControl.SelectedItem!).Header!.ToString()!;
-                currentTab = selectedTab;
-
-                // Update Discord RPC
-                if (!String.IsNullOrEmpty(ModName))
-                {
-                    _discordRPC.UpdatePresence(mainTabControl, ModName);
-                }
-
-                // Update global status based on current tab's status
-                switch (selectedTab)
-                {
-                    case "Single File":
-                        globalStatusTextBlock!.Text = "Status: Waiting for input...";
-                        break;
-                    case "Batch Conversion":
-                        globalStatusTextBlock!.Text = "Status: Waiting for input...";
-                        break;
-                    case "Pack Files":
-                        globalStatusTextBlock!.Text = "Status: Ready to pack files...";
-                        break;
-                }
+            searchTextBox.KeyDown += (s, e) => {
+                if (e.Key == Avalonia.Input.Key.Enter)
+                    PerformSearch(searchTextBox.Text);
             };
+
+            globalStatusTextBlock = this.FindControl<TextBlock>("StatusTextBlock")!;
         }
 
         public void UpdateExportFolderCheckboxes()
@@ -562,6 +589,63 @@ namespace PD3AudioModder
             packButton.IsEnabled = false;
         }
 
+        // ID Search tab
+        private void PerformSearch(string searchText)
+        {
+            if (string.IsNullOrWhiteSpace(searchText))
+            {
+                // Reset to show all items
+                soundsDataGrid!.ItemsSource = _soundItems;
+                UpdateGlobalStatus($"Showing all {_soundItems.Count} sound files", "ID Search");
+                return;
+            }
+
+            searchText = searchText.Trim().ToLowerInvariant();
+
+            // Collection based on search text
+            var filteredItems = _soundItems.Where(item =>
+                item.SoundId.ToLowerInvariant().Contains(searchText) ||
+                item.SoundDescription.ToLowerInvariant().Contains(searchText)).ToList();
+
+            soundsDataGrid!.ItemsSource = filteredItems;
+            UpdateGlobalStatus($"Found {filteredItems.Count} results for '{searchText}'", "ID Search");
+        }
+
+        private async void OnLoadPakFilesClick(
+            object sender,
+            Avalonia.Interactivity.RoutedEventArgs e
+        )
+        {
+            try
+            {
+                var window = (Window)((Control)this).GetVisualRoot()!;
+                var storageProvider = window.StorageProvider;
+                var fileOptions = new FilePickerOpenOptions
+                {
+                    Title = "Select .pak Files",
+                    AllowMultiple = true,
+                    FileTypeFilter = new FilePickerFileType[]
+                    {
+                        new FilePickerFileType("Unreal Engine Pak Files")
+                        {
+                            Patterns = new[] { "*.pak" },
+                            MimeTypes = new[] { "application/octet-stream" },
+                        },
+                    },
+                };
+                var files = await storageProvider.OpenFilePickerAsync(fileOptions);
+                if (files != null && files.Count > 0)
+                {
+                    // Process selected .pak files
+                    await IDSearcher.ProcessPakFiles(files, this);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error opening file dialog: {ex.Message}");
+            }
+        }
+
         // Status
         public void UpdateGlobalStatus(string message, string sourceTab)
         {
@@ -594,6 +678,71 @@ namespace PD3AudioModder
         {
             var settingsWindow = new SettingsWindow(this);
             settingsWindow.ShowDialog(this);
+        }
+
+        // Toggle the hamburger menu
+        private void OnHamburgerButtonClick(object sender, Avalonia.Interactivity.RoutedEventArgs e)
+        {
+            var splitView = this.FindControl<Avalonia.Controls.SplitView>("MainSplitView");
+            splitView!.IsPaneOpen = !splitView.IsPaneOpen;
+        }
+
+        // Handle clicks on menu items to switch tabs
+        private void OnMenuItemClick(object sender, Avalonia.Interactivity.RoutedEventArgs e)
+        {
+            if (sender is Button button && button.Tag is object tag)
+            {
+                int tabIndex = Convert.ToInt32(tag);
+                var tabControl = this.FindControl<TabControl>("MainTabControl");
+
+                if (tabControl != null && tabIndex < tabControl.Items.Count)
+                {
+                    tabControl.SelectedIndex = tabIndex;
+
+                    // Update the current tab for status text
+                    if (
+                        tabControl.SelectedItem is TabItem tabItem
+                        && tabItem.Header is string header
+                    )
+                    {
+                        currentTab = header;
+
+                        // Update global status based on current tab
+                        switch (currentTab)
+                        {
+                            case "Single File":
+                                globalStatusTextBlock!.Text = "Status: Waiting for input...";
+                                break;
+                            case "Batch Conversion":
+                                globalStatusTextBlock!.Text = "Status: Waiting for input...";
+                                break;
+                            case "Pack Files":
+                                globalStatusTextBlock!.Text = "Status: Ready to pack files...";
+                                break;
+                            case "ID Search":
+                                globalStatusTextBlock!.Text = "Status: Ready to search IDs...";
+                                break;
+                        }
+
+                        // Update Discord RPC
+                        if (!String.IsNullOrEmpty(ModName))
+                        {
+                            _discordRPC.UpdatePresence(tabControl, ModName);
+                        }
+                    }
+
+                    // Auto collapse menu when in compact mode
+                    var splitView = this.FindControl<Avalonia.Controls.SplitView>("MainSplitView");
+                    if (
+                        splitView != null
+                        && splitView.DisplayMode
+                            == Avalonia.Controls.SplitViewDisplayMode.CompactOverlay
+                    )
+                    {
+                        splitView.IsPaneOpen = false;
+                    }
+                }
+            }
         }
 
         private void OnWindowClosing(object sender, WindowClosingEventArgs e)

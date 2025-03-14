@@ -44,6 +44,7 @@ namespace PD3AudioModder
                 "Single File" => ("file-bg", "Converting a single audio file"),
                 "Batch Conversion" => ("files-bg", "Converting multiple audio files"),
                 "Pack Files" => ("tools-bg", "Packing files"),
+                "ID Search" => ("file-search-bg", "Browsing audio IDs"),
                 _ => ("file-bg", "Converting a single audio file"), // Default
             };
         }

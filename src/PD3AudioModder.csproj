@@ -8,14 +8,19 @@
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
 	<StartupObject>PD3AudioModder.Program</StartupObject>
 	<ApplicationIcon>assets\icons\audio.ico</ApplicationIcon>
-	<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+	<TrimMode>link</TrimMode>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="assets\icons\audio.ico" />
     <None Remove="assets\icons\audio.svg" />
     <None Remove="assets\icons\download.svg" />
-    <None Remove="assets\icons\tabler-icons\info-circle.svg" />
+    <None Remove="assets\icons\tabler-icons\file-search.svg" />
+    <None Remove="assets\icons\tabler-icons\file.svg" />
+    <None Remove="assets\icons\tabler-icons\files.svg" />
+    <None Remove="assets\icons\tabler-icons\help.svg" />
+    <None Remove="assets\icons\tabler-icons\menu.svg" />
     <None Remove="assets\icons\tabler-icons\settings.svg" />
+    <None Remove="assets\icons\tabler-icons\tools.svg" />
     <None Remove="assets\sounds\error.ogg" />
     <None Remove="assets\twemoji\26a0.svg" />
   </ItemGroup>
@@ -23,13 +28,19 @@
     <AvaloniaResource Include="assets\icons\audio.ico" />
     <AvaloniaResource Include="assets\icons\audio.svg" />
     <AvaloniaResource Include="assets\icons\download.svg" />
-    <AvaloniaResource Include="assets\icons\tabler-icons\info-circle.svg" />
+    <AvaloniaResource Include="assets\icons\tabler-icons\file-search.svg" />
+    <AvaloniaResource Include="assets\icons\tabler-icons\file.svg" />
+    <AvaloniaResource Include="assets\icons\tabler-icons\files.svg" />
+    <AvaloniaResource Include="assets\icons\tabler-icons\help.svg" />
+    <AvaloniaResource Include="assets\icons\tabler-icons\menu.svg" />
     <AvaloniaResource Include="assets\icons\tabler-icons\settings.svg" />
+    <AvaloniaResource Include="assets\icons\tabler-icons\tools.svg" />
     <AvaloniaResource Include="assets\twemoji\26a0.svg" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="11.2.3" />
+    <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.2.3" />
     <PackageReference Include="Avalonia.Desktop" Version="11.2.1" />
     <PackageReference Include="Avalonia.Svg.Skia" Version="11.2.0.2" />
     <PackageReference Include="Avalonia.Themes.Fluent" Version="11.2.1" />
@@ -39,12 +50,19 @@
       <IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
       <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="CUE4Parse" Version="1.2.2" />
     <PackageReference Include="DiscordRichPresence" Version="1.2.1.24" />
     <PackageReference Include="NAudio" Version="2.2.1" />
     <PackageReference Include="NAudio.Vorbis" Version="1.5.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="ReactiveUI" Version="20.1.63" />
   </ItemGroup>
+
+	<ItemGroup>
+		<!-- Trimming these breaks getting the MediaName in ID Search for some reason. -->
+		<TrimmerRootAssembly Include="CUE4Parse" />
+		<TrimmerRootAssembly Include="Newtonsoft.Json" />
+	</ItemGroup>
 
   <ItemGroup>
     <Compile Update="views\LicensesWindow.axaml.cs">

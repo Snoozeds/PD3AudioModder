@@ -12,6 +12,8 @@
 	<!-- https://github.com/AvaloniaUI/Avalonia/pull/11097#issue-1679291634 -->
 	<Application.Styles>
 
+		<StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml" />
+		
 		<Style Selector="ScrollBar Thumb">
 			<Setter Property="CornerRadius" Value="5"/>
 		</Style>

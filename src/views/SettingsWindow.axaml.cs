@@ -31,6 +31,18 @@ namespace PD3AudioModder
             InitializeControls();
             LoadSettings();
             DataContext = this;
+
+            this.FindControl<Slider>("VolumeSlider")!.Value = AppConfig.Instance.Volume;
+        }
+
+        private void OnVolumeChanged(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+        {
+            if (sender is Slider slider && VolumeValueText != null)
+            {
+                VolumeValueText.Text = $"{(int)slider.Value}%";
+                AppConfig.Instance.Volume = (int)slider.Value;
+                AppConfig.Instance.Save();
+            }
         }
 
         private void InitializeVersion()

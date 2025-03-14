@@ -23,6 +23,7 @@ namespace PD3AudioModder
             "https://raw.githubusercontent.com/Snoozeds/PD3WwiseMappings/refs/heads/main/media.json";
         public static readonly string WwiseLocalizedMappingsURl =
             "https://raw.githubusercontent.com/Snoozeds/PD3WwiseMappings/refs/heads/main/localized.json";
+        public static readonly int Volume = 50;
     }
 
     public class AppConfig
@@ -45,6 +46,7 @@ namespace PD3AudioModder
         public string WwiseMediaMappingsURL { get; set; } = DefaultConfig.WwiseMediaMappingsURL;
         public string WwiseLocalizedMappingsURL { get; set; } =
             DefaultConfig.WwiseLocalizedMappingsURl;
+        public int Volume { get; set; } = DefaultConfig.Volume;
 
         public static AppConfig Instance
         {
@@ -161,6 +163,7 @@ namespace PD3AudioModder
                             DefaultConfig.WwiseLocalizedMappingsURl
                         )
                 },
+                { "Volume", config => config.Volume >= 0 && config.Volume <= 100 },
             };
         }
 

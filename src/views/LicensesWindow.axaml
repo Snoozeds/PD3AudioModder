@@ -557,6 +557,41 @@
 						</ScrollViewer>
 					</Grid>
 				</Border>
+
+				<!-- CUE4Parse Card-->
+				<Border Margin="10" BorderBrush="#3282B8" BorderThickness="1" CornerRadius="8"
+                        Background="#1B262C" Width="350" Height="350">
+					<Grid RowDefinitions="Auto,*">
+						<Button Grid.Row="0"
+								Name="CUE4Parse"
+								Click="HandleUrlClick"
+                                Margin="10,10,10,5"
+                                HorizontalAlignment="Center">
+							<Button.Styles>
+								<Style Selector="Button">
+									<Setter Property="Background" Value="Transparent"/>
+									<Setter Property="BorderThickness" Value="0"/>
+									<Setter Property="Padding" Value="5"/>
+									<Setter Property="Cursor" Value="Hand"/>
+									<Setter Property="Foreground" Value="#BBE1FA"/>
+								</Style>
+								<Style Selector="Button:pointerover /template/ ContentPresenter">
+									<Setter Property="TextBlock.TextDecorations" Value="Underline"/>
+								</Style>
+							</Button.Styles>
+							<TextBlock Text="CUE4Parse" FontSize="18"/>
+						</Button>
+
+						<!-- License Text -->
+						<ScrollViewer Grid.Row="1" Margin="10,5,10,10">
+							<SelectableTextBlock FontSize="12" Foreground="#BBE1FA" TextWrapping="Wrap">
+								Apache License<LineBreak/>
+								Version 2.0, January 2004<LineBreak/>
+								https://www.apache.org/licenses/<LineBreak/>
+							</SelectableTextBlock>
+						</ScrollViewer>
+					</Grid>
+				</Border>
 				
 			</UniformGrid>
 		</ScrollViewer>
