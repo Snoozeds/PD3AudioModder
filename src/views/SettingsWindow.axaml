@@ -224,7 +224,40 @@
 				</ScrollViewer>
 			</TabItem>
 
-			<!-- Updates -->
+			<!-- Theme tab -->
+			<TabItem>
+				<TabItem.Header>
+					<StackPanel Orientation="Horizontal" Spacing="5">
+						<Image Source="{SvgImage avares://PD3AudioModder/assets/icons/tabler-icons/brush.svg}"
+							   Width="28" Height="28"/>
+						<TextBlock Text="Theme"/>
+					</StackPanel>
+				</TabItem.Header>
+				<Grid VerticalAlignment="Center" HorizontalAlignment="Center">
+					<StackPanel Spacing="20" MaxWidth="400">
+						<Image Source="{SvgImage avares://PD3AudioModder/assets/icons/tabler-icons/brush.svg}"
+							   Width="80" Height="80" HorizontalAlignment="Center"/>
+						<TextBlock Text="Theming" Foreground="{DynamicResource TextColor}" FontSize="24"
+								 HorizontalAlignment="Center" FontWeight="Bold"/>
+						<Border Background="{DynamicResource BorderBackgroundColor}" CornerRadius="12" Padding="20">
+							<StackPanel Orientation="Vertical">
+								<Button Content="Open theme editor" Name="OpenThemeEditorButton"
+										Width="200" Height="40" Background="{DynamicResource ButtonColor}" Foreground="{DynamicResource ButtonTextColor}"
+										FontSize="16" Padding="10,5" Margin="0,0,0,10" CornerRadius="10"
+										HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+										Click="ThemeEditorClick"/>
+								<Button Content="Open themes folder" Name="OpenThemeFolderButton"
+										Width="200" Height="40" Background="{DynamicResource ButtonColor}" Foreground="{DynamicResource ButtonTextColor}"
+										FontSize="16" Padding="10,5" CornerRadius="10"
+										HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+										Click="ThemeFolderClick"/>
+							</StackPanel>
+						</Border>
+						</StackPanel>
+				</Grid>
+			</TabItem>
+
+			<!-- Updates tab -->
 			<TabItem>
 				<TabItem.Header>
 					<StackPanel Orientation="Horizontal" Spacing="5">
@@ -268,7 +301,7 @@
 				</Grid>
 			</TabItem>
 
-			<!-- About -->
+			<!-- About tab -->
 			<TabItem>
 				<TabItem.Header>
 					<StackPanel Orientation="Horizontal" Spacing="5">

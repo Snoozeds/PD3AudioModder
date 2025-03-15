@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
+using static Org.BouncyCastle.Math.EC.ECCurve;
 
 namespace PD3AudioModder
 {
     public static class DefaultConfig
     {
+        public static string Theme = "Default.ini";
         public static readonly bool AutoUpdateEnabled = true;
         public static readonly bool AskToUpdate = true;
         public static readonly string? RepakPath = null;
@@ -30,6 +32,7 @@ namespace PD3AudioModder
     {
         private static AppConfig? _instance;
         private static readonly object _lock = new object();
+        public string Theme { get; set; } = DefaultConfig.Theme;
         public bool AutoUpdateEnabled { get; set; } = DefaultConfig.AutoUpdateEnabled;
         public bool? AskToUpdate { get; set; } = DefaultConfig.AskToUpdate;
         public string? RepakPath { get; set; } = DefaultConfig.RepakPath;
@@ -93,8 +96,20 @@ namespace PD3AudioModder
 
         private static Dictionary<string, Func<AppConfig, bool>> GetValidationRules()
         {
+            string themesDirectory = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                "PD3AudioModder",
+                "Themes"
+            );
+
             return new Dictionary<string, Func<AppConfig, bool>>()
             {
+                {
+                    "Theme",
+                    config =>
+                        !string.IsNullOrEmpty(config.Theme)
+                        && File.Exists(Path.Combine(themesDirectory, config.Theme))
+                },
                 {
                     "AutoUpdateEnabled",
                     config => config.AutoUpdateEnabled == true || config.AutoUpdateEnabled == false

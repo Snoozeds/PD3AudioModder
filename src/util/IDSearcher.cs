@@ -151,7 +151,12 @@ namespace PD3AudioModder.util
                         }
                     }
 
-                    string soundFolder = ubulkPath.Contains("Localized", StringComparison.OrdinalIgnoreCase) ? "Localized" : "Media";
+                    string soundFolder = ubulkPath.Contains(
+                        "Localized",
+                        StringComparison.OrdinalIgnoreCase
+                    )
+                        ? "Localized"
+                        : "Media";
 
                     // Add the extracted sound item
                     soundItems.Add(

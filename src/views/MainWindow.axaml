@@ -63,10 +63,10 @@
                                     Tag="0">
 								<DockPanel LastChildFill="True">
 									<Grid Width="48" DockPanel.Dock="Left">
-										<Image Source="{SvgImage avares://PD3AudioModder/assets/icons/tabler-icons/file.svg}"
-											   Width="28" Height="28"
-											   HorizontalAlignment="Center"
-											   VerticalAlignment="Center"/>
+											<Image Source="{SvgImage avares://PD3AudioModder/assets/icons/tabler-icons/file.svg}"
+												   Width="28" Height="28"
+												   HorizontalAlignment="Center"
+												   VerticalAlignment="Center"/>
 									</Grid>
 									<TextBlock Text="Single File"
 											   VerticalAlignment="Center"

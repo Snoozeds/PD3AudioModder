@@ -21,11 +21,10 @@
 					<Color x:Key="WarningTextColor">#E6C400</Color> <!-- Used in the settings window (advanced options.) -->
 					<Color x:Key="SettingsTextColor">#8B9DA7</Color> <!-- Used for the descriptions in the settings window. -->
 					<Color x:Key="MenuHoverColor">#275e83</Color> <!-- Used when hovering over a button in the hamburger menu. -->
+					<Color x:Key="SystemAccentColor">#3ca1e6</Color>
 				</ResourceDictionary>
 			</ResourceDictionary.ThemeDictionaries>
 		</ResourceDictionary>
-		
-		<Color x:Key="SystemAccentColor">#3ca1e6</Color>
 		<SolidColorBrush x:Key="SystemAccentBrush" Color="{DynamicResource SystemAccentColor}"/>
 	</Application.Resources>
 
@@ -33,6 +32,7 @@
 	<Application.Styles>
 
 		<StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml" />
+		<StyleInclude Source="avares://Avalonia.Controls.ColorPicker/Themes/Fluent/Fluent.xaml" />
 		
 		<Style Selector="ScrollBar Thumb">
 			<Setter Property="CornerRadius" Value="5"/>

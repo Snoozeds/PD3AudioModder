@@ -1,0 +1,233 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:local="using:PD3AudioModder"
+        xmlns:vm="clr-namespace:PD3AudioModder.ViewModels"
+		x:DataType="vm:ThemeEditorViewModel"
+		x:Class="PD3AudioModder.ThemeEditor"
+        Width="1200" Height="700"
+        Title="Theme Editor"
+        Background="{DynamicResource BackgroundColor}"
+		Icon="avares://PD3AudioModder/assets/icons/audio.ico"
+		WindowStartupLocation="CenterOwner">
+
+	<Window.Styles>
+		<Style Selector="Button">
+			<Setter Property="Background" Value="{DynamicResource ButtonColor}"/>
+			<Setter Property="Foreground" Value="{DynamicResource ButtonTextColor}"/>
+			<Setter Property="Padding" Value="12,6"/>
+			<Setter Property="CornerRadius" Value="8"/>
+			<Setter Property="HorizontalContentAlignment" Value="Center"/>
+		</Style>
+		<Style Selector="TextBlock">
+			<Setter Property="Foreground" Value="{DynamicResource TextColor}"/>
+		</Style>
+		<Style Selector="Border.ColorPreview">
+			<Setter Property="Width" Value="30"/>
+			<Setter Property="Height" Value="30"/>
+			<Setter Property="CornerRadius" Value="4"/>
+			<Setter Property="Margin" Value="5,0"/>
+		</Style>
+		<Style Selector="Border.Section">
+			<Setter Property="Background" Value="{DynamicResource BorderBackgroundColor}"/>
+			<Setter Property="BorderBrush" Value="{DynamicResource BorderColor}"/>
+			<Setter Property="BorderThickness" Value="1"/>
+			<Setter Property="CornerRadius" Value="8"/>
+			<Setter Property="Padding" Value="10"/>
+			<Setter Property="Margin" Value="0,5"/>
+		</Style>
+		<Style Selector="ColorPicker">
+			<Setter Property="BorderBrush" Value="Transparent"/>
+			<Setter Property="BorderThickness" Value="1"/>
+			<Setter Property="CornerRadius" Value="100"/>
+			<Setter Property="Background" Value="Transparent"/>
+			<Setter Property="Width" Value="75"/>
+			<Setter Property="Height" Value="30"/>
+			<Setter Property="IsAlphaEnabled" Value="False"/>
+		</Style>
+
+	</Window.Styles>
+
+	<Grid RowDefinitions="Auto,*,Auto" Margin="10">
+		<!-- Top toolbar -->
+		<Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,10">
+			<StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="10">
+				<Button x:Name="NewThemeButton" Content="New Theme"/>
+				<Button x:Name="LoadThemeButton" Content="Load Theme"/>
+				<Button x:Name="SaveThemeButton" Content="Save Theme"/>
+				<Button x:Name="ExportThemeButton" Content="Export Theme As..."/>
+			</StackPanel>
+			<StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10">
+				<TextBlock VerticalAlignment="Center" Text="Current Theme:"/>
+				<ComboBox x:Name="ThemeSelector"
+						  ItemsSource="{Binding Themes}"
+						  SelectedItem="{Binding SelectedTheme, Mode=TwoWay}"
+						  Width="150"/>
+			</StackPanel>
+		</Grid>
+
+		<!-- Main content area -->
+		<Grid Grid.Row="1" ColumnDefinitions="350,*">
+			<!-- Color editor -->
+			<Border Grid.Column="0" Classes="Section" Margin="0,0">
+				<DockPanel LastChildFill="True">
+					<TextBlock DockPanel.Dock="Top" Text="Color Editor" FontWeight="Bold" Margin="0,0,0,10"/>
+					<ScrollViewer Padding="0,0,13,0">
+						<StackPanel Spacing="10" Margin="0,0,10,0">
+
+							<Grid ColumnDefinitions="*,Auto,Auto" RowDefinitions="Auto,Auto" Margin="0,5">
+								<TextBlock Grid.Column="0" Grid.Row="0" Text="Theme Name" VerticalAlignment="Center"/>
+								<TextBlock Grid.Column="0" Grid.Row="1" Text="Name of the theme."
+										  Foreground="{DynamicResource SettingsTextColor}" FontSize="12"/>
+								<TextBox
+									x:Name="ThemeNameTextBox"
+									Width="150"
+									CornerRadius="10"
+									VerticalContentAlignment="Center"
+									HorizontalContentAlignment="Center"
+									Watermark="Theme"
+									AcceptsReturn="False"
+									Grid.Column="1" Grid.RowSpan="2"
+									IsEnabled="{Binding !isDefaultTheme, Mode=OneWay}">
+									Default
+								</TextBox>
+							</Grid>
+							
+							<!-- Color items -->
+							<Grid ColumnDefinitions="*,Auto,Auto" RowDefinitions="Auto,Auto" Margin="0,5">
+								<TextBlock Grid.Column="0" Grid.Row="0" Text="BackgroundColor" VerticalAlignment="Center"/>
+								<TextBlock Grid.Column="0" Grid.Row="1" Text="Default background color."
+										  Foreground="{DynamicResource SettingsTextColor}" FontSize="12"/>
+								<ColorPicker Grid.Column="1" Grid.RowSpan="2" Color="{DynamicResource BackgroundColor}" x:Name="BackgroundColorPicker" IsEnabled="{Binding !isDefaultTheme, Mode=OneWay}"/>
+							</Grid>
+
+							<Grid ColumnDefinitions="*,Auto,Auto" RowDefinitions="Auto,Auto" Margin="0,5">
+								<TextBlock Grid.Column="0" Grid.Row="0" Text="TextColor" VerticalAlignment="Center"/>
+								<TextBlock Grid.Column="0" Grid.Row="1" Text="General text."
+										  Foreground="{DynamicResource SettingsTextColor}" FontSize="12"/>
+								<ColorPicker Grid.Column="1" Grid.RowSpan="2" Color="{DynamicResource TextColor}" x:Name="TextColorPicker" IsEnabled="{Binding !isDefaultTheme, Mode=OneWay}"/>
+							</Grid>
+
+							<Grid ColumnDefinitions="*,Auto,Auto" RowDefinitions="Auto,Auto" Margin="0,5">
+								<TextBlock Grid.Column="0" Grid.Row="0" Text="ButtonColor" VerticalAlignment="Center"/>
+								<TextBlock Grid.Column="0" Grid.Row="1" Text="General buttons."
+										  Foreground="{DynamicResource SettingsTextColor}" FontSize="12"/>
+								<ColorPicker Grid.Column="1" Grid.RowSpan="2" Color="{DynamicResource ButtonColor}" x:Name="ButtonColorPicker" IsEnabled="{Binding !isDefaultTheme, Mode=OneWay}"/>
+							</Grid>
+
+							<Grid ColumnDefinitions="*,Auto,Auto" RowDefinitions="Auto,Auto" Margin="0,5">
+								<TextBlock Grid.Column="0" Grid.Row="0" Text="ButtonTextColor" VerticalAlignment="Center"/>
+								<TextBlock Grid.Column="0" Grid.Row="1" Text="General buttons text color."
+										  Foreground="{DynamicResource SettingsTextColor}" FontSize="12"/>
+								<ColorPicker Grid.Column="1" Grid.RowSpan="2" Color="{DynamicResource ButtonTextColor}" x:Name="ButtonTextColorPicker" IsEnabled="{Binding !isDefaultTheme, Mode=OneWay}"/>
+							</Grid>
+
+							<Grid ColumnDefinitions="*,Auto,Auto" RowDefinitions="Auto,Auto" Margin="0,5">
+								<TextBlock Grid.Column="0" Grid.Row="0" Text="SecondaryButtonColor" VerticalAlignment="Center"/>
+								<TextBlock Grid.Column="0" Grid.Row="1" Text="Used in the update dialog."
+										  Foreground="{DynamicResource SettingsTextColor}" FontSize="12"/>
+								<ColorPicker Grid.Column="1" Grid.RowSpan="2" Color="{DynamicResource SecondaryButtonColor}" x:Name="SecondaryButtonColorPicker" IsEnabled="{Binding !isDefaultTheme, Mode=OneWay}"/>
+							</Grid>
+
+							<Grid ColumnDefinitions="*,Auto,Auto" RowDefinitions="Auto,Auto" Margin="0,5">
+								<TextBlock Grid.Column="0" Grid.Row="0" Text="SecondaryButtonTextColor" VerticalAlignment="Center"/>
+								<TextBlock Grid.Column="0" Grid.Row="1" Text="Used in the update dialog."
+										  Foreground="{DynamicResource SettingsTextColor}" FontSize="12"/>
+								<ColorPicker Grid.Column="1" Grid.RowSpan="2" Color="{DynamicResource SecondaryButtonTextColor}" x:Name="SecondaryButtonTextColorPicker" IsEnabled="{Binding !isDefaultTheme, Mode=OneWay}"/>
+							</Grid>
+
+							<Grid ColumnDefinitions="*,Auto,Auto" RowDefinitions="Auto,Auto" Margin="0,5">
+								<TextBlock Grid.Column="0" Grid.Row="0" Text="BorderColor" VerticalAlignment="Center"/>
+								<TextBlock Grid.Column="0" Grid.Row="1" Text="Used in the licenses window."
+										  Foreground="{DynamicResource SettingsTextColor}" FontSize="12"/>
+								<ColorPicker Grid.Column="1" Grid.RowSpan="2" Color="{DynamicResource BorderColor}" x:Name="BorderColorPicker" IsEnabled="{Binding !isDefaultTheme, Mode=OneWay}"/>
+							</Grid>
+
+							<Grid ColumnDefinitions="*,Auto,Auto" RowDefinitions="Auto,Auto" Margin="0,5">
+								<TextBlock Grid.Column="0" Grid.Row="0" Text="TertiaryColor" VerticalAlignment="Center"/>
+								<TextBlock Grid.Column="0" Grid.Row="1" Text="Used for the status bar, sidebar, etc."
+										  Foreground="{DynamicResource SettingsTextColor}" FontSize="12"/>
+								<ColorPicker Grid.Column="1" Grid.RowSpan="2" Color="{DynamicResource TertiaryColor}" x:Name="TertiaryColorPicker" IsEnabled="{Binding !isDefaultTheme, Mode=OneWay}"/>
+							</Grid>
+
+							<Grid ColumnDefinitions="*,Auto,Auto" RowDefinitions="Auto,Auto" Margin="0,5">
+								<TextBlock Grid.Column="0" Grid.Row="0" Text="BorderBackgroundColor" VerticalAlignment="Center"/>
+								<TextBlock Grid.Column="0" Grid.Row="1" Text="Settings sections background."
+										  Foreground="{DynamicResource SettingsTextColor}" FontSize="12"/>
+								<ColorPicker Grid.Column="1" Grid.RowSpan="2" Color="{DynamicResource BorderBackgroundColor}" x:Name="BorderBackgroundColorPicker" IsEnabled="{Binding !isDefaultTheme, Mode=OneWay}"/>
+							</Grid>
+
+							<Grid ColumnDefinitions="*,Auto,Auto" RowDefinitions="Auto,Auto" Margin="0,5">
+								<TextBlock Grid.Column="0" Grid.Row="0" Text="WarningTextColor" VerticalAlignment="Center"/>
+								<TextBlock Grid.Column="0" Grid.Row="1" Text="Used for advanced settings warning."
+										  Foreground="{DynamicResource SettingsTextColor}" FontSize="12"/>
+								<ColorPicker Grid.Column="1" Grid.RowSpan="2" Color="{DynamicResource WarningTextColor}" x:Name="WarningTextColorPicker" IsEnabled="{Binding !isDefaultTheme, Mode=OneWay}"/>
+							</Grid>
+
+							<Grid ColumnDefinitions="*,Auto,Auto" RowDefinitions="Auto,Auto" Margin="0,5">
+								<TextBlock Grid.Column="0" Grid.Row="0" Text="SettingsTextColor" VerticalAlignment="Center"/>
+								<TextBlock Grid.Column="0" Grid.Row="1" Text="Used for settings descriptions."
+										  Foreground="{DynamicResource SettingsTextColor}" FontSize="12"/>
+								<ColorPicker Grid.Column="1" Grid.RowSpan="2" Color="{DynamicResource SettingsTextColor}" x:Name="SettingsTextColorPicker" IsEnabled="{Binding !isDefaultTheme, Mode=OneWay}"/>
+							</Grid>
+
+							<Grid ColumnDefinitions="*,Auto,Auto" RowDefinitions="Auto,Auto" Margin="0,5">
+								<TextBlock Grid.Column="0" Grid.Row="0" Text="MenuHoverColor" VerticalAlignment="Center"/>
+								<TextBlock Grid.Column="0" Grid.Row="1" Text="Hamburger menu hover."
+										  Foreground="{DynamicResource SettingsTextColor}" FontSize="12"/>
+								<ColorPicker Grid.Column="1" Grid.RowSpan="2" Color="{DynamicResource MenuHoverColor}" x:Name="MenuHoverColorPicker" IsEnabled="{Binding !isDefaultTheme, Mode=OneWay}"/>
+							</Grid>
+
+							<Grid ColumnDefinitions="*,Auto,Auto" RowDefinitions="Auto,Auto" Margin="0,5">
+								<TextBlock Grid.Column="0" Grid.Row="0" Text="SystemAccentColor" VerticalAlignment="Center"/>
+								<TextBlock Grid.Column="0" Grid.Row="1" Text="System accent color"
+										  Foreground="{DynamicResource SettingsTextColor}" FontSize="12"/>
+								<ColorPicker Grid.Column="1" Grid.RowSpan="2" Color="{DynamicResource SystemAccentColor}" x:Name="SystemAccentColorPicker" IsEnabled="{Binding !isDefaultTheme, Mode=OneWay}"/>
+							</Grid>
+						</StackPanel>
+					</ScrollViewer>
+				</DockPanel>
+			</Border>
+
+			<Grid Grid.Column="1" RowDefinitions="*,Auto">
+				<!-- INI Editor -->
+				<Border Grid.Row="0" Classes="Section" Margin="10,0,0,0">
+					<DockPanel LastChildFill="True">
+						<TextBlock DockPanel.Dock="Top" Text="INI Editor" FontWeight="Bold" Margin="0,0,0,10"/>
+						<TextBox x:Name="INIEditor"
+                                 AcceptsReturn="True"
+                                 FontFamily="Consolas, Menlo, Monospace"
+                                 FontSize="14"
+                                 Text=""
+                                 IsEnabled="{Binding !isDefaultTheme, Mode=OneWay}"/>
+					</DockPanel>
+				</Border>
+
+				<Border Grid.Row="1" Classes="Section" Margin="10,10,0,0" Background="{DynamicResource BorderBackgroundColor}">
+					<DockPanel LastChildFill="True">
+						<TextBlock DockPanel.Dock="Top" Text="Warning Output" FontWeight="Bold" Margin="0,0,0,10"/>
+						<TextBox x:Name="WarningOutput"
+								 AcceptsReturn="True"
+								 IsReadOnly="True"
+								 Text=""
+								 Background="Black"
+								 Foreground="Lime"
+								 FontFamily="Consolas, Menlo, Monospace"
+								 FontSize="16"
+								 HorizontalAlignment="Stretch"
+								 VerticalAlignment="Stretch"
+								 Height="200"/>
+					</DockPanel>
+				</Border>
+			</Grid>
+		</Grid>
+
+		<!-- Bottom bar -->
+		<Border Grid.Row="2" Background="{DynamicResource TertiaryColor}" Height="30" Margin="0,10,0,0" CornerRadius="8">
+			<Grid ColumnDefinitions="Auto,*,Auto">
+				<TextBlock Grid.Column="1" x:Name="ThemeNameText" Text="Theme: Default Theme" Margin="10,0,0,0" VerticalAlignment="Center"/>
+			</Grid>
+		</Border>
+	</Grid>
+</Window>

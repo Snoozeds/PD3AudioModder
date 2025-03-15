@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
+using System.Runtime.InteropServices;
 using Avalonia.Controls;
 using Avalonia.Controls.Notifications;
 
@@ -408,6 +410,42 @@ namespace PD3AudioModder
                         NotificationType.Error
                     )
                 );
+            }
+        }
+
+        private void ThemeEditorClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+        {
+            var themeEditorWindow = new ThemeEditor();
+            themeEditorWindow.ShowDialog(this);
+        }
+
+        private void ThemeFolderClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+        {
+            string appDataPath = Environment.GetFolderPath(
+                Environment.SpecialFolder.ApplicationData
+            );
+            string themesDirectory = Path.Combine(appDataPath, "PD3AudioModder", "Themes");
+
+            if (!Directory.Exists(themesDirectory))
+            {
+                Directory.CreateDirectory(themesDirectory);
+            }
+
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                Process.Start("explorer.exe", themesDirectory);
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            {
+                Process.Start("open", themesDirectory);
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                Process.Start("xdg-open", themesDirectory);
+            }
+            else
+            {
+                Console.WriteLine("Unable to open theme folder. Unsupported OS?");
             }
         }
 

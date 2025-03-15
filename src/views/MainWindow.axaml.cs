@@ -273,7 +273,8 @@ namespace PD3AudioModder
             var searchTextBox = this.FindControl<TextBox>("SearchTextBox")!;
             searchButton.Click += (_, _) => PerformSearch(searchTextBox.Text);
 
-            searchTextBox.KeyDown += (s, e) => {
+            searchTextBox.KeyDown += (s, e) =>
+            {
                 if (e.Key == Avalonia.Input.Key.Enter)
                     PerformSearch(searchTextBox.Text);
             };
@@ -603,12 +604,18 @@ namespace PD3AudioModder
             searchText = searchText.Trim().ToLowerInvariant();
 
             // Collection based on search text
-            var filteredItems = _soundItems.Where(item =>
-                item.SoundId.ToLowerInvariant().Contains(searchText) ||
-                item.SoundDescription.ToLowerInvariant().Contains(searchText)).ToList();
+            var filteredItems = _soundItems
+                .Where(item =>
+                    item.SoundId.ToLowerInvariant().Contains(searchText)
+                    || item.SoundDescription.ToLowerInvariant().Contains(searchText)
+                )
+                .ToList();
 
             soundsDataGrid!.ItemsSource = filteredItems;
-            UpdateGlobalStatus($"Found {filteredItems.Count} results for '{searchText}'", "ID Search");
+            UpdateGlobalStatus(
+                $"Found {filteredItems.Count} results for '{searchText}'",
+                "ID Search"
+            );
         }
 
         private async void OnLoadPakFilesClick(

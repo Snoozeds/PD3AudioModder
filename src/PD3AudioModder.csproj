@@ -11,9 +11,11 @@
 	<TrimMode>link</TrimMode>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="assets\blahaj.jpg" />
     <None Remove="assets\icons\audio.ico" />
     <None Remove="assets\icons\audio.svg" />
     <None Remove="assets\icons\download.svg" />
+    <None Remove="assets\icons\tabler-icons\brush.svg" />
     <None Remove="assets\icons\tabler-icons\file-search.svg" />
     <None Remove="assets\icons\tabler-icons\file.svg" />
     <None Remove="assets\icons\tabler-icons\files.svg" />
@@ -25,9 +27,11 @@
     <None Remove="assets\twemoji\26a0.svg" />
   </ItemGroup>
   <ItemGroup>
+    <AvaloniaResource Include="assets\blahaj.jpg" />
     <AvaloniaResource Include="assets\icons\audio.ico" />
     <AvaloniaResource Include="assets\icons\audio.svg" />
     <AvaloniaResource Include="assets\icons\download.svg" />
+    <AvaloniaResource Include="assets\icons\tabler-icons\brush.svg" />
     <AvaloniaResource Include="assets\icons\tabler-icons\file-search.svg" />
     <AvaloniaResource Include="assets\icons\tabler-icons\file.svg" />
     <AvaloniaResource Include="assets\icons\tabler-icons\files.svg" />
