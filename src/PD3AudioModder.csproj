@@ -12,6 +12,7 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="assets\blahaj.jpg" />
+    <None Remove="assets\blahaj.png" />
     <None Remove="assets\icons\audio.ico" />
     <None Remove="assets\icons\audio.svg" />
     <None Remove="assets\icons\download.svg" />
@@ -27,7 +28,7 @@
     <None Remove="assets\twemoji\26a0.svg" />
   </ItemGroup>
   <ItemGroup>
-    <AvaloniaResource Include="assets\blahaj.jpg" />
+    <AvaloniaResource Include="assets\blahaj.png" />
     <AvaloniaResource Include="assets\icons\audio.ico" />
     <AvaloniaResource Include="assets\icons\audio.svg" />
     <AvaloniaResource Include="assets\icons\download.svg" />
