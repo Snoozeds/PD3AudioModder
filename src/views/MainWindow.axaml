@@ -9,7 +9,7 @@
         Title="PD3AudioModder"
         Height="400"
         Width="600"
-        Background="#1B262C"
+        Background="{DynamicResource BackgroundColor}"
         Icon="avares://PD3AudioModder/assets/icons/audio.ico"
         WindowStartupLocation="CenterScreen"
         Closing="OnWindowClosing">
@@ -18,12 +18,12 @@
 		<!-- Status Bar -->
 		<Grid DockPanel.Dock="Bottom"
               Height="22"
-              Background="#0F4C75">
+              Background="{DynamicResource TertiaryColor}">
 			<StackPanel Orientation="Horizontal"
                         Margin="5,0">
 				<TextBlock x:Name="StatusTextBlock"
                           Text="Status: Waiting for input..."
-                          Foreground="#BBE1FA"
+                          Foreground="{DynamicResource TextColor}"
                           VerticalAlignment="Center"
                           FontSize="12"/>
 			</StackPanel>
@@ -36,7 +36,7 @@
 					  DisplayMode="CompactOverlay"
 					  CompactPaneLength="48"
 					  OpenPaneLength="200"
-					  PaneBackground="#0F4C75">
+					  PaneBackground="{DynamicResource TertiaryColor}">
 				<!-- Hamburger Menu Pane -->
 				<SplitView.Pane>
 					<Grid RowDefinitions="Auto,*">
@@ -46,7 +46,7 @@
                                 Width="48" Height="48"
                                 HorizontalAlignment="Left"
                                 Background="Transparent"
-                                Foreground="#BBE1FA"
+                                Foreground="{DynamicResource TextColor}"
                                 Padding="12"
                                 Click="OnHamburgerButtonClick">
 							<Image Source="{SvgImage avares://PD3AudioModder/assets/icons/tabler-icons/menu.svg}"
@@ -129,7 +129,7 @@
 							</Button>
 
 							<!-- Separator -->
-							<Separator Height="1" Margin="10,10,10,0" Background="#3282B8" />
+							<Separator Height="1" Margin="10,10,10,0" Background="{DynamicResource BorderColor}" />
 
 							<!-- Help Button -->
 							<Button x:Name="HelpButton"
@@ -171,7 +171,7 @@
 				<!-- Content Panel -->
 				<TabControl x:Name="MainTabControl">
 					<!-- Single File Tab -->
-					<TabItem Header="Single File" IsVisible="False" Foreground="#BBE1FA" FontSize="20">
+					<TabItem Header="Single File" IsVisible="False" Foreground="{DynamicResource TextColor}" FontSize="20">
 						<Grid>
 							<Border Padding="20" HorizontalAlignment="Center" VerticalAlignment="Center">
 								<Grid RowDefinitions="Auto,Auto,Auto,Auto">
@@ -180,7 +180,7 @@
                                               Text="PD3AudioModder"
                                               HorizontalAlignment="Center"
                                               FontSize="28"
-                                              Foreground="#BBE1FA"
+                                              Foreground="{DynamicResource TextColor}"
                                               Margin="10"
                                               TextWrapping="Wrap"
                                               MaxWidth="250"/>
@@ -193,8 +193,8 @@
                                             VerticalContentAlignment="Center"
                                             Width="250"
                                             Height="40"
-                                            Background="#3282B8"
-                                            Foreground="White"
+                                            Background="{DynamicResource ButtonColor}"
+                                            Foreground="{DynamicResource ButtonTextColor}"
                                             FontSize="16"
                                             Padding="10,5"
                                             CornerRadius="10"
@@ -208,8 +208,8 @@
                                             VerticalContentAlignment="Center"
                                             Width="250"
                                             Height="40"
-                                            Background="#3282B8"
-                                            Foreground="White"
+                                            Background="{DynamicResource ButtonColor}"
+                                            Foreground="{DynamicResource ButtonTextColor}"
                                             FontSize="16"
                                             Padding="10,5"
                                             CornerRadius="10"
@@ -227,14 +227,14 @@
                                               HorizontalContentAlignment="Center"
                                               VerticalContentAlignment="Center"
                                               FontSize="16"
-                                              Foreground="#BBE1FA"/>
+                                              Foreground="{DynamicResource TextColor}"/>
 								</Grid>
 							</Border>
 						</Grid>
 					</TabItem>
 
 					<!-- Multiple Files Tab -->
-					<TabItem Header="Batch Conversion" IsVisible="False" Foreground="#BBE1FA" FontSize="20">
+					<TabItem Header="Batch Conversion" IsVisible="False" Foreground="{DynamicResource TextColor}" FontSize="20">
 						<Grid>
 							<Border Padding="20" HorizontalAlignment="Center" VerticalAlignment="Center">
 								<Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto">
@@ -243,7 +243,7 @@
                                               Text="PD3AudioModder"
                                               HorizontalAlignment="Center"
                                               FontSize="24"
-                                              Foreground="#BBE1FA"
+                                              Foreground="{DynamicResource TextColor}"
                                               Margin="10"
                                               TextWrapping="Wrap"
                                               MaxWidth="350"/>
@@ -256,8 +256,8 @@
                                             VerticalContentAlignment="Center"
                                             Width="280"
                                             Height="40"
-                                            Background="#3282B8"
-                                            Foreground="White"
+                                            Background="{DynamicResource ButtonColor}"
+                                            Foreground="{DynamicResource ButtonTextColor}"
                                             FontSize="16"
                                             Padding="10,5"
                                             CornerRadius="10"
@@ -271,8 +271,8 @@
                                             VerticalContentAlignment="Center"
                                             Width="280"
                                             Height="40"
-                                            Background="#3282B8"
-                                            Foreground="White"
+                                            Background="{DynamicResource ButtonColor}"
+                                            Foreground="{DynamicResource ButtonTextColor}"
                                             FontSize="16"
                                             Padding="10,5"
                                             CornerRadius="10"
@@ -286,8 +286,8 @@
                                             VerticalContentAlignment="Center"
                                             Width="280"
                                             Height="40"
-                                            Background="#3282B8"
-                                            Foreground="White"
+                                            Background="{DynamicResource ButtonColor}"
+                                            Foreground="{DynamicResource ButtonTextColor}"
                                             FontSize="16"
                                             Padding="10,5"
                                             CornerRadius="10"
@@ -305,7 +305,7 @@
                                               HorizontalContentAlignment="Center"
                                               VerticalContentAlignment="Center"
                                               FontSize="16"
-                                              Foreground="#BBE1FA"/>
+                                              Foreground="{DynamicResource TextColor}"/>
 
 									<!-- Progress Bar -->
 									<ProgressBar x:Name="BatchProgressBar"
@@ -315,8 +315,8 @@
                                                 Minimum="0"
                                                 Maximum="100"
                                                 Value="0"
-                                                Foreground="#3282B8"
-                                                Background="#0F4C75"
+                                                Foreground="{DynamicResource ButtonColor}"
+                                                Background="{DynamicResource TertiaryColor}"
                                                 CornerRadius="5"
                                                 Margin="0,15,0,0"/>
 								</Grid>
@@ -325,7 +325,7 @@
 					</TabItem>
 
 					<!-- Pack Files Tab -->
-					<TabItem Header="Pack Files" IsVisible="False" Foreground="#BBE1FA" FontSize="20">
+					<TabItem Header="Pack Files" IsVisible="False" Foreground="{DynamicResource TextColor}" FontSize="20">
 						<Grid>
 							<Border Padding="20">
 								<Grid RowDefinitions="Auto,*,Auto"
@@ -336,13 +336,13 @@
 										<TextBlock Text="PD3AudioModder"
                                                    HorizontalAlignment="Center"
                                                    FontSize="32"
-                                                   Foreground="#BBE1FA"
+                                                   Foreground="{DynamicResource TextColor}"
                                                    Margin="0,0,0,15"/>
 										<TextBlock x:Name="RepakPathTextBlock"
                                                    Text="Repak Path: None"
                                                    HorizontalAlignment="Center"
                                                    FontSize="16"
-                                                   Foreground="#BBE1FA"
+                                                   Foreground="{DynamicResource TextColor}"
                                                    TextWrapping="NoWrap"
                                                    TextTrimming="CharacterEllipsis"
                                                    Margin="0,0,0,20"/>
@@ -357,11 +357,11 @@
 											<Button x:Name="SelectRepakButton"
                                                     Content="Select repak.exe"
                                                     HorizontalContentAlignment="Center"
-                                                    VerticalContentAlignment="Center"
+													VerticalContentAlignment="Center"
                                                     HorizontalAlignment="Stretch"
                                                     Height="45"
-                                                    Background="#3282B8"
-                                                    Foreground="White"
+                                                    Background="{DynamicResource ButtonColor}"
+													Foreground="{DynamicResource ButtonTextColor}"
                                                     FontSize="16"
                                                     Padding="15,5"
                                                     CornerRadius="8"/>
@@ -371,7 +371,7 @@
                                                      VerticalContentAlignment="Center"
                                                      Height="45"
                                                      FontSize="16"
-                                                     Foreground="#BBE1FA"
+                                                     Foreground="{DynamicResource TextColor}"
                                                      Padding="15,5"
                                                      CornerRadius="8"/>
 										</StackPanel>
@@ -384,8 +384,8 @@
                                                     VerticalContentAlignment="Center"
                                                     HorizontalAlignment="Stretch"
                                                     Height="45"
-                                                    Background="#3282B8"
-                                                    Foreground="White"
+                                                    Background="{DynamicResource ButtonColor}"
+                                                    Foreground="{DynamicResource ButtonTextColor}"
                                                     FontSize="16"
                                                     Padding="15,5"
                                                     CornerRadius="8"/>
@@ -396,8 +396,8 @@
                                                     VerticalContentAlignment="Center"
                                                     HorizontalAlignment="Stretch"
                                                     Height="45"
-                                                    Background="#3282B8"
-                                                    Foreground="White"
+                                                    Background="{DynamicResource ButtonColor}"
+                                                    Foreground="{DynamicResource ButtonTextColor}"
                                                     FontSize="16"
                                                     Padding="15,5"
                                                     CornerRadius="8"/>
@@ -411,7 +411,7 @@
                                               HorizontalAlignment="Center"
                                               VerticalAlignment="Center"
                                               FontSize="16"
-                                              Foreground="#BBE1FA"
+                                              Foreground="{DynamicResource TextColor}"
                                               Margin="0,5,0,35"
                                               Grid.Row="2"/>
 								</Grid>
@@ -420,7 +420,7 @@
 					</TabItem>
 
 					<!--ID Search Tab-->
-					<TabItem Header="ID Search" IsVisible="False" Foreground="#BBE1FA" FontSize="20">
+					<TabItem Header="ID Search" IsVisible="False" Foreground="{DynamicResource TextColor}" FontSize="20">
 						<Grid>
 							<Border Padding="20">
 								<Grid RowDefinitions="Auto,Auto,Auto,*"
@@ -431,7 +431,7 @@
 										<TextBlock Text="PD3AudioModder"
 												   HorizontalAlignment="Center"
 												   FontSize="28"
-												   Foreground="#BBE1FA"
+												   Foreground="{DynamicResource TextColor}"
 												   Margin="0,0,0,15"/>
 									</StackPanel>
 
@@ -445,7 +445,7 @@
 												 Margin="0,0,10,0"
 												 Height="40"
 												 FontSize="16"
-												 Foreground="#BBE1FA"
+												 Foreground="{DynamicResource TextColor}"
 												 Padding="10,5"
 												 CornerRadius="8"/>
 										<Button x:Name="SearchButton"
@@ -455,8 +455,8 @@
 												VerticalContentAlignment="Center"
 												Width="120"
 												Height="40"
-												Background="#3282B8"
-												Foreground="White"
+												Background="{DynamicResource ButtonColor}"
+												Foreground="{DynamicResource ButtonTextColor}"
 												FontSize="16"
 												Padding="10,5"
 												CornerRadius="8"/>
@@ -472,8 +472,8 @@
 											VerticalContentAlignment="Center"
 											Width="250"
 											Height="40"
-											Background="#3282B8"
-											Foreground="White"
+											Background="{DynamicResource ButtonColor}"
+											Foreground="{DynamicResource ButtonTextColor}"
 											FontSize="16"
 											Padding="10,5"
 											CornerRadius="10"
@@ -481,7 +481,7 @@
 
 									<!-- Results Table -->
 									<Border Grid.Row="3"
-											Background="#0F4C75"
+											Background="{DynamicResource TertiaryColor}"
 											CornerRadius="8"
 											Padding="5">
 										<DataGrid x:Name="SoundsDataGrid"
@@ -489,9 +489,9 @@
 												  Background="Transparent"
 												  GridLinesVisibility="All"
 												  BorderThickness="0"
-												  Foreground="#BBE1FA"
-												  VerticalGridLinesBrush="#1B262C"
-												  HorizontalGridLinesBrush="#1B262C"
+												  Foreground="{DynamicResource TextColor}"
+												  VerticalGridLinesBrush="{DynamicResource BackgroundColor}"
+												  HorizontalGridLinesBrush="{DynamicResource BackgroundColor}"
 												  IsReadOnly="True"
 												  AutoGenerateColumns="False"
 												  CanUserResizeColumns="True"
@@ -545,17 +545,17 @@
 	<Window.Styles>
 		<Style Selector="Button.MenuButton">
 			<Setter Property="Background" Value="Transparent"/>
-			<Setter Property="Foreground" Value="#BBE1FA"/>
+			<Setter Property="Foreground" Value="{DynamicResource TextColor}"/>
 			<Setter Property="HorizontalAlignment" Value="Stretch"/>
 			<Setter Property="HorizontalContentAlignment" Value="Left"/>
 			<Setter Property="Padding" Value="10,8"/>
 			<Setter Property="CornerRadius" Value="4"/>
 		</Style>
 		<Style Selector="Button.MenuButton:pointerover /template/ ContentPresenter">
-			<Setter Property="Background" Value="#275e83"/>
+			<Setter Property="Background" Value="{DynamicResource MenuHoverColor}"/>
 		</Style>
 		<Style Selector="Button.MenuButton:pressed /template/ ContentPresenter">
-			<Setter Property="Background" Value="#275e83"/>
+			<Setter Property="Background" Value="{DynamicResource MenuHoverColor}"/>
 		</Style>
 	</Window.Styles>
 </Window>

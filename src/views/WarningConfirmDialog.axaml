@@ -6,7 +6,7 @@
         x:DataType="local:WarningConfirmDialog"
         x:Class="PD3AudioModder.WarningConfirmDialog"
         Title="Warning!"
-        Background="#1B262C"
+        Background="{DynamicResource BackgroundColor}"
         Icon="avares://PD3AudioModder/assets/icons/audio.ico"
         WindowStartupLocation="CenterScreen"
         Height="450"
@@ -23,7 +23,7 @@
 				<TextBlock Text="Warning!"
                          FontSize="32"
                          FontWeight="Bold"
-                         Foreground="#BBE1FA"/>
+                         Foreground="{DynamicResource TextColor}"/>
 			</StackPanel>
 
 			<!-- Message Content -->
@@ -34,14 +34,14 @@
 					<TextBlock Name="MessageTextBlock"
                              Text="{Binding Message}"
                              FontSize="20"
-                             Foreground="#BBE1FA"
+                             Foreground="{DynamicResource TextColor}"
                              TextWrapping="Wrap"
                              TextAlignment="Center"
                              Margin="0,0,0,15"/>
 					<TextBlock Name="Message2TextBlock"
                              Text="{Binding Message2}"
                              FontSize="20"
-                             Foreground="#BBE1FA"
+                             Foreground="{DynamicResource TextColor}"
                              TextWrapping="Wrap"
                              TextAlignment="Center"/>
 				</StackPanel>
@@ -53,19 +53,19 @@
                       Spacing="10">
 				<Button Click="OnYesClick"
                         FontSize="18"
-                        Background="#3282B8"
+                        Background="{DynamicResource ButtonColor}"
                         BorderThickness="0"
                         Padding="10,5"
-                        Foreground="White"
+                        Foreground="{DynamicResource ButtonTextColor}"
                         CornerRadius="10">
 					<TextBlock Text="Yes"/>
 				</Button>
 				<Button Click="OnNoClick"
                         FontSize="18"
-                        Background="#3282B8"
+                        Background="{DynamicResource ButtonColor}"
                         BorderThickness="0"
                         Padding="10,5"
-                        Foreground="White"
+                        Foreground="{DynamicResource ButtonTextColor}"
                         CornerRadius="10">
 					<TextBlock Text="No"/>
 				</Button>
@@ -74,10 +74,10 @@
 			<!-- Yes to All Button -->
 			<Button Click="YesToAllClick"
                     FontSize="18"
-                    Background="#3282B8"
+                    Background="{DynamicResource ButtonColor}"
                     BorderThickness="0"
                     Padding="10,5"
-                    Foreground="White"
+                    Foreground="{DynamicResource ButtonTextColor}"
                     CornerRadius="10"
                     HorizontalAlignment="Center">
 				<TextBlock Text="Yes to all"/>
@@ -86,7 +86,7 @@
 			<!-- Checkbox -->
 			<CheckBox HorizontalAlignment="Center"
                      FontSize="16"
-                     Foreground="#BBE1FA"
+                     Foreground="{DynamicResource TextColor}"
                      IsCheckedChanged="WarningCheckChanged">
 				<TextBlock Text="Disable these warnings"/>
 			</CheckBox>

@@ -5,7 +5,7 @@
         x:DataType="local:LicensesWindow"
         Title="Licenses"
         Height="800" Width="1200"
-        Background="#1B262C"
+        Background="{DynamicResource BackgroundColor}"
         Icon="avares://PD3AudioModder/assets/icons/audio.ico"
         WindowStartupLocation="CenterOwner">
 
@@ -14,15 +14,15 @@
 		<TextBlock Grid.Row="0"
                    Text="Licenses for packages &amp; code used:"
                    FontSize="24"
-                   Foreground="#BBE1FA"
+                   Foreground="{DynamicResource TextColor}"
                    HorizontalAlignment="Center"
                    Margin="0,0,0,20"/>
 
 		<!-- Main Content -->
 		<ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Disabled">
 			<UniformGrid Columns="3" HorizontalAlignment="Center" VerticalAlignment="Top">
-				<Border Margin="10" BorderBrush="#3282B8" BorderThickness="1" CornerRadius="8"
-                        Background="#1B262C" Width="350" Height="350">
+				<Border Margin="10" BorderBrush="{DynamicResource BorderColor}" BorderThickness="1" CornerRadius="8"
+                        Background="{DynamicResource BackgroundColor}" Width="350" Height="350">
 					<Grid RowDefinitions="Auto,*">
 						<!-- Wwise_pd3 Card -->
 						<Button Grid.Row="0"
@@ -36,7 +36,7 @@
 									<Setter Property="BorderThickness" Value="0"/>
 									<Setter Property="Padding" Value="5"/>
 									<Setter Property="Cursor" Value="Hand"/>
-									<Setter Property="Foreground" Value="#BBE1FA"/>
+									<Setter Property="Foreground" Value="{DynamicResource TextColor}"/>
 								</Style>
 								<Style Selector="Button:pointerover /template/ ContentPresenter">
 									<Setter Property="TextBlock.TextDecorations" Value="Underline"/>
@@ -47,7 +47,7 @@
 
 						<!-- License Text -->
 						<ScrollViewer Grid.Row="1" Margin="10,5,10,10">
-							<SelectableTextBlock FontSize="12" Foreground="#BBE1FA" TextWrapping="Wrap">
+							<SelectableTextBlock FontSize="12" Foreground="{DynamicResource TextColor}" TextWrapping="Wrap">
 								MIT License <LineBreak />
 
 								Copyright (c) 2025 HW12Dev and Moolah Modding <LineBreak />
@@ -77,8 +77,8 @@
 				</Border>
 				
 				<!-- Avalonia Card -->
-				<Border Margin="10" BorderBrush="#3282B8" BorderThickness="1" CornerRadius="8"
-						Background="#1B262C" Width="350" Height="350">
+				<Border Margin="10" BorderBrush="{DynamicResource BorderColor}" BorderThickness="1" CornerRadius="8"
+						Background="{DynamicResource BackgroundColor}" Width="350" Height="350">
 					<Grid RowDefinitions="Auto,*">
 						<Button Grid.Row="0"
 								Name="Avalonia"
@@ -91,7 +91,7 @@
 									<Setter Property="BorderThickness" Value="0"/>
 									<Setter Property="Padding" Value="5"/>
 									<Setter Property="Cursor" Value="Hand"/>
-									<Setter Property="Foreground" Value="#BBE1FA"/>
+									<Setter Property="Foreground" Value="{DynamicResource TextColor}"/>
 								</Style>
 								<Style Selector="Button:pointerover /template/ ContentPresenter">
 									<Setter Property="TextBlock.TextDecorations" Value="Underline"/>
@@ -102,7 +102,7 @@
 
 						<!-- License Text -->
 						<ScrollViewer Grid.Row="1" Margin="10,5,10,10">
-							<SelectableTextBlock FontSize="12" Foreground="#BBE1FA" TextWrapping="Wrap">
+							<SelectableTextBlock FontSize="12" Foreground="{DynamicResource TextColor}" TextWrapping="Wrap">
 								MIT License <LineBreak />
 								Copyright (c) AvaloniaUI OÜ All Rights Reserved
 								<LineBreak />
@@ -132,8 +132,8 @@
 					</Border>
 
 				<!-- Avalonia.Svg.Skia Card -->
-				<Border Margin="10" BorderBrush="#3282B8" BorderThickness="1" CornerRadius="8"
-						Background="#1B262C" Width="350" Height="350">
+				<Border Margin="10" BorderBrush="{DynamicResource BorderColor}" BorderThickness="1" CornerRadius="8"
+						Background="{DynamicResource BackgroundColor}" Width="350" Height="350">
 					<Grid RowDefinitions="Auto,*">
 						<Button Grid.Row="0"
 								Name="AvaloniaSvgSkia"
@@ -146,7 +146,7 @@
 									<Setter Property="BorderThickness" Value="0"/>
 									<Setter Property="Padding" Value="5"/>
 									<Setter Property="Cursor" Value="Hand"/>
-									<Setter Property="Foreground" Value="#BBE1FA"/>
+									<Setter Property="Foreground" Value="{DynamicResource TextColor}"/>
 								</Style>
 								<Style Selector="Button:pointerover /template/ ContentPresenter">
 									<Setter Property="TextBlock.TextDecorations" Value="Underline"/>
@@ -157,7 +157,7 @@
 
 						<!-- License Text -->
 						<ScrollViewer Grid.Row="1" Margin="10,5,10,10">
-							<SelectableTextBlock FontSize="12" Foreground="#BBE1FA" TextWrapping="Wrap">
+							<SelectableTextBlock FontSize="12" Foreground="{DynamicResource TextColor}" TextWrapping="Wrap">
 								MIT License <LineBreak />
 								Copyright (c) 2020 Wiesław Šoltés
 								<LineBreak />
@@ -187,8 +187,8 @@
 					</Border>
 
 				<!-- NAudio Card -->
-				<Border Margin="10" BorderBrush="#3282B8" BorderThickness="1" CornerRadius="8"
-						Background="#1B262C" Width="350" Height="350">
+				<Border Margin="10" BorderBrush="{DynamicResource BorderColor}" BorderThickness="1" CornerRadius="8"
+						Background="{DynamicResource BackgroundColor}" Width="350" Height="350">
 					<Grid RowDefinitions="Auto,*">
 						<Button Grid.Row="0"
 								Name="NAudio"
@@ -201,7 +201,7 @@
 									<Setter Property="BorderThickness" Value="0"/>
 									<Setter Property="Padding" Value="5"/>
 									<Setter Property="Cursor" Value="Hand"/>
-									<Setter Property="Foreground" Value="#BBE1FA"/>
+									<Setter Property="Foreground" Value="{DynamicResource TextColor}"/>
 								</Style>
 								<Style Selector="Button:pointerover /template/ ContentPresenter">
 									<Setter Property="TextBlock.TextDecorations" Value="Underline"/>
@@ -212,7 +212,7 @@
 
 						<!-- License Text -->
 						<ScrollViewer Grid.Row="1" Margin="10,5,10,10">
-							<SelectableTextBlock FontSize="12" Foreground="#BBE1FA" TextWrapping="Wrap">
+							<SelectableTextBlock FontSize="12" Foreground="{DynamicResource TextColor}" TextWrapping="Wrap">
 								MIT License <LineBreak />
 								Copyright 2020 Mark Heath
 								<LineBreak />
@@ -242,8 +242,8 @@
 					</Border>
 
 				<!-- NAudio.Vorbis Card -->
-				<Border Margin="10" BorderBrush="#3282B8" BorderThickness="1" CornerRadius="8"
-						Background="#1B262C" Width="350" Height="350">
+				<Border Margin="10" BorderBrush="{DynamicResource BorderColor}" BorderThickness="1" CornerRadius="8"
+						Background="{DynamicResource BackgroundColor}" Width="350" Height="350">
 					<Grid RowDefinitions="Auto,*">
 						<Button Grid.Row="0"
 								Name="NAudioVorbis"
@@ -256,7 +256,7 @@
 									<Setter Property="BorderThickness" Value="0"/>
 									<Setter Property="Padding" Value="5"/>
 									<Setter Property="Cursor" Value="Hand"/>
-									<Setter Property="Foreground" Value="#BBE1FA"/>
+									<Setter Property="Foreground" Value="{DynamicResource TextColor}"/>
 								</Style>
 								<Style Selector="Button:pointerover /template/ ContentPresenter">
 									<Setter Property="TextBlock.TextDecorations" Value="Underline"/>
@@ -267,7 +267,7 @@
 
 						<!-- License Text -->
 						<ScrollViewer Grid.Row="1" Margin="10,5,10,10">
-							<SelectableTextBlock FontSize="12" Foreground="#BBE1FA" TextWrapping="Wrap">
+							<SelectableTextBlock FontSize="12" Foreground="{DynamicResource TextColor}" TextWrapping="Wrap">
 								MIT License <LineBreak />
 								Copyright (c) 2021 Andrew Ward
 								<LineBreak />
@@ -297,8 +297,8 @@
 					</Border>
 
 				<!-- Newtonsoft.Json Card -->
-				<Border Margin="10" BorderBrush="#3282B8" BorderThickness="1" CornerRadius="8"
-						Background="#1B262C" Width="350" Height="350">
+				<Border Margin="10" BorderBrush="{DynamicResource BorderColor}" BorderThickness="1" CornerRadius="8"
+						Background="{DynamicResource BackgroundColor}" Width="350" Height="350">
 					<Grid RowDefinitions="Auto,*">
 						<Button Grid.Row="0"
 								Name="NewtonsoftJson"
@@ -311,7 +311,7 @@
 									<Setter Property="BorderThickness" Value="0"/>
 									<Setter Property="Padding" Value="5"/>
 									<Setter Property="Cursor" Value="Hand"/>
-									<Setter Property="Foreground" Value="#BBE1FA"/>
+									<Setter Property="Foreground" Value="{DynamicResource TextColor}"/>
 								</Style>
 								<Style Selector="Button:pointerover /template/ ContentPresenter">
 									<Setter Property="TextBlock.TextDecorations" Value="Underline"/>
@@ -322,7 +322,7 @@
 
 						<!-- License Text -->
 						<ScrollViewer Grid.Row="1" Margin="10,5,10,10">
-							<SelectableTextBlock FontSize="12" Foreground="#BBE1FA" TextWrapping="Wrap">
+							<SelectableTextBlock FontSize="12" Foreground="{DynamicResource TextColor}" TextWrapping="Wrap">
 								MIT License <LineBreak />
 								Copyright (c) 2007 James Newton-King
 								<LineBreak />
@@ -352,8 +352,8 @@
 					</Border>
 
 				<!-- ReactiveUI Card -->
-				<Border Margin="10" BorderBrush="#3282B8" BorderThickness="1" CornerRadius="8"
-						Background="#1B262C" Width="350" Height="350">
+				<Border Margin="10" BorderBrush="{DynamicResource BorderColor}" BorderThickness="1" CornerRadius="8"
+						Background="{DynamicResource BackgroundColor}" Width="350" Height="350">
 					<Grid RowDefinitions="Auto,*">
 						<Button Grid.Row="0"
 								Name="ReactiveUI"
@@ -366,7 +366,7 @@
 									<Setter Property="BorderThickness" Value="0"/>
 									<Setter Property="Padding" Value="5"/>
 									<Setter Property="Cursor" Value="Hand"/>
-									<Setter Property="Foreground" Value="#BBE1FA"/>
+									<Setter Property="Foreground" Value="{DynamicResource TextColor}"/>
 								</Style>
 								<Style Selector="Button:pointerover /template/ ContentPresenter">
 									<Setter Property="TextBlock.TextDecorations" Value="Underline"/>
@@ -377,7 +377,7 @@
 
 						<!-- License Text -->
 						<ScrollViewer Grid.Row="1" Margin="10,5,10,10">
-							<SelectableTextBlock FontSize="12" Foreground="#BBE1FA" TextWrapping="Wrap">
+							<SelectableTextBlock FontSize="12" Foreground="{DynamicResource TextColor}" TextWrapping="Wrap">
 								MIT License <LineBreak />
 								Copyright (c) .NET Foundation and Contributors
 								<LineBreak />
@@ -409,8 +409,8 @@
 					</Border>
 
 				<!-- Twemoji Card -->
-				<Border Margin="10" BorderBrush="#3282B8" BorderThickness="1" CornerRadius="8"
-                        Background="#1B262C" Width="350" Height="350">
+				<Border Margin="10" BorderBrush="{DynamicResource BorderColor}" BorderThickness="1" CornerRadius="8"
+                        Background="{DynamicResource BackgroundColor}" Width="350" Height="350">
 					<Grid RowDefinitions="Auto,*">
 						<Button Grid.Row="0"
 								Name="Twemoji"
@@ -423,7 +423,7 @@
 									<Setter Property="BorderThickness" Value="0"/>
 									<Setter Property="Padding" Value="5"/>
 									<Setter Property="Cursor" Value="Hand"/>
-									<Setter Property="Foreground" Value="#BBE1FA"/>
+									<Setter Property="Foreground" Value="{DynamicResource TextColor}"/>
 								</Style>
 								<Style Selector="Button:pointerover /template/ ContentPresenter">
 									<Setter Property="TextBlock.TextDecorations" Value="Underline"/>
@@ -434,7 +434,7 @@
 
 						<!-- License Text -->
 						<ScrollViewer Grid.Row="1" Margin="10,5,10,10">
-							<SelectableTextBlock FontSize="12" Foreground="#BBE1FA" TextWrapping="Wrap">
+							<SelectableTextBlock FontSize="12" Foreground="{DynamicResource TextColor}" TextWrapping="Wrap">
 								CC-BY 4.0 License <LineBreak />
 								Copyright (c) 2019 Twitter, Inc and other contributors
 								<LineBreak />
@@ -448,8 +448,8 @@
 				</Border>
 
 				<!-- Tabler Card -->
-				<Border Margin="10" BorderBrush="#3282B8" BorderThickness="1" CornerRadius="8"
-                        Background="#1B262C" Width="350" Height="350">
+				<Border Margin="10" BorderBrush="{DynamicResource BorderColor}" BorderThickness="1" CornerRadius="8"
+                        Background="{DynamicResource BackgroundColor}" Width="350" Height="350">
 					<Grid RowDefinitions="Auto,*">
 						<Button Grid.Row="0"
 								Name="TablerIcons"
@@ -462,7 +462,7 @@
 									<Setter Property="BorderThickness" Value="0"/>
 									<Setter Property="Padding" Value="5"/>
 									<Setter Property="Cursor" Value="Hand"/>
-									<Setter Property="Foreground" Value="#BBE1FA"/>
+									<Setter Property="Foreground" Value="{DynamicResource TextColor}"/>
 								</Style>
 								<Style Selector="Button:pointerover /template/ ContentPresenter">
 									<Setter Property="TextBlock.TextDecorations" Value="Underline"/>
@@ -474,7 +474,7 @@
 
 						<!-- License Text -->
 						<ScrollViewer Grid.Row="1" Margin="10,5,10,10">
-							<SelectableTextBlock FontSize="12" Foreground="#BBE1FA" TextWrapping="Wrap">
+							<SelectableTextBlock FontSize="12" Foreground="{DynamicResource TextColor}" TextWrapping="Wrap">
 								MIT License <LineBreak />
 								Copyright (c) 2020-2024 Paweł Kuna
 								<LineBreak />
@@ -504,8 +504,8 @@
 				</Border>
 
 				<!-- DiscordRichPresence Card-->
-				<Border Margin="10" BorderBrush="#3282B8" BorderThickness="1" CornerRadius="8"
-                        Background="#1B262C" Width="350" Height="350">
+				<Border Margin="10" BorderBrush="{DynamicResource BorderColor}" BorderThickness="1" CornerRadius="8"
+                        Background="{DynamicResource BackgroundColor}" Width="350" Height="350">
 					<Grid RowDefinitions="Auto,*">
 						<Button Grid.Row="0"
 								Name="DiscordRichPresence"
@@ -518,7 +518,7 @@
 									<Setter Property="BorderThickness" Value="0"/>
 									<Setter Property="Padding" Value="5"/>
 									<Setter Property="Cursor" Value="Hand"/>
-									<Setter Property="Foreground" Value="#BBE1FA"/>
+									<Setter Property="Foreground" Value="{DynamicResource TextColor}"/>
 								</Style>
 								<Style Selector="Button:pointerover /template/ ContentPresenter">
 									<Setter Property="TextBlock.TextDecorations" Value="Underline"/>
@@ -529,7 +529,7 @@
 
 						<!-- License Text -->
 						<ScrollViewer Grid.Row="1" Margin="10,5,10,10">
-							<SelectableTextBlock FontSize="12" Foreground="#BBE1FA" TextWrapping="Wrap">
+							<SelectableTextBlock FontSize="12" Foreground="{DynamicResource TextColor}" TextWrapping="Wrap">
 								MIT License <LineBreak />
 								Copyright (c) 2021 Lachee
 								<LineBreak />
@@ -559,8 +559,8 @@
 				</Border>
 
 				<!-- CUE4Parse Card-->
-				<Border Margin="10" BorderBrush="#3282B8" BorderThickness="1" CornerRadius="8"
-                        Background="#1B262C" Width="350" Height="350">
+				<Border Margin="10" BorderBrush="{DynamicResource BorderColor}" BorderThickness="1" CornerRadius="8"
+                        Background="{DynamicResource BackgroundColor}" Width="350" Height="350">
 					<Grid RowDefinitions="Auto,*">
 						<Button Grid.Row="0"
 								Name="CUE4Parse"
@@ -573,7 +573,7 @@
 									<Setter Property="BorderThickness" Value="0"/>
 									<Setter Property="Padding" Value="5"/>
 									<Setter Property="Cursor" Value="Hand"/>
-									<Setter Property="Foreground" Value="#BBE1FA"/>
+									<Setter Property="Foreground" Value="{DynamicResource TextColor}"/>
 								</Style>
 								<Style Selector="Button:pointerover /template/ ContentPresenter">
 									<Setter Property="TextBlock.TextDecorations" Value="Underline"/>
@@ -584,7 +584,7 @@
 
 						<!-- License Text -->
 						<ScrollViewer Grid.Row="1" Margin="10,5,10,10">
-							<SelectableTextBlock FontSize="12" Foreground="#BBE1FA" TextWrapping="Wrap">
+							<SelectableTextBlock FontSize="12" Foreground="{DynamicResource TextColor}" TextWrapping="Wrap">
 								Apache License<LineBreak/>
 								Version 2.0, January 2004<LineBreak/>
 								https://www.apache.org/licenses/<LineBreak/>
@@ -606,8 +606,8 @@
                 Click="CloseClick">
 			<Button.Styles>
 				<Style Selector="Button">
-					<Setter Property="Background" Value="#3282B8"/>
-					<Setter Property="Foreground" Value="White"/>
+					<Setter Property="Background" Value="{DynamicResource ButtonColor}"/>
+					<Setter Property="Foreground" Value="{DynamicResource ButtonTextColor}"/>
 					<Setter Property="FontSize" Value="16"/>
 					<Setter Property="CornerRadius" Value="10"/>
 					<Setter Property="Padding" Value="10,5"/>

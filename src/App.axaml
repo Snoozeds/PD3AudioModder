@@ -5,6 +5,26 @@
              <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
 	<Application.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.ThemeDictionaries>
+				<!-- Default Theme -->
+				<ResourceDictionary x:Key="Default">
+					<Color x:Key="BackgroundColor">#1B262C</Color> <!-- Default background colour for every window. -->
+					<Color x:Key="TextColor">#BBE1FA</Color> <!-- General text -->
+					<Color x:Key="ButtonColor">#3282B8</Color> <!-- General buttons -->
+					<Color x:Key="ButtonTextColor">#ffffff</Color> <!-- General buttons -->
+					<Color x:Key="SecondaryButtonColor">#BBE1FA</Color> <!-- Used in the update dialog. -->
+					<Color x:Key="SecondaryButtonTextColor">#1B262C</Color> <!-- Used in the update dialog. -->
+					<Color x:Key="BorderColor">#3282B8</Color> <!-- Used in the licenses window. -->
+					<Color x:Key="TertiaryColor">#0F4C75</Color> <!-- Used for the status bar, sidebar, displaying changes in update dialog. -->
+					<Color x:Key="BorderBackgroundColor">#2C3E50</Color> <!-- Used in the settings window (background of sections.) -->
+					<Color x:Key="WarningTextColor">#E6C400</Color> <!-- Used in the settings window (advanced options.) -->
+					<Color x:Key="SettingsTextColor">#8B9DA7</Color> <!-- Used for the descriptions in the settings window. -->
+					<Color x:Key="MenuHoverColor">#275e83</Color> <!-- Used when hovering over a button in the hamburger menu. -->
+				</ResourceDictionary>
+			</ResourceDictionary.ThemeDictionaries>
+		</ResourceDictionary>
+		
 		<Color x:Key="SystemAccentColor">#3ca1e6</Color>
 		<SolidColorBrush x:Key="SystemAccentBrush" Color="{DynamicResource SystemAccentColor}"/>
 	</Application.Resources>

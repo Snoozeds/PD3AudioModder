@@ -3,35 +3,35 @@
         x:Class="PD3AudioModder.UpdateDialog"
         Title="Update Available"
         SizeToContent="WidthAndHeight"
-        Background="#1B262C"
+        Background="{DynamicResource BackgroundColor}"
         Icon="avares://PD3AudioModder/assets/icons/audio.ico"
         WindowStartupLocation="CenterOwner"
         MaxHeight="400"
         MaxWidth="600">
-	<Border Padding="20" Background="#1B262C">
+	<Border Padding="20" Background="{DynamicResource BackgroundColor}">
 		<Grid RowDefinitions="Auto,Auto,Auto,*,Auto,Auto">
 			<TextBlock Grid.Row="0"
                        Text="A new update is available!"
                        FontSize="18"
                        HorizontalAlignment="Center"
                        FontWeight="Bold"
-                       Foreground="#BBE1FA"/>
+                       Foreground="{DynamicResource TextColor}"/>
 			<TextBlock Grid.Row="1"
                        x:Name="CurrentVersionText"
                        Text="Current version: {1}"
                        HorizontalAlignment="Center"
                        FontSize="16"
                        Margin="0,15,0,0"
-                       Foreground="#BBE1FA"/>
+                       Foreground="{DynamicResource TextColor}"/>
 			<TextBlock Grid.Row="2"
                        x:Name="VersionText"
                        Text="New version: {0}"
                        HorizontalAlignment="Center"
                        FontSize="16"
                        Margin="0,5,0,15"
-                       Foreground="#BBE1FA"/>
+                       Foreground="{DynamicResource TextColor}"/>
 			<Border Grid.Row="3"
-                    Background="#0F4C75"
+                    Background="{DynamicResource TertiaryColor}"
                     CornerRadius="5"
                     Padding="15"
                     MinHeight="100"
@@ -43,7 +43,7 @@
                                 Spacing="5"
                                 Margin="0,0,25,0">
 						<SelectableTextBlock Text="Loading changes..."
-                                           Foreground="#BBE1FA"
+                                           Foreground="{DynamicResource TextColor}"
                                            FontSize="14"
                                            TextWrapping="Wrap"/>
 					</StackPanel>
@@ -54,7 +54,7 @@
                        HorizontalAlignment="Center"
                        FontSize="16"
                        Margin="0,15,0,0"
-                       Foreground="#BBE1FA"/>
+                       Foreground="{DynamicResource TextColor}"/>
 			<StackPanel Grid.Row="5"
                         Orientation="Horizontal"
                         HorizontalAlignment="Center"
@@ -63,8 +63,8 @@
 				<Button Content="Yes"
                         Width="75"
                         Height="40"
-                        Background="#3282B8"
-                        Foreground="White"
+                        Background="{DynamicResource ButtonColor}"
+                        Foreground="{DynamicResource ButtonTextColor}"
                         FontSize="16"
                         Padding="10,5"
                         CornerRadius="10"
@@ -74,8 +74,8 @@
 				<Button Content="No"
                         Width="75"
                         Height="40"
-                        Background="#BBE1FA"
-                        Foreground="#1B262C"
+                        Background="{DynamicResource SecondaryButtonColor}"
+                        Foreground="{DynamicResource SecondaryButtonTextColor}"
                         FontSize="16"
                         Padding="10,5"
                         CornerRadius="10"

@@ -5,7 +5,7 @@
         x:Class="PD3AudioModder.HelpWindow"
         Title="Help"
         SizeToContent="WidthAndHeight"
-        Background="#1B262C"
+        Background="{DynamicResource BackgroundColor}"
         Icon="avares://PD3AudioModder/assets/icons/audio.ico"
         WindowStartupLocation="CenterOwner">
 
@@ -21,11 +21,11 @@
 			<TextBlock Text="Single File"
                        FontSize="28"
                        FontWeight="Bold"
-                       Foreground="#BBE1FA"
+                       Foreground="{DynamicResource TextColor}"
                        Margin="0,0,0,10"/>
 			<TextBlock Text="To use single file mode, you have to first export the .uexp, .uasset, .ubulk, and .json files of the audio you want to replace from the game. You can do this using FModel.&#x0a;&#x0a;Then, you need the audio file you want to replace the game's sound with, lets say input.mp3.&#x0a;&#x0a;Upload both input.mp3 and the original game files, and then click 'Convert Files'. You will be asked where to save the modified files after conversion is done."
                        FontSize="16"
-                       Foreground="#BBE1FA"
+                       Foreground="{DynamicResource TextColor}"
                        TextWrapping="Wrap"
                        MaxWidth="800"/>
 		</StackPanel>
@@ -35,11 +35,11 @@
 			<TextBlock Text="Batch Conversion"
                        FontSize="28"
                        FontWeight="Bold"
-                       Foreground="#BBE1FA"
+                       Foreground="{DynamicResource TextColor}"
                        Margin="0,0,0,10"/>
 			<TextBlock Text="To use batch conversion mode, you have to first export the .uexp, .uasset, .ubulk, and .json files of the audio you want to replace from the game. You can do this using FModel.&#x0a;&#x0a;Then, you need audio files for each file you exported from the game. For example, 170412.mp3, and 171486.mp3. These will replace the game files of the same name.&#x0a;&#x0a;Upload the folder containing your audio files (the ones you're using as replacements), then the folder for the exported game files, click 'Start Batch Conversion' and you will be asked where to save modified files."
                        FontSize="16"
-                       Foreground="#BBE1FA"
+                       Foreground="{DynamicResource TextColor}"
                        TextWrapping="Wrap"
                        MaxWidth="800"/>
 		</StackPanel>
@@ -49,11 +49,11 @@
 			<TextBlock Text="Pack Files"
                        FontSize="28"
                        FontWeight="Bold"
-                       Foreground="#BBE1FA"
+                       Foreground="{DynamicResource TextColor}"
                        Margin="0,0,0,10"/>
 			<SelectableTextBlock Text="Please note that this function uses another project of mine, PD3WWiseMappings to tell which files go in which folders. If there has been an update to PAYDAY 3 lately, then this may not be fully up to date, and thus some files may be skipped.&#x0a;&#x0a;To use the pack files function, select the path to repak.exe.&#x0a;&#x0a;You can get the exe from:&#x0a;https://github.com/trumank/repak &#x0a;&#x0a;Then, select the folder of processed files that you have.&#x0a;They do not have to be ordered and should all be in one folder.&#x0a;&#x0a;Enter the name that you want your mod to be called, and then click Pack Files.&#x0a;If all goes well, then you should see a success notification and a File Explorer window will open to where the .pak file is located."
                        FontSize="16"
-                       Foreground="#BBE1FA"
+                       Foreground="{DynamicResource TextColor}"
                        TextWrapping="Wrap"
                        MaxWidth="800"/>
 		</StackPanel>
@@ -63,11 +63,11 @@
 			<TextBlock Text="ID Search"
                        FontSize="28"
                        FontWeight="Bold"
-                       Foreground="#BBE1FA"
+                       Foreground="{DynamicResource TextColor}"
                        Margin="0,0,0,10"/>
 			<SelectableTextBlock Text="To use the ID Search tab, first click 'Load Pak Files', then navigate to wherever PAYDAY 3 is installed.&#x0a;They are usually located in PAYDAY3\PAYDAY3\Content\Paks&#x0a;&#x0a;You can select multiple or just one pak file at once. After a bit of waiting, all the pak files should load. You can then search, sort, and play the audio files.&#x0a;&#x0a;To play audio files, you need vgmstream-cli.exe.&#x0a;The download for this is available at:&#x0a;https://vgmstream.org/&#x0a;&#x0a;Place everything that is in the zip file in the same folder as PD3AudioModder.exe. Read USAGE.md if you'd like, it can de-clutter the folder."
                        FontSize="16"
-                       Foreground="#BBE1FA"
+                       Foreground="{DynamicResource TextColor}"
                        TextWrapping="Wrap"
                        MaxWidth="800"/>
 		</StackPanel>
@@ -76,8 +76,8 @@
 		<Button Content="Close"
                 Width="75"
                 Height="40"
-                Background="#3282B8"
-                Foreground="White"
+                Background="{DynamicResource ButtonColor}"
+                Foreground="{DynamicResource ButtonTextColor}"
                 FontSize="16"
                 CornerRadius="10"
                 Click="OnCloseClick"
