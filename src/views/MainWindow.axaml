@@ -16,8 +16,6 @@
 
 	<DockPanel LastChildFill="True">
 		
-		
-		
 		<!-- Status Bar -->
 		<Grid DockPanel.Dock="Bottom"
               Height="22"
