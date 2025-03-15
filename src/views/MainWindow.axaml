@@ -4,7 +4,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="using:PD3AudioModder"
         x:DataType="local:MainWindow"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="400"
         x:Class="PD3AudioModder.MainWindow"
         Title="PD3AudioModder"
         Height="400"
@@ -15,6 +15,9 @@
         Closing="OnWindowClosing">
 
 	<DockPanel LastChildFill="True">
+		
+		
+		
 		<!-- Status Bar -->
 		<Grid DockPanel.Dock="Bottom"
               Height="22"
@@ -27,6 +30,15 @@
                           VerticalAlignment="Center"
                           FontSize="12"/>
 			</StackPanel>
+			<Image x:Name="BlahajImage"
+					   Source="avares://PD3AudioModder/assets/blahaj.png"
+					   Width="200"
+					   Height="200"
+					   Margin="-20,-100"
+					   HorizontalAlignment="Right"
+					   VerticalAlignment="Top"
+					   IsVisible="False">
+			</Image>
 		</Grid>
 
 		<!-- Main Content -->

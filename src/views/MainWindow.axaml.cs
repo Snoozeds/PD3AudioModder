@@ -94,6 +94,10 @@ namespace PD3AudioModder
         public string pd3InstallFolder;
         public DataGrid? soundsDataGrid;
 
+        // Blahaj EE
+        private string keySequence = "";
+        private const string BLAHAJ_SEQUENCE = "blahaj";
+
         public MainWindow()
         {
             _appConfig = AppConfig.Load();
@@ -138,6 +142,9 @@ namespace PD3AudioModder
             _discordRPC.Initialize();
 
             PackFiles.Initialize(this);
+
+            // Blahaj EE
+            KeyDown += MainWindow_KeyDown;
         }
 
         private async void CheckForUpdatesAsync()
@@ -751,6 +758,50 @@ namespace PD3AudioModder
                     }
                 }
             }
+        }
+
+        // Blahaj EE
+        private void MainWindow_KeyDown(object sender, Avalonia.Input.KeyEventArgs e)
+        {
+            // Ignore when focus is on a TextBox
+            if (TopLevel.GetTopLevel(this)?.FocusManager?.GetFocusedElement() is TextBox)
+                return;
+
+            // Get character from key event
+            char? keyChar = KeyToChar(e.Key);
+
+            if (keyChar.HasValue)
+            {
+                keySequence += keyChar.Value;
+
+                // Remove oldest character if sequence too long
+                if (keySequence.Length > BLAHAJ_SEQUENCE.Length)
+                    keySequence = keySequence.Substring(
+                        keySequence.Length - BLAHAJ_SEQUENCE.Length
+                    );
+
+                // Check if sequence matches
+                if (keySequence.Equals(BLAHAJ_SEQUENCE, StringComparison.OrdinalIgnoreCase))
+                {
+                    // Toggle Bl�haj visibility
+                    var blahajImage = this.FindControl<Image>("BlahajImage");
+                    if (blahajImage != null)
+                    {
+                        blahajImage.IsVisible = !blahajImage.IsVisible;
+
+                        keySequence = "";
+                    }
+                }
+            }
+        }
+
+        private char? KeyToChar(Avalonia.Input.Key key)
+        {
+            // Convert letter keys
+            if (key >= Avalonia.Input.Key.A && key <= Avalonia.Input.Key.Z)
+                return (char)('a' + (key - Avalonia.Input.Key.A));
+
+            return null;
         }
 
         private void OnWindowClosing(object sender, WindowClosingEventArgs e)
