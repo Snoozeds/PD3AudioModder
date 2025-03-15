@@ -28,14 +28,15 @@ You may find instructions on how to use the app by clicking on the "Help" button
 -----
 
 ### Previews:
-| Modding a single sound | Modding multiple sounds |
-| -------- | -------- |
-|[![Modding a single sound](https://img.youtube.com/vi/wbDB-RdiKRY/maxresdefault.jpg)](https://www.youtube.com/watch?v=wbDB-RdiKRY)  | [![Modding multiple sounds](https://img.youtube.com/vi/36ryInl7q3M/maxresdefault.jpg)](https://www.youtube.com/watch?v=36ryInl7q3M)
+| Modding a single sound | Modding multiple sounds | Searching sound IDs |
+| -------- | -------- | -------- |
+|[![Modding a single sound](https://img.youtube.com/vi/wbDB-RdiKRY/maxresdefault.jpg)](https://www.youtube.com/watch?v=wbDB-RdiKRY)  | [![Modding multiple sounds](https://img.youtube.com/vi/36ryInl7q3M/maxresdefault.jpg)](https://www.youtube.com/watch?v=36ryInl7q3M) | [![Searching sound IDs](https://img.youtube.com/vi/Y48aZMiaFXo/maxresdefault.jpg)](https://youtu.be/Y48aZMiaFXo)
 
 | Single File Mode | Batch Conversion Mode |
 | ---------------- | --------------------- |
-| [![Single File Mode](https://storage.modworkshop.net/mods/images/GiQIzJym6mKB02sccdiHJS8Ji5kjTyWxeyG65VVh.webp)](https://storage.modworkshop.net/mods/images/GiQIzJym6mKB02sccdiHJS8Ji5kjTyWxeyG65VVh.webp) | [![Batch Conversion Mode](https://storage.modworkshop.net/mods/images/pXmXd6jILfMCDr3maiwTRxiX2gNMNaZhUVrrZytK.webp)](https://storage.modworkshop.net/mods/images/pXmXd6jILfMCDr3maiwTRxiX2gNMNaZhUVrrZytK.webp) |
+| [![Single File Mode](https://storage.modworkshop.net/mods/images/FYzn1R17R2a1XoOP7PpyfGi90TwxEL8Y0NUKUK7M.webp)](https://storage.modworkshop.net/mods/images/FYzn1R17R2a1XoOP7PpyfGi90TwxEL8Y0NUKUK7M.webp) | [![Batch Conversion Mode](https://storage.modworkshop.net/mods/images/qkdGccNtI8GBDHQl464tOywBgcipxxqMPKRW9r6t.webp)](https://storage.modworkshop.net/mods/images/qkdGccNtI8GBDHQl464tOywBgcipxxqMPKRW9r6t.webp) |
 
 | Pack Files | Settings Window |
 | ---------- | --------------- |
-| [![Pack Files](https://storage.modworkshop.net/mods/images/SQnjdZLlQKaQkgV22UH4HEphopG3LWUJ96S7QUvi.webp)](https://storage.modworkshop.net/mods/images/SQnjdZLlQKaQkgV22UH4HEphopG3LWUJ96S7QUvi.webp) | [![Settings Window](https://storage.modworkshop.net/mods/images/1HTmiUdbSX3Bko9CJxlWZZtcHWrO82JHgjgAkmZW.webp)](https://storage.modworkshop.net/mods/images/1HTmiUdbSX3Bko9CJxlWZZtcHWrO82JHgjgAkmZW.webp) |
+| [![Pack Files](https://storage.modworkshop.net/mods/images/abGhtMICsljNk4KZDzH9Yzft2bl7zWSCQGlenCOU.webp)](https://storage.modworkshop.net/mods/images/abGhtMICsljNk4KZDzH9Yzft2bl7zWSCQGlenCOU.webp) | [![Settings Window](https://storage.modworkshop.net/mods/images/SgLqorP4g3aWUk3FB3ShGDNW632Zx9Wl44pZIjyO.webp)](https://storage.modworkshop.net/mods/images/SgLqorP4g3aWUk3FB3ShGDNW632Zx9Wl44pZIjyO.webp) |
+
