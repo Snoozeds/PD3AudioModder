@@ -86,7 +86,7 @@ namespace PD3AudioModder
                     var warningOutput = this.FindControl<TextBox>("WarningOutput");
                     if (warningOutput != null && !_viewModel.isDefaultTheme)
                     {
-                        warningOutput.Text = "Theme loaded successfully.";
+                        warningOutput.Text = $"Theme {selectedThemeName} loaded successfully.";
                         warningOutput.Foreground = new SolidColorBrush(Colors.Lime);
                     }
                 }

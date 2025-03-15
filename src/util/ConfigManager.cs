@@ -108,7 +108,7 @@ namespace PD3AudioModder
                     "Theme",
                     config =>
                         !string.IsNullOrEmpty(config.Theme)
-                        && File.Exists(Path.Combine(themesDirectory, config.Theme))
+                        && File.Exists(Path.Combine(themesDirectory, config.Theme + ".ini"))
                 },
                 {
                     "AutoUpdateEnabled",

@@ -63,7 +63,9 @@ namespace PD3AudioModder
             }
 
             // Load theme from config
-            string selectedTheme = AppConfig.Instance.Theme ?? "Default.ini";
+            AppConfig.Load();
+            var _appConfig = AppConfig.Instance;
+            string selectedTheme = _appConfig.Theme + ".ini";
             string themePath = Path.Combine(themesDirectory, selectedTheme);
 
             // Check if the theme file exists
