@@ -8,7 +8,10 @@
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
 	<StartupObject>PD3AudioModder.Program</StartupObject>
 	<ApplicationIcon>assets\icons\audio.ico</ApplicationIcon>
-	<TrimMode>link</TrimMode>
+	  <TrimMode>link</TrimMode>
+	  <PublishTrimmed>true</PublishTrimmed>
+	  <SuppressTrimAnalysisWarnings>false</SuppressTrimAnalysisWarnings>
+	  <TrimmerDefaultAction>link</TrimmerDefaultAction>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="assets\blahaj.jpg" />
@@ -66,8 +69,8 @@
 
 	<ItemGroup>
 		<!-- Trimming these breaks getting the MediaName in ID Search for some reason. -->
-		<TrimmerRootAssembly Include="CUE4Parse" />
-		<TrimmerRootAssembly Include="Newtonsoft.Json" />
+		<TrimmerRootAssembly Include="CUE4Parse" RootMode="All" />
+		<TrimmerRootAssembly Include="Newtonsoft.Json" RootMode="All" />
 	</ItemGroup>
 
   <ItemGroup>
