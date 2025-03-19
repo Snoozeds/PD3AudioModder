@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls.Notifications;
+using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using CUE4Parse.Encryption.Aes;
 using CUE4Parse.FileProvider;
@@ -19,6 +20,13 @@ namespace PD3AudioModder.util
 {
     public class IDSearcher
     {
+        private MainWindow _mainWindow;
+
+        public IDSearcher(MainWindow mainWindow = null)
+        {
+            _mainWindow = mainWindow;
+        }
+
         private static DefaultFileProvider _provider;
         private static string _pakDirectory;
         private WaveOutEvent _outputDevice;
@@ -30,7 +38,7 @@ namespace PD3AudioModder.util
         )
         {
             List<SoundItem> soundItems = new List<SoundItem>();
-            IDSearcher sharedSearcher = new IDSearcher();
+            IDSearcher sharedSearcher = new IDSearcher(_mainWindow);
             var aesKey = "0x27DFBADBB537388ACDE27A7C5F3EBC3721AF0AE0A7602D2D7F8A16548F37D394";
 
             try
@@ -56,6 +64,8 @@ namespace PD3AudioModder.util
                         $"Provider initialized. Available files: {_provider.Files.Count}"
                     );
                 }
+
+                RegistryLocations.SavePakDirectory(_pakDirectory);
 
                 Dictionary<string, string> uassetPathsByID = new Dictionary<string, string>();
                 Dictionary<string, string> ubulkPathsByID = new Dictionary<string, string>();
@@ -160,7 +170,11 @@ namespace PD3AudioModder.util
 
                     // Add the extracted sound item
                     soundItems.Add(
-                        new SoundItem(_mainWindow._notificationManager, sharedSearcher)
+                        new SoundItem(
+                            _mainWindow._notificationManager!,
+                            sharedSearcher,
+                            _mainWindow
+                        )
                         {
                             SoundId = soundID,
                             SoundDescription = description,
@@ -308,6 +322,261 @@ namespace PD3AudioModder.util
             {
                 _audioFile.Dispose();
                 _audioFile = null;
+            }
+        }
+
+        public async Task ExportSound(SoundItem soundItem, MainWindow mainWindow)
+        {
+            if (_provider == null)
+            {
+                ShowWarning("Error: Provider is not initialized!");
+                return;
+            }
+
+            try
+            {
+                string defaultExportDir = RegistryLocations.GetExportDirectory();
+
+                var folderOptions = new Avalonia.Platform.Storage.FolderPickerOpenOptions
+                {
+                    Title = "Select Export Folder",
+                    AllowMultiple = false,
+                };
+
+                // Set default directory if available
+                if (!string.IsNullOrEmpty(defaultExportDir))
+                {
+                    folderOptions.SuggestedStartLocation =
+                        await mainWindow.StorageProvider.TryGetFolderFromPathAsync(
+                            defaultExportDir
+                        );
+                }
+
+                var storageProvider = await mainWindow.StorageProvider.OpenFolderPickerAsync(
+                    folderOptions
+                );
+
+                if (storageProvider == null || storageProvider.Count == 0)
+                {
+                    return;
+                }
+
+                var selectedFolder = storageProvider[0];
+                string selectedPath = selectedFolder.Path.LocalPath;
+                RegistryLocations.SaveExportDirectory(selectedPath);
+
+                // Prepare file paths
+                string uassetPath = Path.ChangeExtension(soundItem.UbulkPath, ".uasset");
+                string uexpPath = Path.ChangeExtension(soundItem.UbulkPath, ".uexp");
+                string ubulkPath = soundItem.UbulkPath;
+
+                // Create destination file paths
+                string destFolder = Path.Combine(selectedPath);
+                Directory.CreateDirectory(destFolder);
+
+                string destUassetPath = Path.Combine(destFolder, $"{soundItem.SoundId}.uasset");
+                string destUexpPath = Path.Combine(destFolder, $"{soundItem.SoundId}.uexp");
+                string destUbulkPath = Path.Combine(destFolder, $"{soundItem.SoundId}.ubulk");
+
+                int exportedCount = 0;
+
+                // Export .uasset file
+                if (_provider.Files.ContainsKey(uassetPath))
+                {
+                    await File.WriteAllBytesAsync(
+                        destUassetPath,
+                        _provider.Files[uassetPath].Read()
+                    );
+                    exportedCount++;
+                }
+
+                // Export .uexp file
+                if (_provider.Files.ContainsKey(uexpPath))
+                {
+                    await File.WriteAllBytesAsync(destUexpPath, _provider.Files[uexpPath].Read());
+                    exportedCount++;
+                }
+
+                // Export .ubulk file
+                if (_provider.Files.ContainsKey(ubulkPath))
+                {
+                    await File.WriteAllBytesAsync(destUbulkPath, _provider.Files[ubulkPath].Read());
+                    exportedCount++;
+                }
+
+                await Dispatcher.UIThread.InvokeAsync(() =>
+                {
+                    mainWindow._notificationManager?.Show(
+                        new Notification(
+                            "Export Complete",
+                            $"Exported {exportedCount} files to {destFolder}",
+                            NotificationType.Success
+                        )
+                    );
+                });
+            }
+            catch (Exception ex)
+            {
+                ShowWarning($"Error exporting files: {ex.Message}");
+            }
+        }
+
+        public async Task SaveSound(SoundItem soundItem, MainWindow mainWindow)
+        {
+            if (_provider == null)
+            {
+                ShowWarning("Error: Provider is not initialized!");
+                return;
+            }
+
+            string vgmstreamPath = Path.Combine(
+                AppDomain.CurrentDomain.BaseDirectory,
+                "vgmstream-cli.exe"
+            );
+
+            if (!File.Exists(vgmstreamPath))
+            {
+                ShowWarning(
+                    "vgmstream command line not found!\nPlease download it from\nhttps://vgmstream.org/downloads\nand place it (and all the DLLs) in the same folder as this app."
+                );
+                return;
+            }
+
+            try
+            {
+                string defaultSaveDir = RegistryLocations.GetAudioSaveDirectory();
+
+                // Ask for save location
+                var saveOptions = new Avalonia.Platform.Storage.FilePickerSaveOptions
+                {
+                    Title = "Save Sound As WAV",
+                    SuggestedFileName = $"{soundItem.SoundId}.wav",
+                    FileTypeChoices = new[]
+                    {
+                        new Avalonia.Platform.Storage.FilePickerFileType("WAV Files")
+                        {
+                            Patterns = new[] { "*.wav" },
+                            MimeTypes = new[] { "audio/wav" },
+                        },
+                    },
+                };
+
+                // Set default directory if available
+                if (!string.IsNullOrEmpty(defaultSaveDir))
+                {
+                    saveOptions.SuggestedStartLocation =
+                        await mainWindow.StorageProvider.TryGetFolderFromPathAsync(defaultSaveDir);
+                }
+
+                var storageFile = await mainWindow.StorageProvider.SaveFilePickerAsync(saveOptions);
+
+                if (storageFile == null)
+                {
+                    return;
+                }
+
+                string savePath = storageFile.Path.LocalPath;
+                RegistryLocations.SaveAudioSaveDirectory(Path.GetDirectoryName(savePath));
+
+                // Get sound data
+                byte[] wemData = null;
+                string uexpPath = Path.ChangeExtension(soundItem.UbulkPath, ".uexp");
+                string uassetPath = Path.ChangeExtension(soundItem.UbulkPath, ".uasset");
+
+                // Try getting ubulk data first
+                if (_provider.Files.ContainsKey(soundItem.UbulkPath))
+                {
+                    wemData = _provider.Files[soundItem.UbulkPath].Read();
+                }
+                // Then uexp
+                else if (_provider.Files.ContainsKey(uexpPath))
+                {
+                    wemData = _provider.Files[uexpPath].Read();
+                }
+                // Then uasset
+                else if (_provider.Files.ContainsKey(uassetPath))
+                {
+                    wemData = _provider.Files[uassetPath].Read();
+                }
+
+                if (wemData == null || wemData.Length == 0)
+                {
+                    ShowWarning("Could not extract WEM data.");
+                    return;
+                }
+
+                // Create temp files
+                string tempWemPath = Path.Combine(Path.GetTempPath(), $"{soundItem.SoundId}.wem");
+                string tempWavPath = Path.Combine(
+                    Path.GetTempPath(),
+                    $"{soundItem.SoundId}.wem.wav"
+                );
+
+                // Write the WEM data to a temporary file
+                await File.WriteAllBytesAsync(tempWemPath, wemData);
+
+                // Convert WEM to WAV using vgmstream
+                ProcessStartInfo psi = new ProcessStartInfo
+                {
+                    FileName = vgmstreamPath,
+                    Arguments = $"-o \"{tempWavPath}\" \"{tempWemPath}\"",
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    UseShellExecute = false,
+                    CreateNoWindow = true,
+                };
+
+                using (Process process = new Process { StartInfo = psi })
+                {
+                    process.Start();
+                    string stdError = await process.StandardError.ReadToEndAsync();
+                    await process.WaitForExitAsync();
+
+                    if (process.ExitCode != 0)
+                    {
+                        ShowWarning($"vgmstream error: {stdError}");
+                        return;
+                    }
+                }
+
+                if (!File.Exists(tempWavPath))
+                {
+                    ShowWarning("Failed to decode WEM to WAV.");
+                    return;
+                }
+
+                // Copy to destination
+                File.Copy(tempWavPath, savePath, true);
+
+                // Clean up temp files
+                try
+                {
+                    File.Delete(tempWemPath);
+                    File.Delete(tempWavPath);
+                }
+                catch { }
+
+                await Dispatcher.UIThread.InvokeAsync(() =>
+                {
+                    if (mainWindow._notificationManager != null)
+                    {
+                        mainWindow._notificationManager.Show(
+                            new Notification(
+                                "Save Complete",
+                                $"Successfully saved WAV file to:\n{savePath}",
+                                NotificationType.Success
+                            )
+                        );
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Successfully saved WAV file to: {savePath}");
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                ShowWarning($"Error saving sound: {ex.Message}");
             }
         }
 

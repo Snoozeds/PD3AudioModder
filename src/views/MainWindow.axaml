@@ -522,19 +522,40 @@
 																		MaxWidth="100">
 													<DataGridTemplateColumn.CellTemplate>
 														<DataTemplate>
-															<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-																<Button Content="▶"
-																		Command="{Binding PlayCommand}"
-																		CommandParameter="{Binding}"
-																		VerticalAlignment="Center"
-																		VerticalContentAlignment="Center"
-																		HorizontalContentAlignment="Center"/>
-																<Button Content="❚❚"
-																		Command="{Binding StopCommand}"
-																		VerticalAlignment="Center"
-																		VerticalContentAlignment="Center"
-																		HorizontalContentAlignment="Center"
-																		Margin="5,0,0,0"/>
+															<StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+																<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+																	<Button Content="▶"
+																			Command="{Binding PlayCommand}"
+																			CommandParameter="{Binding}"
+																			VerticalAlignment="Center"
+																			VerticalContentAlignment="Center"
+																			HorizontalContentAlignment="Center"
+																			ToolTip.Tip="Play sound"/>
+																	<Button Content="❚❚"
+																			Command="{Binding StopCommand}"
+																			VerticalAlignment="Center"
+																			VerticalContentAlignment="Center"
+																			HorizontalContentAlignment="Center"
+																			Margin="5,0,0,0"
+																			ToolTip.Tip="Stop all sounds"/>
+																</StackPanel>
+																<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5,0,0">
+																	<Button Content="→"
+																			Command="{Binding ExportCommand}"
+																			CommandParameter="{Binding}"
+																			VerticalAlignment="Center"
+																			VerticalContentAlignment="Center"
+																			HorizontalContentAlignment="Center"
+																			ToolTip.Tip="Export raw files (.uasset)"/>
+																	<Button Content="↓"
+																			Command="{Binding SaveCommand}"
+																			CommandParameter="{Binding}"
+																			VerticalAlignment="Center"
+																			VerticalContentAlignment="Center"
+																			HorizontalContentAlignment="Center"
+																			Margin="5,0,0,0"
+																			ToolTip.Tip="Save sound (.WAV)"/>
+																</StackPanel>
 															</StackPanel>
 														</DataTemplate>
 													</DataGridTemplateColumn.CellTemplate>

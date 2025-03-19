@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Notifications;
 using Avalonia.Markup.Xaml;
 using Avalonia.Platform.Storage;
@@ -23,17 +24,27 @@ namespace PD3AudioModder
         public string UbulkPath { get; set; }
         public ICommand PlayCommand { get; set; }
         public ICommand StopCommand { get; set; }
+        public ICommand ExportCommand { get; set; }
+        public ICommand SaveCommand { get; set; }
 
         private readonly WindowNotificationManager _notificationManager;
         private readonly IDSearcher _idSearcher;
+        private readonly MainWindow _mainWindow;
 
-        public SoundItem(WindowNotificationManager notificationManager, IDSearcher idSearcher)
+        public SoundItem(
+            WindowNotificationManager notificationManager,
+            IDSearcher idSearcher,
+            MainWindow mainWindow
+        )
         {
             _notificationManager = notificationManager;
             _idSearcher = idSearcher;
+            _mainWindow = mainWindow;
 
             PlayCommand = new RelayCommand<SoundItem>(PlaySound);
             StopCommand = new RelayCommand<object>(_ => StopSound());
+            ExportCommand = new RelayCommand<SoundItem>(ExportSound);
+            SaveCommand = new RelayCommand<SoundItem>(SaveSound);
         }
 
         private void PlaySound(SoundItem soundItem)
@@ -44,6 +55,16 @@ namespace PD3AudioModder
         private void StopSound()
         {
             _idSearcher.StopAudio();
+        }
+
+        private async void ExportSound(SoundItem soundItem)
+        {
+            await _idSearcher.ExportSound(soundItem, _mainWindow);
+        }
+
+        private async void SaveSound(SoundItem soundItem)
+        {
+            await _idSearcher.SaveSound(soundItem, _mainWindow);
         }
     }
 
@@ -630,6 +651,8 @@ namespace PD3AudioModder
             Avalonia.Interactivity.RoutedEventArgs e
         )
         {
+            string defaultPakDir = RegistryLocations.GetPakDirectory();
+
             try
             {
                 var window = (Window)((Control)this).GetVisualRoot()!;
@@ -647,6 +670,13 @@ namespace PD3AudioModder
                         },
                     },
                 };
+
+                if (!string.IsNullOrEmpty(defaultPakDir))
+                {
+                    fileOptions.SuggestedStartLocation =
+                        await StorageProvider.TryGetFolderFromPathAsync(defaultPakDir);
+                }
+
                 var files = await storageProvider.OpenFilePickerAsync(fileOptions);
                 if (files != null && files.Count > 0)
                 {
