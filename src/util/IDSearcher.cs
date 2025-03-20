@@ -401,39 +401,24 @@ namespace PD3AudioModder.util
             {
                 string savePath = Path.Combine(saveFolder, $"{soundItem.SoundId}.wav");
 
-                // Get sound data
-                byte[] wemData = null;
-                string uexpPath = Path.ChangeExtension(soundItem.UbulkPath, ".uexp");
-                string uassetPath = Path.ChangeExtension(soundItem.UbulkPath, ".uasset");
+                // Get .ubulk file data
+                if (!_provider.Files.ContainsKey(soundItem.UbulkPath))
+                {
+                    ShowWarning("Could not find .ubulk file.");
+                    return;
+                }
 
-                // Try getting ubulk data first
-                if (_provider.Files.ContainsKey(soundItem.UbulkPath))
-                {
-                    wemData = _provider.Files[soundItem.UbulkPath].Read();
-                }
-                // Then uexp
-                else if (_provider.Files.ContainsKey(uexpPath))
-                {
-                    wemData = _provider.Files[uexpPath].Read();
-                }
-                // Then uasset
-                else if (_provider.Files.ContainsKey(uassetPath))
-                {
-                    wemData = _provider.Files[uassetPath].Read();
-                }
+                byte[] wemData = _provider.Files[soundItem.UbulkPath].Read();
 
                 if (wemData == null || wemData.Length == 0)
                 {
-                    ShowWarning("Could not extract WEM data.");
+                    ShowWarning("Could not extract WEM data from .ubulk file.");
                     return;
                 }
 
                 // Create temp files
                 string tempWemPath = Path.Combine(Path.GetTempPath(), $"{soundItem.SoundId}.wem");
-                string tempWavPath = Path.Combine(
-                    Path.GetTempPath(),
-                    $"{soundItem.SoundId}.wem.wav"
-                );
+                string tempWavPath = Path.Combine(Path.GetTempPath(), $"{soundItem.SoundId}.wav");
 
                 // Write the WEM data to a temporary file
                 await File.WriteAllBytesAsync(tempWemPath, wemData);
