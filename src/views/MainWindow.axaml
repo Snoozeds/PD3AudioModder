@@ -449,7 +449,7 @@
 									<Grid Grid.Row="1" ColumnDefinitions="*, Auto" Margin="0,0,0,15">
 										<TextBox x:Name="SearchTextBox"
 												 Grid.Column="0"
-												 Watermark="Search by ID or MediaName..."
+												 Watermark="Search by ID, MediaName or Folder..."
 												 HorizontalContentAlignment="Center"
 												 VerticalContentAlignment="Center"
 												 Margin="0,0,10,0"

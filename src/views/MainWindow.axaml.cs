@@ -1016,6 +1016,7 @@ namespace PD3AudioModder
                 .Where(item =>
                     item.SoundId.ToLowerInvariant().Contains(searchText)
                     || item.SoundDescription.ToLowerInvariant().Contains(searchText)
+                    || item.SoundFolder.ToLowerInvariant().Contains(searchText)
                 )
                 .ToList();
 
