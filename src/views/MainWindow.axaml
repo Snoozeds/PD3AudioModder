@@ -506,7 +506,8 @@
 												  AutoGenerateColumns="False"
 												  CanUserResizeColumns="True"
 												  CanUserReorderColumns="True"
-												  ClipboardCopyMode="ExcludeHeader">
+												  ClipboardCopyMode="ExcludeHeader"
+												  SelectionMode="Extended">
 											<DataGrid.Columns>
 												<DataGridTextColumn Header="ID"
 																	Binding="{Binding SoundId}"
@@ -538,23 +539,6 @@
 																			HorizontalContentAlignment="Center"
 																			Margin="5,0,0,0"
 																			ToolTip.Tip="Stop all sounds"/>
-																</StackPanel>
-																<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5,0,0">
-																	<Button Content="→"
-																			Command="{Binding ExportCommand}"
-																			CommandParameter="{Binding}"
-																			VerticalAlignment="Center"
-																			VerticalContentAlignment="Center"
-																			HorizontalContentAlignment="Center"
-																			ToolTip.Tip="Export raw files (.uasset)"/>
-																	<Button Content="↓"
-																			Command="{Binding SaveCommand}"
-																			CommandParameter="{Binding}"
-																			VerticalAlignment="Center"
-																			VerticalContentAlignment="Center"
-																			HorizontalContentAlignment="Center"
-																			Margin="5,0,0,0"
-																			ToolTip.Tip="Save sound (.WAV)"/>
 																</StackPanel>
 															</StackPanel>
 														</DataTemplate>

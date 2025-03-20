@@ -1,17 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Avalonia.Controls.Notifications;
-using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using CUE4Parse.Encryption.Aes;
 using CUE4Parse.FileProvider;
 using CUE4Parse.UE4.Objects.Core.Misc;
-using CUE4Parse.UE4.Versions;
 using NAudio.Wave;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -325,7 +321,7 @@ namespace PD3AudioModder.util
             }
         }
 
-        public async Task ExportSound(SoundItem soundItem, MainWindow mainWindow)
+        public async Task ExportSound(SoundItem soundItem, string selectedPath)
         {
             if (_provider == null)
             {
@@ -335,35 +331,8 @@ namespace PD3AudioModder.util
 
             try
             {
-                string defaultExportDir = RegistryLocations.GetExportDirectory();
-
-                var folderOptions = new Avalonia.Platform.Storage.FolderPickerOpenOptions
-                {
-                    Title = "Select Export Folder",
-                    AllowMultiple = false,
-                };
-
-                // Set default directory if available
-                if (!string.IsNullOrEmpty(defaultExportDir))
-                {
-                    folderOptions.SuggestedStartLocation =
-                        await mainWindow.StorageProvider.TryGetFolderFromPathAsync(
-                            defaultExportDir
-                        );
-                }
-
-                var storageProvider = await mainWindow.StorageProvider.OpenFolderPickerAsync(
-                    folderOptions
-                );
-
-                if (storageProvider == null || storageProvider.Count == 0)
-                {
-                    return;
-                }
-
-                var selectedFolder = storageProvider[0];
-                string selectedPath = selectedFolder.Path.LocalPath;
-                RegistryLocations.SaveExportDirectory(selectedPath);
+                string destFolder = Path.Combine(selectedPath);
+                Directory.CreateDirectory(destFolder);
 
                 // Prepare file paths
                 string uassetPath = Path.ChangeExtension(soundItem.UbulkPath, ".uasset");
@@ -371,9 +340,6 @@ namespace PD3AudioModder.util
                 string ubulkPath = soundItem.UbulkPath;
 
                 // Create destination file paths
-                string destFolder = Path.Combine(selectedPath);
-                Directory.CreateDirectory(destFolder);
-
                 string destUassetPath = Path.Combine(destFolder, $"{soundItem.SoundId}.uasset");
                 string destUexpPath = Path.Combine(destFolder, $"{soundItem.SoundId}.uexp");
                 string destUbulkPath = Path.Combine(destFolder, $"{soundItem.SoundId}.ubulk");
@@ -403,17 +369,6 @@ namespace PD3AudioModder.util
                     await File.WriteAllBytesAsync(destUbulkPath, _provider.Files[ubulkPath].Read());
                     exportedCount++;
                 }
-
-                await Dispatcher.UIThread.InvokeAsync(() =>
-                {
-                    mainWindow._notificationManager?.Show(
-                        new Notification(
-                            "Export Complete",
-                            $"Exported {exportedCount} files to {destFolder}",
-                            NotificationType.Success
-                        )
-                    );
-                });
             }
             catch (Exception ex)
             {
@@ -421,7 +376,7 @@ namespace PD3AudioModder.util
             }
         }
 
-        public async Task SaveSound(SoundItem soundItem, MainWindow mainWindow)
+        public async Task SaveSound(SoundItem soundItem, string saveFolder)
         {
             if (_provider == null)
             {
@@ -444,39 +399,7 @@ namespace PD3AudioModder.util
 
             try
             {
-                string defaultSaveDir = RegistryLocations.GetAudioSaveDirectory();
-
-                // Ask for save location
-                var saveOptions = new Avalonia.Platform.Storage.FilePickerSaveOptions
-                {
-                    Title = "Save Sound As WAV",
-                    SuggestedFileName = $"{soundItem.SoundId}.wav",
-                    FileTypeChoices = new[]
-                    {
-                        new Avalonia.Platform.Storage.FilePickerFileType("WAV Files")
-                        {
-                            Patterns = new[] { "*.wav" },
-                            MimeTypes = new[] { "audio/wav" },
-                        },
-                    },
-                };
-
-                // Set default directory if available
-                if (!string.IsNullOrEmpty(defaultSaveDir))
-                {
-                    saveOptions.SuggestedStartLocation =
-                        await mainWindow.StorageProvider.TryGetFolderFromPathAsync(defaultSaveDir);
-                }
-
-                var storageFile = await mainWindow.StorageProvider.SaveFilePickerAsync(saveOptions);
-
-                if (storageFile == null)
-                {
-                    return;
-                }
-
-                string savePath = storageFile.Path.LocalPath;
-                RegistryLocations.SaveAudioSaveDirectory(Path.GetDirectoryName(savePath));
+                string savePath = Path.Combine(saveFolder, $"{soundItem.SoundId}.wav");
 
                 // Get sound data
                 byte[] wemData = null;
@@ -555,24 +478,6 @@ namespace PD3AudioModder.util
                     File.Delete(tempWavPath);
                 }
                 catch { }
-
-                await Dispatcher.UIThread.InvokeAsync(() =>
-                {
-                    if (mainWindow._notificationManager != null)
-                    {
-                        mainWindow._notificationManager.Show(
-                            new Notification(
-                                "Save Complete",
-                                $"Successfully saved WAV file to:\n{savePath}",
-                                NotificationType.Success
-                            )
-                        );
-                    }
-                    else
-                    {
-                        Console.WriteLine($"Successfully saved WAV file to: {savePath}");
-                    }
-                });
             }
             catch (Exception ex)
             {

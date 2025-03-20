@@ -33,7 +33,16 @@
 
 		<StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml" />
 		<StyleInclude Source="avares://Avalonia.Controls.ColorPicker/Themes/Fluent/Fluent.xaml" />
-		
+
+		<Style Selector="ContextMenu">
+			<Setter Property="Background" Value="{DynamicResource TertiaryColor}"/>
+			<Setter Property="BorderBrush" Value="{DynamicResource BorderColor}"/>
+		</Style>
+
+		<Style Selector="MenuItem">
+			<Setter Property="Foreground" Value="{DynamicResource TextColor}"/>
+		</Style>
+
 		<Style Selector="ScrollBar Thumb">
 			<Setter Property="CornerRadius" Value="5"/>
 		</Style>

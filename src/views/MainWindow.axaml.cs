@@ -6,8 +6,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia.Controls;
-using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Notifications;
+using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Avalonia.Platform.Storage;
 using Avalonia.VisualTree;
@@ -25,7 +25,11 @@ namespace PD3AudioModder
         public ICommand PlayCommand { get; set; }
         public ICommand StopCommand { get; set; }
         public ICommand ExportCommand { get; set; }
+        public ICommand ExportMultipleCommand { get; private set; }
         public ICommand SaveCommand { get; set; }
+        public ICommand SaveMultipleCommand { get; private set; }
+        public ICommand CopyIDCommand { get; private set; }
+        public ICommand CopyMediaNameCommand { get; private set; }
 
         private readonly WindowNotificationManager _notificationManager;
         private readonly IDSearcher _idSearcher;
@@ -44,7 +48,11 @@ namespace PD3AudioModder
             PlayCommand = new RelayCommand<SoundItem>(PlaySound);
             StopCommand = new RelayCommand<object>(_ => StopSound());
             ExportCommand = new RelayCommand<SoundItem>(ExportSound);
+            ExportMultipleCommand = new RelayCommand<List<SoundItem>>(ExportMultipleSounds);
             SaveCommand = new RelayCommand<SoundItem>(SaveSound);
+            SaveMultipleCommand = new RelayCommand<List<SoundItem>>(SaveMultipleSounds);
+            CopyIDCommand = new RelayCommand<SoundItem>(CopyID);
+            CopyMediaNameCommand = new RelayCommand<SoundItem>(CopyMediaName);
         }
 
         private void PlaySound(SoundItem soundItem)
@@ -59,12 +67,190 @@ namespace PD3AudioModder
 
         private async void ExportSound(SoundItem soundItem)
         {
-            await _idSearcher.ExportSound(soundItem, _mainWindow);
+            string exportFolder = await GetExportFolder(soundItem);
+            if (string.IsNullOrEmpty(exportFolder))
+                return;
+            await _idSearcher.ExportSound(soundItem, exportFolder);
+
+            _notificationManager?.Show(
+                new Notification(
+                    "Export Complete",
+                    $"Successfully exported {soundItem.SoundId} to {exportFolder}.",
+                    NotificationType.Success,
+                    TimeSpan.FromSeconds(2)
+                )
+            );
+        }
+
+        private async Task<string> GetExportFolder(SoundItem sampleSoundItem)
+        {
+            string defaultExportDir = RegistryLocations.GetExportDirectory();
+
+            var folderOptions = new Avalonia.Platform.Storage.FolderPickerOpenOptions
+            {
+                Title = "Select Export Folder",
+                AllowMultiple = false,
+            };
+
+            if (!string.IsNullOrEmpty(defaultExportDir))
+            {
+                folderOptions.SuggestedStartLocation =
+                    await _mainWindow.StorageProvider.TryGetFolderFromPathAsync(defaultExportDir);
+            }
+
+            var storageProvider = await _mainWindow.StorageProvider.OpenFolderPickerAsync(
+                folderOptions
+            );
+
+            if (storageProvider == null || storageProvider.Count == 0)
+            {
+                return null; // User canceled
+            }
+
+            string selectedPath = storageProvider[0].Path.LocalPath;
+            RegistryLocations.SaveExportDirectory(selectedPath);
+            return selectedPath;
+        }
+
+        private async void ExportMultipleSounds(List<SoundItem> soundItems)
+        {
+            if (soundItems == null || !soundItems.Any())
+                return;
+
+            string exportFolder = await GetExportFolder(soundItems.First());
+            if (string.IsNullOrEmpty(exportFolder))
+                return;
+
+            int exportedCount = 0;
+
+            foreach (var soundItem in soundItems)
+            {
+                await _idSearcher.ExportSound(soundItem, exportFolder);
+                exportedCount++;
+            }
+
+            _notificationManager?.Show(
+                new Notification(
+                    "Export Complete",
+                    $"Successfully exported {exportedCount} sound files to {exportFolder}.",
+                    NotificationType.Success,
+                    TimeSpan.FromSeconds(2)
+                )
+            );
         }
 
         private async void SaveSound(SoundItem soundItem)
         {
-            await _idSearcher.SaveSound(soundItem, _mainWindow);
+            string exportFolder = await GetExportFolder(soundItem);
+            if (string.IsNullOrEmpty(exportFolder))
+                return;
+            await _idSearcher.SaveSound(soundItem, exportFolder);
+
+            _notificationManager?.Show(
+                new Notification(
+                    "Export Complete",
+                    $"Successfully saved {soundItem.SoundId}.wav to {exportFolder}.",
+                    NotificationType.Success,
+                    TimeSpan.FromSeconds(2)
+                )
+            );
+        }
+
+        private async Task<string> GetSaveFolder(SoundItem sampleSoundItem)
+        {
+            string defaultSaveDir = RegistryLocations.GetAudioSaveDirectory();
+
+            var folderOptions = new Avalonia.Platform.Storage.FolderPickerOpenOptions
+            {
+                Title = "Select Save Folder",
+                AllowMultiple = false,
+            };
+
+            if (!string.IsNullOrEmpty(defaultSaveDir))
+            {
+                folderOptions.SuggestedStartLocation =
+                    await _mainWindow.StorageProvider.TryGetFolderFromPathAsync(defaultSaveDir);
+            }
+
+            var storageProvider = await _mainWindow.StorageProvider.OpenFolderPickerAsync(
+                folderOptions
+            );
+
+            if (storageProvider == null || storageProvider.Count == 0)
+            {
+                return null; // User canceled
+            }
+
+            string selectedPath = storageProvider[0].Path.LocalPath;
+            RegistryLocations.SaveAudioSaveDirectory(selectedPath);
+            return selectedPath;
+        }
+
+        private async void SaveMultipleSounds(List<SoundItem> soundItems)
+        {
+            if (soundItems == null || !soundItems.Any())
+                return;
+
+            string saveFolder = await GetSaveFolder(soundItems.First());
+            if (string.IsNullOrEmpty(saveFolder))
+                return;
+
+            int savedCount = 0;
+
+            foreach (var soundItem in soundItems)
+            {
+                await _idSearcher.SaveSound(soundItem, saveFolder);
+                savedCount++;
+            }
+
+            _notificationManager?.Show(
+                new Notification(
+                    "Save Complete",
+                    $"Successfully saved {savedCount} WAV files to {saveFolder}.",
+                    NotificationType.Success,
+                    TimeSpan.FromSeconds(2)
+                )
+            );
+        }
+
+        private async void CopyID(SoundItem soundItem)
+        {
+            if (soundItem != null && _mainWindow != null)
+            {
+                var clipboard = TopLevel.GetTopLevel(_mainWindow)?.Clipboard;
+                if (clipboard != null)
+                {
+                    await clipboard.SetTextAsync(soundItem.SoundId);
+                    _notificationManager?.Show(
+                        new Notification(
+                            "Copied",
+                            $"{soundItem.SoundId} copied to clipboard",
+                            NotificationType.Information,
+                            TimeSpan.FromSeconds(2)
+                        )
+                    );
+                }
+            }
+        }
+
+        private async void CopyMediaName(SoundItem soundItem)
+        {
+            if (soundItem != null && _mainWindow != null)
+            {
+                var clipboard = TopLevel.GetTopLevel(_mainWindow)?.Clipboard;
+                if (clipboard != null)
+                {
+                    await clipboard.SetTextAsync(soundItem.SoundDescription);
+                    _notificationManager?.Show(
+                        new Notification(
+                            "Copied",
+                            $"{soundItem.SoundDescription} copied to clipboard",
+                            NotificationType.Information,
+                            TimeSpan.FromSeconds(2)
+                        )
+                    );
+                }
+            }
         }
     }
 
@@ -296,7 +482,8 @@ namespace PD3AudioModder
             packButton.Click += (_, _) => PackButton_Click(PackFolderPath!);
 
             // ID Search Tab
-            soundsDataGrid = this.FindControl<DataGrid>("SoundsDataGrid");
+            soundsDataGrid = this.FindControl<DataGrid>("SoundsDataGrid")!;
+            InitializeDataGrid(soundsDataGrid);
             var searchButton = this.FindControl<Button>("SearchButton")!;
             var searchTextBox = this.FindControl<TextBox>("SearchTextBox")!;
             searchButton.Click += (_, _) => PerformSearch(searchTextBox.Text);
@@ -619,6 +806,199 @@ namespace PD3AudioModder
         }
 
         // ID Search tab
+        private void InitializeDataGrid(DataGrid soundsDataGrid)
+        {
+            var contextMenu = new ContextMenu();
+
+            var copy = new MenuItem { Header = "Copy ID(s)" };
+            copy.Click += (s, args) =>
+            {
+                if (
+                    soundsDataGrid.SelectedItems.Count == 1
+                    && soundsDataGrid.SelectedItem is SoundItem item
+                )
+                    item.CopyIDCommand.Execute(item);
+                else
+                    OnCopyIDsClick(s, args);
+            };
+
+            var copyMediaName = new MenuItem { Header = "Copy MediaName(s)" };
+            copyMediaName.Click += (s, args) =>
+            {
+                if (
+                    soundsDataGrid.SelectedItems.Count == 1
+                    && soundsDataGrid.SelectedItem is SoundItem item
+                )
+                    item.CopyMediaNameCommand.Execute(item);
+                else
+                    OnCopyMediaNamesClick(s, args);
+            };
+
+            var export = new MenuItem { Header = "Export raw file(s) (.uasset)" };
+            export.Click += (s, args) =>
+            {
+                if (
+                    soundsDataGrid.SelectedItems.Count == 1
+                    && soundsDataGrid.SelectedItem is SoundItem item
+                )
+                    item.ExportCommand.Execute(item);
+                else
+                    OnExportSelectedClick(s, args);
+            };
+
+            var save = new MenuItem { Header = "Save WAV file(s)" };
+            save.Click += (s, args) =>
+            {
+                if (
+                    soundsDataGrid.SelectedItems.Count == 1
+                    && soundsDataGrid.SelectedItem is SoundItem item
+                )
+                    item.SaveCommand.Execute(item);
+                else
+                    OnSaveSelectedClick(s, args);
+            };
+
+            contextMenu.Items.Add(copy);
+            contextMenu.Items.Add(copyMediaName);
+            contextMenu.Items.Add(export);
+            contextMenu.Items.Add(save);
+
+            soundsDataGrid.ContextMenu = contextMenu;
+
+            soundsDataGrid.KeyDown += (s, e) =>
+            {
+                if (
+                    e.Key == Avalonia.Input.Key.A
+                    && e.KeyModifiers == Avalonia.Input.KeyModifiers.Control
+                )
+                {
+                    soundsDataGrid.SelectAll();
+                    e.Handled = true;
+                }
+            };
+        }
+
+        private void OnExportSelectedClick(object sender, Avalonia.Interactivity.RoutedEventArgs e)
+        {
+            if (soundsDataGrid == null)
+                return;
+
+            var selectedItems = soundsDataGrid.SelectedItems.Cast<SoundItem>().ToList();
+            if (!selectedItems.Any())
+                return;
+
+            try
+            {
+                if (selectedItems.Count == 1)
+                {
+                    selectedItems[0].ExportCommand.Execute(selectedItems[0]);
+                }
+                else
+                {
+                    selectedItems[0].ExportMultipleCommand.Execute(selectedItems);
+                }
+            }
+            catch (Exception ex)
+            {
+                _notificationManager?.Show(
+                    new Notification(
+                        "Export Error",
+                        $"Error exporting files: {ex.Message}",
+                        NotificationType.Error,
+                        TimeSpan.FromSeconds(3)
+                    )
+                );
+            }
+        }
+
+        private void OnSaveSelectedClick(object sender, RoutedEventArgs e)
+        {
+            if (soundsDataGrid == null)
+                return;
+
+            var selectedItems = soundsDataGrid.SelectedItems.Cast<SoundItem>().ToList();
+            if (!selectedItems.Any())
+                return;
+
+            try
+            {
+                if (selectedItems.Count == 1)
+                {
+                    selectedItems[0].SaveCommand.Execute(selectedItems[0]);
+                }
+                else
+                {
+                    selectedItems[0].SaveMultipleCommand.Execute(selectedItems);
+                }
+            }
+            catch (Exception ex)
+            {
+                _notificationManager?.Show(
+                    new Notification(
+                        "Save Error",
+                        $"Error saving files: {ex.Message}",
+                        NotificationType.Error,
+                        TimeSpan.FromSeconds(3)
+                    )
+                );
+            }
+        }
+
+        private async void OnCopyIDsClick(object sender, Avalonia.Interactivity.RoutedEventArgs e)
+        {
+            var selectedItems = soundsDataGrid?.SelectedItems.Cast<SoundItem>().ToList();
+            if (selectedItems == null || !selectedItems.Any())
+                return;
+
+            var clipboard = TopLevel.GetTopLevel(this)?.Clipboard;
+            if (clipboard != null)
+            {
+                string textToCopy = string.Join(
+                    Environment.NewLine,
+                    selectedItems.Select(item => item.SoundId)
+                );
+                await clipboard.SetTextAsync(textToCopy);
+
+                _notificationManager?.Show(
+                    new Notification(
+                        "Copied",
+                        $"{selectedItems.Count} ID(s) copied to clipboard",
+                        NotificationType.Information,
+                        TimeSpan.FromSeconds(2)
+                    )
+                );
+            }
+        }
+
+        private async void OnCopyMediaNamesClick(
+            object sender,
+            Avalonia.Interactivity.RoutedEventArgs e
+        )
+        {
+            var selectedItems = soundsDataGrid?.SelectedItems.Cast<SoundItem>().ToList();
+            if (selectedItems == null || !selectedItems.Any())
+                return;
+
+            var clipboard = TopLevel.GetTopLevel(this)?.Clipboard;
+            if (clipboard != null)
+            {
+                string textToCopy = string.Join(
+                    Environment.NewLine,
+                    selectedItems.Select(item => item.SoundDescription)
+                );
+                await clipboard.SetTextAsync(textToCopy);
+
+                _notificationManager?.Show(
+                    new Notification(
+                        "Copied",
+                        $"{selectedItems.Count} MediaName(s) copied to clipboard",
+                        NotificationType.Information,
+                        TimeSpan.FromSeconds(2)
+                    )
+                );
+            }
+        }
+
         private void PerformSearch(string searchText)
         {
             if (string.IsNullOrWhiteSpace(searchText))
