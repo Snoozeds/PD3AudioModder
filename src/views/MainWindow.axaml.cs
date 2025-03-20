@@ -122,11 +122,14 @@ namespace PD3AudioModder
                 return;
 
             int exportedCount = 0;
+            int totalFiles = soundItems.Count;
 
             foreach (var soundItem in soundItems)
             {
                 await _idSearcher.ExportSound(soundItem, exportFolder);
                 exportedCount++;
+
+                _mainWindow.UpdateGlobalStatus($"Exporting {exportedCount}/{totalFiles} files...", "ID Search");
             }
 
             _notificationManager?.Show(
@@ -137,6 +140,8 @@ namespace PD3AudioModder
                     TimeSpan.FromSeconds(2)
                 )
             );
+
+            _mainWindow.UpdateGlobalStatus($"Export complete: {exportedCount}/{totalFiles} files.", "ID Search");
         }
 
         private async void SaveSound(SoundItem soundItem)
@@ -196,11 +201,14 @@ namespace PD3AudioModder
                 return;
 
             int savedCount = 0;
+            int totalFiles = soundItems.Count;
 
             foreach (var soundItem in soundItems)
             {
                 await _idSearcher.SaveSound(soundItem, saveFolder);
                 savedCount++;
+
+                _mainWindow.UpdateGlobalStatus($"Saving {savedCount}/{totalFiles} files...", "ID Search");
             }
 
             _notificationManager?.Show(
@@ -211,6 +219,8 @@ namespace PD3AudioModder
                     TimeSpan.FromSeconds(2)
                 )
             );
+
+            _mainWindow.UpdateGlobalStatus($"Save complete: {savedCount}/{totalFiles} files.", "ID Search");
         }
 
         private async void CopyID(SoundItem soundItem)
