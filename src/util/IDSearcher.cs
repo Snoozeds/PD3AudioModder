@@ -401,27 +401,97 @@ namespace PD3AudioModder.util
             {
                 string savePath = Path.Combine(saveFolder, $"{soundItem.SoundId}.wav");
 
-                // Get .ubulk file data
-                if (!_provider.Files.ContainsKey(soundItem.UbulkPath))
+                string ubulkPath = soundItem.UbulkPath;
+                string uexpPath = Path.ChangeExtension(ubulkPath, ".uexp");
+                string uassetPath = Path.ChangeExtension(ubulkPath, ".uasset");
+
+                // Check if uasset exists
+                if (!_provider.Files.ContainsKey(uassetPath))
                 {
-                    ShowWarning("Could not find .ubulk file.");
+                    ShowWarning("Could not find corresponding .uasset file.");
                     return;
                 }
 
-                byte[] wemData = _provider.Files[soundItem.UbulkPath].Read();
-
-                if (wemData == null || wemData.Length == 0)
+                // Load uasset
+                var package = _provider.LoadPackage(uassetPath);
+                if (package == null)
                 {
-                    ShowWarning("Could not extract WEM data from .ubulk file.");
+                    ShowWarning("Failed to load .uasset.");
                     return;
                 }
 
-                // Create temp files
+                // Extract JSON data
+                string jsonData = JsonConvert.SerializeObject(package.GetExports(), Formatting.Indented);
+                var jsonArray = JsonConvert.DeserializeObject<JArray>(jsonData);
+
+                if (jsonArray == null)
+                {
+                    ShowWarning("Invalid JSON structure in .uasset file.");
+                    return;
+                }
+
+                // Find relevant media asset data
+                var mediaAssetData = jsonArray.FirstOrDefault(x => x["Type"]?.ToString() == "AkMediaAssetData");
+                if (mediaAssetData == null)
+                {
+                    ShowWarning("Could not find media asset data.");
+                    return;
+                }
+
+                // Extract all BulkData chunks
+                var dataChunks = mediaAssetData["DataChunks"]?.ToArray();
+                if (dataChunks == null || dataChunks.Length == 0)
+                {
+                    ShowWarning("No BulkData found in .uasset file.");
+                    return;
+                }
+
+                // Sort chunks by OffsetInFile
+                var sortedChunks = dataChunks.OrderBy(chunk => Convert.ToInt32(chunk["BulkData"]["OffsetInFile"].ToString(), 16));
+
+                List<byte> wemData = new List<byte>();
+
+                // Ensure ubulk file exists
+                if (!_provider.Files.TryGetValue(ubulkPath, out var ubulkFile))
+                {
+                    ShowWarning("Could not find corresponding .ubulk file.");
+                    return;
+                }
+
+                byte[] ubulkBytes = ubulkFile.Read();
+                using (MemoryStream stream = new MemoryStream(ubulkBytes))
+                using (BinaryReader reader = new BinaryReader(stream))
+                {
+                    foreach (var chunk in sortedChunks)
+                    {
+                        bool isPrefetch = chunk["IsPrefetch"]?.ToObject<bool>() ?? false;
+                        if (isPrefetch) continue; // Skip prefetch data
+
+                        int chunkSize = chunk["BulkData"]["SizeOnDisk"]?.ToObject<int>() ?? 0;
+                        int offset = Convert.ToInt32(chunk["BulkData"]["OffsetInFile"].ToString(), 16);
+
+                        if (chunkSize <= 0) continue;
+
+                        // Seek to offset
+                        stream.Seek(offset, SeekOrigin.Begin);
+
+                        // Read chunk data
+                        byte[] chunkData = reader.ReadBytes(chunkSize);
+                        wemData.AddRange(chunkData);
+                    }
+                }
+
+                if (wemData.Count == 0)
+                {
+                    ShowWarning("Failed to reconstruct WEM data.");
+                    return;
+                }
+
+                // Write WEM data to temp file
                 string tempWemPath = Path.Combine(Path.GetTempPath(), $"{soundItem.SoundId}.wem");
                 string tempWavPath = Path.Combine(Path.GetTempPath(), $"{soundItem.SoundId}.wav");
 
-                // Write the WEM data to a temporary file
-                await File.WriteAllBytesAsync(tempWemPath, wemData);
+                await File.WriteAllBytesAsync(tempWemPath, wemData.ToArray());
 
                 // Convert WEM to WAV using vgmstream
                 ProcessStartInfo psi = new ProcessStartInfo
