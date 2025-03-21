@@ -490,6 +490,12 @@ namespace PD3AudioModder
             }
 
             var mainTabControl = this.FindControl<TabControl>("MainTabControl")!;
+            var singleFileButton = this.FindControl<Button>("SingleFileButton")!;
+
+            // Highlight single file button in the hamburger menu on launch
+            ClearMenuButtonSelection();
+            singleFileButton.Classes.Add("Selected");
+
             ModNameTextBox.TextChanged += (_, _) =>
             {
                 ModName = !string.IsNullOrEmpty(ModNameTextBox.Text)
@@ -497,6 +503,7 @@ namespace PD3AudioModder
                     : "MyPD3Mod";
                 _discordRPC.UpdatePresence(mainTabControl, ModName);
             };
+
             selectRepakButton.Click += (_, _) => SelectRepakButton_Click(repakPathTextBlock);
             compressCheckBox.IsCheckedChanged += (_, _) =>
                 CompressionEnabled = compressCheckBox.IsChecked;
@@ -1145,6 +1152,9 @@ namespace PD3AudioModder
 
                 if (tabControl != null && tabIndex < tabControl.Items.Count)
                 {
+                    // Highlight button in hamburger menu depending on what tab we're in.
+                    ClearMenuButtonSelection();
+                    button.Classes.Add("Selected");
                     tabControl.SelectedIndex = tabIndex;
 
                     // Update the current tab for status text
@@ -1189,6 +1199,25 @@ namespace PD3AudioModder
                     {
                         splitView.IsPaneOpen = false;
                     }
+                }
+            }
+        }
+
+        private void ClearMenuButtonSelection()
+        {
+            var menuButtons = new[]
+            {
+                this.FindControl<Button>("SingleFileButton"),
+                this.FindControl<Button>("BatchButton"),
+                this.FindControl<Button>("PackFilesButton"),
+                this.FindControl<Button>("IDSearchButton"),
+            };
+
+            foreach (var btn in menuButtons)
+            {
+                if (btn != null)
+                {
+                    btn.Classes.Remove("Selected");
                 }
             }
         }

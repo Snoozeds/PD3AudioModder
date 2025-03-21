@@ -572,5 +572,8 @@
 		<Style Selector="Button.MenuButton:pressed /template/ ContentPresenter">
 			<Setter Property="Background" Value="{DynamicResource MenuHoverColor}"/>
 		</Style>
+		<Style Selector="Button.MenuButton.Selected">
+			<Setter Property="Background" Value="{DynamicResource MenuHoverColor}" />
+		</Style>
 	</Window.Styles>
 </Window>
