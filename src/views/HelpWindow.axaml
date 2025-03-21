@@ -16,8 +16,37 @@
 			<RowDefinition Height="Auto"/>
 		</Grid.RowDefinitions>
 
+		<StackPanel Orientation="Horizontal"
+					Margin="0,0,0,10"
+					Grid.Row="0">
+			<TextBlock Text="ⓘ"
+					   FontSize="22"
+					   Foreground="{DynamicResource TextColor}"
+					   VerticalAlignment="Center"
+					   HorizontalAlignment="Center"
+					   Margin="0,-3,3,0">
+			</TextBlock>
+			<TextBlock Text="You may also view the guide on how to use PAM "
+					   FontSize="14"
+					   Foreground="{DynamicResource TextColor}"
+					   VerticalAlignment="Center"
+					   HorizontalAlignment="Center"/>
+			<Button Content="Here"
+					Click="GuideClick"
+					FontSize="14"
+					Foreground="{DynamicResource ButtonTextColor}"
+					Background="Transparent"
+					BorderThickness="0"
+					Padding="0"
+					Cursor="Hand"
+					VerticalAlignment="Center"
+					HorizontalAlignment="Center"
+					HorizontalContentAlignment="Center"
+					VerticalContentAlignment="Center"/>
+		</StackPanel>
+		
 		<!-- Single File Section -->
-		<StackPanel x:Name="SingleFileSection" Grid.Row="0" Margin="0,0,0,20" IsVisible="False">
+		<StackPanel x:Name="SingleFileSection" Grid.Row="1" Margin="0,0,0,20" IsVisible="False">
 			<TextBlock Text="Single File"
                        FontSize="28"
                        FontWeight="Bold"
@@ -31,7 +60,7 @@
 		</StackPanel>
 
 		<!-- Batch Conversion Section -->
-		<StackPanel x:Name="BatchConversionSection" Grid.Row="0" IsVisible="False">
+		<StackPanel x:Name="BatchConversionSection" Grid.Row="1" IsVisible="False">
 			<TextBlock Text="Batch Conversion"
                        FontSize="28"
                        FontWeight="Bold"
@@ -45,7 +74,7 @@
 		</StackPanel>
 
 		<!-- Pack Files Section -->
-		<StackPanel x:Name="PackFilesSection"  Grid.Row="0" IsVisible="False">
+		<StackPanel x:Name="PackFilesSection"  Grid.Row="1" IsVisible="False">
 			<TextBlock Text="Pack Files"
                        FontSize="28"
                        FontWeight="Bold"
@@ -59,7 +88,7 @@
 		</StackPanel>
 
 		<!-- ID Search Section -->
-		<StackPanel x:Name="IDSearchSection"  Grid.Row="0" IsVisible="False">
+		<StackPanel x:Name="IDSearchSection"  Grid.Row="1" IsVisible="False">
 			<TextBlock Text="ID Search"
                        FontSize="28"
                        FontWeight="Bold"

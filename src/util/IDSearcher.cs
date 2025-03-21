@@ -421,7 +421,10 @@ namespace PD3AudioModder.util
                 }
 
                 // Extract JSON data
-                string jsonData = JsonConvert.SerializeObject(package.GetExports(), Formatting.Indented);
+                string jsonData = JsonConvert.SerializeObject(
+                    package.GetExports(),
+                    Formatting.Indented
+                );
                 var jsonArray = JsonConvert.DeserializeObject<JArray>(jsonData);
 
                 if (jsonArray == null)
@@ -431,7 +434,9 @@ namespace PD3AudioModder.util
                 }
 
                 // Find relevant media asset data
-                var mediaAssetData = jsonArray.FirstOrDefault(x => x["Type"]?.ToString() == "AkMediaAssetData");
+                var mediaAssetData = jsonArray.FirstOrDefault(x =>
+                    x["Type"]?.ToString() == "AkMediaAssetData"
+                );
                 if (mediaAssetData == null)
                 {
                     ShowWarning("Could not find media asset data.");
@@ -447,7 +452,9 @@ namespace PD3AudioModder.util
                 }
 
                 // Sort chunks by OffsetInFile
-                var sortedChunks = dataChunks.OrderBy(chunk => Convert.ToInt32(chunk["BulkData"]["OffsetInFile"].ToString(), 16));
+                var sortedChunks = dataChunks.OrderBy(chunk =>
+                    Convert.ToInt32(chunk["BulkData"]["OffsetInFile"].ToString(), 16)
+                );
 
                 List<byte> wemData = new List<byte>();
 
@@ -465,12 +472,17 @@ namespace PD3AudioModder.util
                     foreach (var chunk in sortedChunks)
                     {
                         bool isPrefetch = chunk["IsPrefetch"]?.ToObject<bool>() ?? false;
-                        if (isPrefetch) continue; // Skip prefetch data
+                        if (isPrefetch)
+                            continue; // Skip prefetch data
 
                         int chunkSize = chunk["BulkData"]["SizeOnDisk"]?.ToObject<int>() ?? 0;
-                        int offset = Convert.ToInt32(chunk["BulkData"]["OffsetInFile"].ToString(), 16);
+                        int offset = Convert.ToInt32(
+                            chunk["BulkData"]["OffsetInFile"].ToString(),
+                            16
+                        );
 
-                        if (chunkSize <= 0) continue;
+                        if (chunkSize <= 0)
+                            continue;
 
                         // Seek to offset
                         stream.Seek(offset, SeekOrigin.Begin);
