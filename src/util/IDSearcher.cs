@@ -18,9 +18,69 @@ namespace PD3AudioModder.util
     {
         private MainWindow _mainWindow;
 
+        // Command process
+        private Process _sharedProcess;
+        private bool _isProcessInitialized = false;
+
         public IDSearcher(MainWindow mainWindow = null)
         {
             _mainWindow = mainWindow;
+        }
+
+        // Reusable command window so Windows Defender doesn't think PAM is a trojan :D
+        private void InitializeSharedProcess()
+        {
+            if (_isProcessInitialized && _sharedProcess != null && !_sharedProcess.HasExited)
+                return;
+
+            string vgmstreamPath = Path.Combine(
+                AppDomain.CurrentDomain.BaseDirectory,
+                "vgmstream-cli.exe"
+            );
+
+            ProcessStartInfo psi = new ProcessStartInfo
+            {
+                FileName = "cmd.exe",
+                RedirectStandardInput = true,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                UseShellExecute = false,
+                CreateNoWindow = false
+            };
+
+            _sharedProcess = new Process { StartInfo = psi };
+
+            _sharedProcess.OutputDataReceived += (sender, args) =>
+            {
+                if (!string.IsNullOrEmpty(args.Data))
+                    Console.WriteLine(args.Data);
+            };
+            _sharedProcess.ErrorDataReceived += (sender, args) =>
+            {
+                if (!string.IsNullOrEmpty(args.Data))
+                    Console.WriteLine("ERROR: " + args.Data);
+            };
+
+            _sharedProcess.Start();
+            _sharedProcess.BeginOutputReadLine();
+            _sharedProcess.BeginErrorReadLine();
+
+            _sharedProcess.StandardInput.WriteLine($"cd /d \"{AppDomain.CurrentDomain.BaseDirectory}\"");
+            _sharedProcess.StandardInput.Flush();
+
+            _isProcessInitialized = true;
+        }
+
+        public void CleanupSharedProcess()
+        {
+            if (_sharedProcess != null && !_sharedProcess.HasExited)
+            {
+                _sharedProcess.StandardInput.WriteLine("exit");
+                _sharedProcess.WaitForExit(1000);
+                _sharedProcess.Dispose();
+                _sharedProcess = null;
+            }
+            _isProcessInitialized = false;
         }
 
         private static DefaultFileProvider _provider;
@@ -397,6 +457,9 @@ namespace PD3AudioModder.util
                 return;
             }
 
+            // Initialize shared command prompt window so that PAM doesn't get falsely flagged as a trojan/spam command windows
+            InitializeSharedProcess();
+
             try
             {
                 string savePath = Path.Combine(saveFolder, $"{soundItem.SoundId}.wav");
@@ -506,32 +569,19 @@ namespace PD3AudioModder.util
                 await File.WriteAllBytesAsync(tempWemPath, wemData.ToArray());
 
                 // Convert WEM to WAV using vgmstream
-                ProcessStartInfo psi = new ProcessStartInfo
-                {
-                    FileName = vgmstreamPath,
-                    Arguments = $"-o \"{tempWavPath}\" \"{tempWemPath}\"",
-                    RedirectStandardOutput = true,
-                    RedirectStandardError = true,
-                    UseShellExecute = false,
-                    CreateNoWindow = true,
-                };
+                _sharedProcess.StandardInput.WriteLine($"vgmstream-cli.exe -o \"{tempWavPath}\" \"{tempWemPath}\"");
+                _sharedProcess.StandardInput.Flush();
 
-                using (Process process = new Process { StartInfo = psi })
+                int attempts = 0;
+                while (!File.Exists(tempWavPath) && attempts < 50)
                 {
-                    process.Start();
-                    string stdError = await process.StandardError.ReadToEndAsync();
-                    await process.WaitForExitAsync();
-
-                    if (process.ExitCode != 0)
-                    {
-                        ShowWarning($"vgmstream error: {stdError}");
-                        return;
-                    }
+                    await Task.Delay(100);
+                    attempts++;
                 }
 
                 if (!File.Exists(tempWavPath))
                 {
-                    ShowWarning("Failed to decode WEM to WAV.");
+                    ShowWarning("Conversion failed: WAV file was not created.");
                     return;
                 }
 

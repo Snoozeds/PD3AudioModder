@@ -233,6 +233,8 @@ namespace PD3AudioModder
                 $"Save complete: {savedCount}/{totalFiles} files.",
                 "ID Search"
             );
+
+            _idSearcher.CleanupSharedProcess();
         }
 
         private async void CopyID(SoundItem soundItem)
