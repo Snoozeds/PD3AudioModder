@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -146,7 +147,7 @@ public class PackFiles
         }
     }
 
-    public static void Pack(
+    public static bool Pack(
         string repakPath,
         bool compression,
         string packFolderPath,
@@ -175,6 +176,9 @@ public class PackFiles
 
             JToken localizedMappings = JToken.Parse(localizedJson);
             JToken mediaMappings = JToken.Parse(mediaJson);
+
+            // Used to display a warning when files do not exist in mappings
+            List<string> unmatchedFiles = new List<string>();
 
             // Iterate through all files in packFolderPath
             var files = Directory.GetFiles(packFolderPath, "*", SearchOption.AllDirectories);
@@ -245,13 +249,28 @@ public class PackFiles
 
                 if (!fileProcessed)
                 {
-                    var warningDialog = new WarningDialog(
-                        $"File {fileName} does not match any known mappings.\nThere may have been an update to the game recently,\nand the mappings have not been updated yet."
-                    );
-                    warningDialog.Show();
+                    unmatchedFiles.Add(fileName);
+                    Console.WriteLine($"File {fileName} does not match any known mappings.");
                 }
             }
+
+            if (unmatchedFiles.Count > 0)
+            {
+                string warningMessage =
+                    $"{unmatchedFiles.Count} file(s) do not match any known mappings:\n"
+                    + string.Join("\n", unmatchedFiles.Take(10))
+                    + (unmatchedFiles.Count > 10 ? "\n(and more...)" : "");
+
+                warningMessage +=
+                    "\n\nThere may have been an update to the game recently,\nand the mappings have not been updated yet.\nPlease make sure to only use this tab for audio files, too.";
+
+                var warningDialog = new WarningDialog(warningMessage);
+                warningDialog.Show();
+                return false;
+            }
+
             UpdateStatus("Files packed successfully.");
+            return true;
         }
         catch (Exception ex)
         {

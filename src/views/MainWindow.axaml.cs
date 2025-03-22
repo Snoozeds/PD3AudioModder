@@ -792,7 +792,6 @@ namespace PD3AudioModder
         private async void PackButton_Click(string packFolderPath)
         {
             await PackFiles.DownloadMappings();
-
             if (_appConfig.RepakPath == null)
             {
                 _notificationManager?.Show(
@@ -805,33 +804,51 @@ namespace PD3AudioModder
                 return;
             }
 
-            PackFiles.Pack(
+            bool packSuccess = PackFiles.Pack(
                 _appConfig.RepakPath,
                 CompressionEnabled ?? false,
                 packFolderPath,
                 Path.GetDirectoryName(packFolderPath)!,
                 ModName ?? "MyPD3Mod"
             );
-            await PackFiles.Repak(
-                _appConfig.RepakPath,
-                CompressionEnabled ?? false,
-                packFolderPath,
-                ModName ?? "MyPD3Mod"
-            );
 
-            _notificationManager?.Show(
-                new Notification("Success", "Files packed successfully.", NotificationType.Success)
-            );
+            if (packSuccess)
+            {
+                await PackFiles.Repak(
+                    _appConfig.RepakPath,
+                    CompressionEnabled ?? false,
+                    packFolderPath,
+                    ModName ?? "MyPD3Mod"
+                );
 
-            System.Diagnostics.Process.Start(
-                "explorer.exe",
-                Path.GetDirectoryName(packFolderPath)!
-            );
+                _notificationManager?.Show(
+                    new Notification(
+                        "Success",
+                        "Files packed successfully.",
+                        NotificationType.Success
+                    )
+                );
 
-            // Reset fields
-            PackFolderPath = null;
-            var packButton = this.FindControl<Button>("PackButton")!;
-            packButton.IsEnabled = false;
+                System.Diagnostics.Process.Start(
+                    "explorer.exe",
+                    Path.GetDirectoryName(packFolderPath)!
+                );
+
+                // Reset fields
+                PackFolderPath = null;
+                var packButton = this.FindControl<Button>("PackButton")!;
+                packButton.IsEnabled = false;
+            }
+            else
+            {
+                _notificationManager?.Show(
+                    new Notification(
+                        "Warning",
+                        "Packing incomplete.",
+                        NotificationType.Warning
+                    )
+                );
+            }
         }
 
         // ID Search tab
