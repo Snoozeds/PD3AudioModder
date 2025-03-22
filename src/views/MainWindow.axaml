@@ -176,7 +176,7 @@
 								<Grid RowDefinitions="Auto,Auto,Auto,Auto">
 									<!-- Title -->
 									<TextBlock Grid.Row="0"
-                                              Text="Pack Files"
+                                              Text="Single File"
                                               HorizontalAlignment="Center"
                                               FontSize="36"
                                               Foreground="{DynamicResource TextColor}"
