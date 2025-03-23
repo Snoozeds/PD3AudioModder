@@ -403,10 +403,11 @@ namespace PD3AudioModder.util
                 string destUassetPath = Path.Combine(destFolder, $"{soundItem.SoundId}.uasset");
                 string destUexpPath = Path.Combine(destFolder, $"{soundItem.SoundId}.uexp");
                 string destUbulkPath = Path.Combine(destFolder, $"{soundItem.SoundId}.ubulk");
+                string destJsonPath = Path.Combine(destFolder, $"{soundItem.SoundId}.json");
 
                 int exportedCount = 0;
 
-                // Export .uasset file
+                // Export .uasset file and extract JSON properties
                 if (_provider.Files.ContainsKey(uassetPath))
                 {
                     await File.WriteAllBytesAsync(
@@ -414,6 +415,28 @@ namespace PD3AudioModder.util
                         _provider.Files[uassetPath].Read()
                     );
                     exportedCount++;
+
+                    // Load the package to extract JSON properties
+                    try
+                    {
+                        var package = _provider.LoadPackage(uassetPath);
+                        if (package != null)
+                        {
+                            // Convert exports to JSON
+                            string jsonData = JsonConvert.SerializeObject(
+                                package.GetExports(),
+                                Formatting.Indented
+                            );
+
+                            await File.WriteAllTextAsync(destJsonPath, jsonData);
+                            exportedCount++;
+                        }
+                    }
+                    catch (Exception jsonEx)
+                    {
+                        Console.WriteLine($"Error extracting JSON for {uassetPath}: {jsonEx.Message}");
+                        ShowWarning($"$\"Error extracting JSON for {{uassetPath}}: {{jsonEx.Message}}\"");
+                    }
                 }
 
                 // Export .uexp file
