@@ -29,10 +29,57 @@ jobs:
 
   build:
     needs: update-version
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+
+      - name: Install Scoop
+        run: |
+          Invoke-WebRequest -useb get.scoop.sh | Invoke-Expression
+          echo "$HOME\scoop\shims" >> $env:GITHUB_PATH
+
+      - name: Install NSIS via Scoop
+        run: |
+          scoop install nsis
+
+      - name: Download NSIS Plugins
+        run: |
+          Invoke-WebRequest -Uri "https://nsis.sourceforge.io/mediawiki/images/7/7f/EnVar_plugin.zip" -OutFile "EnVar_plugin.zip"
+          Invoke-WebRequest -Uri "https://nsis.sourceforge.io/mediawiki/images/1/1c/Nsisunz.zip" -OutFile "Nsisunz.zip"
+          Invoke-WebRequest -Uri "https://nsis.sourceforge.io/mediawiki/images/c/c9/Inetc.zip" -OutFile "Inetc.zip"
+
+      - name: Install NSIS Plugins
+        run: |
+          # Create plugin directories if they don't exist
+          $pluginDirs = @(
+            "C:\Program Files (x86)\NSIS\Plugins\x86-unicode",
+            "C:\Program Files (x86)\NSIS\Plugins\x86-ansi",
+            "C:\Program Files (x86)\NSIS\Plugins\amd64-unicode"
+          )
+          $pluginDirs | ForEach-Object { 
+            if (!(Test-Path $_)) { 
+              New-Item -ItemType Directory -Path $_ 
+            } 
+          }
+
+          # Extract and copy EnVar plugin
+          Expand-Archive -Path "EnVar_plugin.zip" -DestinationPath ".\EnVar_temp" -Force
+          Copy-Item ".\EnVar_temp\Plugins\x86-unicode\EnVar.dll" -Destination "C:\Program Files (x86)\NSIS\Plugins\x86-unicode\"
+          Copy-Item ".\EnVar_temp\Plugins\x86-ansi\EnVar.dll" -Destination "C:\Program Files (x86)\NSIS\Plugins\x86-ansi\"
+          Copy-Item ".\EnVar_temp\Plugins\amd64-unicode\EnVar.dll" -Destination "C:\Program Files (x86)\NSIS\Plugins\amd64-unicode\"
+
+          # Extract and copy Nsisunz plugin
+          Expand-Archive -Path "Nsisunz.zip" -DestinationPath ".\Nsisunz_temp" -Force
+          Copy-Item ".\Nsisunz_temp\nsisunz\release\nsisunz.dll" -Destination "C:\Program Files (x86)\NSIS\Plugins\x86-unicode\"
+          Copy-Item ".\Nsisunz_temp\nsisunz\release\nsisunz.dll" -Destination "C:\Program Files (x86)\NSIS\Plugins\x86-ansi\"
+          Copy-Item ".\Nsisunz_temp\nsisunz\release\nsisunz.dll" -Destination "C:\Program Files (x86)\NSIS\Plugins\amd64-unicode\"
+
+          # Extract and copy Inetc plugin
+          Expand-Archive -Path "Inetc.zip" -DestinationPath ".\Inetc_temp" -Force
+          Copy-Item ".\Inetc_temp\Plugins\x86-unicode\inetc.dll" -Destination "C:\Program Files (x86)\NSIS\Plugins\x86-unicode\"
+          Copy-Item ".\Inetc_temp\Plugins\x86-ansi\inetc.dll" -Destination "C:\Program Files (x86)\NSIS\Plugins\x86-ansi\"
+          Copy-Item ".\Inetc_temp\Plugins\amd64-unicode\inetc.dll" -Destination "C:\Program Files (x86)\NSIS\Plugins\amd64-unicode\"
 
       - name: Set up .NET SDK
         uses: actions/setup-dotnet@v3
@@ -50,19 +97,36 @@ jobs:
         run: |
           echo "${{ github.event.release.tag_name }}" > ./output/version.txt
 
-      - name: Create ZIP file with version.txt
+      - name: Create Standard ZIP file
         working-directory: ./output
         run: |
-          zip -r PD3AudioModder.zip ./*.exe ./*.dll ./version.txt
+          Compress-Archive -Path ./*.exe, ./*.dll, ./version.txt -DestinationPath PD3AudioModder.zip -Force
 
-      - name: Upload Artifacts
+      - name: Create NSIS Installer
+        run: |
+          & "C:\Program Files (x86)\NSIS\makensis.exe" install.nsi
+
+      - name: Create Installer ZIP
+        working-directory: ./
+        run: |
+          Compress-Archive -Path *.exe -DestinationPath Installer-PD3AudioModder.zip -Force
+
+      - name: Upload Application Artifact
         uses: actions/upload-artifact@v4
         with:
           name: PD3AudioModder-exe
           path: ./output/PD3AudioModder.zip
 
+      - name: Upload Installer Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: PD3AudioModder-Installer
+          path: ./Installer-PD3AudioModder.zip
+
       - name: Upload to Release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          files: ./output/PD3AudioModder.zip
+          files: |
+            ./output/PD3AudioModder.zip
+            ./Installer-PD3AudioModder.zip
