@@ -23,7 +23,7 @@ RequestExecutionLevel admin
 
 ; MUI Settings
 !define MUI_ABORTWARNING
-!define MUI_ICON "C:\Users\Snoozeds\Documents\GitHub\PD3AudioModder\src\assets\icons\audio.ico"  ; Application icon
+!define MUI_ICON "src\assets\icons\audio.ico"  ; Application icon
 !define MUI_WELCOMEFINISHPAGE_BITMAP "welcome.bmp" ; Welcome bitmap
 
 !define LicenseFile "licenses.txt"
@@ -43,8 +43,8 @@ Section "Main Application" SecMain
     SectionIn RO
     SetOutPath "$INSTDIR"
     
-    ; Copy published files
-    File /r "C:\Users\Snoozeds\Documents\GitHub\PD3AudioModder\src\bin\Release\net8.0\publish\win-x64\*"
+    ; Copy published files using relative path
+    File /r "output\*"
     
     ; Create uninstaller
     WriteUninstaller "$INSTDIR\Uninstall.exe"
@@ -94,38 +94,38 @@ Section "Dependencies" SecDependencies
     ${EndIf}
 
     ; Check and install VGMStream CLI
-	DetailPrint "Checking VGMStream CLI installation..."
+    DetailPrint "Checking VGMStream CLI installation..."
 
-	IfFileExists "$WINDIR\Sysnative\vgmstream-cli.exe" vgmFound skipSystem32Check
-	skipSystem32Check:
-		Goto vgmFoundDone
+    IfFileExists "$WINDIR\Sysnative\vgmstream-cli.exe" vgmFound skipSystem32Check
+    skipSystem32Check:
+        Goto vgmFoundDone
 
-	IfFileExists "$WINDIR\System32\vgmstream-cli.exe" vgmFound vgmNotFound
-	vgmFound:
-		DetailPrint "vgmstream-cli is already installed."
-		Goto vgmFoundDone
+    IfFileExists "$WINDIR\System32\vgmstream-cli.exe" vgmFound vgmNotFound
+    vgmFound:
+        DetailPrint "vgmstream-cli is already installed."
+        Goto vgmFoundDone
 
-	vgmNotFound:
-		MessageBox MB_YESNO "vgmstream-cli not found. Do you want to download and install it?" IDNO skipVGMStream
-		DetailPrint "Downloading vgmstream-cli..."
-		inetc::get "https://github.com/vgmstream/vgmstream/releases/latest/download/vgmstream-win64.zip" "$TEMP\vgmstream.zip" /END
-		Pop $R0
-		${If} $R0 == "OK"
-			nsisunz::Unzip "$TEMP\vgmstream.zip" "$TEMP\vgmstream"
-			${If} ${RunningX64}
-				StrCpy $0 "$WINDIR\System32"
-			${Else}
-				StrCpy $0 "$WINDIR\Sysnative"
-			${EndIf}
-			; Copy the executable to the destination folder
-			CopyFiles /SILENT "$TEMP\vgmstream\vgmstream-cli.exe" "$0"
-			; Copy all DLLs to the destination folder
-			CopyFiles /SILENT "$TEMP\vgmstream\*.dll" "$0"
-		${Else}
-			MessageBox MB_OK "Failed to download VGMStream CLI: $R0"
-		${EndIf}
-	vgmFoundDone:
-	skipVGMStream:
+    vgmNotFound:
+        MessageBox MB_YESNO "vgmstream-cli not found. Do you want to download and install it?" IDNO skipVGMStream
+        DetailPrint "Downloading vgmstream-cli..."
+        inetc::get "https://github.com/vgmstream/vgmstream/releases/latest/download/vgmstream-win64.zip" "$TEMP\vgmstream.zip" /END
+        Pop $R0
+        ${If} $R0 == "OK"
+            nsisunz::Unzip "$TEMP\vgmstream.zip" "$TEMP\vgmstream"
+            ${If} ${RunningX64}
+                StrCpy $0 "$WINDIR\System32"
+            ${Else}
+                StrCpy $0 "$WINDIR\Sysnative"
+            ${EndIf}
+            ; Copy the executable to the destination folder
+            CopyFiles /SILENT "$TEMP\vgmstream\vgmstream-cli.exe" "$0"
+            ; Copy all DLLs to the destination folder
+            CopyFiles /SILENT "$TEMP\vgmstream\*.dll" "$0"
+        ${Else}
+            MessageBox MB_OK "Failed to download VGMStream CLI: $R0"
+        ${EndIf}
+    vgmFoundDone:
+    skipVGMStream:
 
     ; Check and install Repak
     DetailPrint "Checking Repak installation..."
