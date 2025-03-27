@@ -41,7 +41,8 @@ jobs:
 
       - name: Install NSIS via Scoop
         run: |
-          scoop install nsis
+          scoop bucket add extras
+          scoop install extras/nsis
 
       - name: Download NSIS Plugins
         run: |
