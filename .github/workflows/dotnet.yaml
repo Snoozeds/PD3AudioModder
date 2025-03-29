@@ -9,26 +9,7 @@ permissions:
   contents: write
 
 jobs:
-  update-version:
-    name: Update Version File
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Update version.txt
-        run: |
-          echo "${{ github.event.release.tag_name }}" > version.txt
-          git config user.name "GitHub Actions"
-          git config user.email "actions@github.com"
-          git add version.txt
-          git commit -m "Update version.txt for release ${{ github.event.release.tag_name }}"
-          git push origin HEAD:main
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
   build:
-    needs: update-version
     runs-on: windows-latest
     steps:
       - name: Checkout repository
@@ -43,44 +24,6 @@ jobs:
         run: |
           scoop bucket add extras
           scoop install extras/nsis
-
-      - name: Download NSIS Plugins
-        run: |
-          Invoke-WebRequest -Uri "https://nsis.sourceforge.io/mediawiki/images/7/7f/EnVar_plugin.zip" -OutFile "EnVar_plugin.zip"
-          Invoke-WebRequest -Uri "https://nsis.sourceforge.io/mediawiki/images/1/1c/Nsisunz.zip" -OutFile "Nsisunz.zip"
-          Invoke-WebRequest -Uri "https://nsis.sourceforge.io/mediawiki/images/c/c9/Inetc.zip" -OutFile "Inetc.zip"
-
-      - name: Install NSIS Plugins
-        run: |
-          # Create plugin directories if they don't exist
-          $pluginDirs = @(
-            "C:\Program Files (x86)\NSIS\Plugins\x86-unicode",
-            "C:\Program Files (x86)\NSIS\Plugins\x86-ansi",
-            "C:\Program Files (x86)\NSIS\Plugins\amd64-unicode"
-          )
-          $pluginDirs | ForEach-Object { 
-            if (!(Test-Path $_)) { 
-              New-Item -ItemType Directory -Path $_ 
-            } 
-          }
-
-          # Extract and copy EnVar plugin
-          Expand-Archive -Path "EnVar_plugin.zip" -DestinationPath ".\EnVar_temp" -Force
-          Copy-Item ".\EnVar_temp\Plugins\x86-unicode\EnVar.dll" -Destination "C:\Program Files (x86)\NSIS\Plugins\x86-unicode\"
-          Copy-Item ".\EnVar_temp\Plugins\x86-ansi\EnVar.dll" -Destination "C:\Program Files (x86)\NSIS\Plugins\x86-ansi\"
-          Copy-Item ".\EnVar_temp\Plugins\amd64-unicode\EnVar.dll" -Destination "C:\Program Files (x86)\NSIS\Plugins\amd64-unicode\"
-
-          # Extract and copy Nsisunz plugin
-          Expand-Archive -Path "Nsisunz.zip" -DestinationPath ".\Nsisunz_temp" -Force
-          Copy-Item ".\Nsisunz_temp\nsisunz\release\nsisunz.dll" -Destination "C:\Program Files (x86)\NSIS\Plugins\x86-unicode\"
-          Copy-Item ".\Nsisunz_temp\nsisunz\release\nsisunz.dll" -Destination "C:\Program Files (x86)\NSIS\Plugins\x86-ansi\"
-          Copy-Item ".\Nsisunz_temp\nsisunz\release\nsisunz.dll" -Destination "C:\Program Files (x86)\NSIS\Plugins\amd64-unicode\"
-
-          # Extract and copy Inetc plugin
-          Expand-Archive -Path "Inetc.zip" -DestinationPath ".\Inetc_temp" -Force
-          Copy-Item ".\Inetc_temp\Plugins\x86-unicode\inetc.dll" -Destination "C:\Program Files (x86)\NSIS\Plugins\x86-unicode\"
-          Copy-Item ".\Inetc_temp\Plugins\x86-ansi\inetc.dll" -Destination "C:\Program Files (x86)\NSIS\Plugins\x86-ansi\"
-          Copy-Item ".\Inetc_temp\Plugins\amd64-unicode\inetc.dll" -Destination "C:\Program Files (x86)\NSIS\Plugins\amd64-unicode\"
 
       - name: Set up .NET SDK
         uses: actions/setup-dotnet@v3
@@ -131,3 +74,14 @@ jobs:
           files: |
             ./output/PD3AudioModder.zip
             ./Installer-PD3AudioModder.zip
+
+      - name: Update version.txt
+        run: |
+          echo "${{ github.event.release.tag_name }}" > version.txt
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add version.txt
+          git commit -m "Update version.txt for release ${{ github.event.release.tag_name }}"
+          git push origin HEAD:main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
