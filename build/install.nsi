@@ -1,5 +1,5 @@
 ; NSIS Installer Script for PD3AudioModder
-; Requires NSIS 3.1.1+, EnVar, NSISdl, nsisunz, inetc
+; Requires NSIS 3.1.1+, NSISdl
 
 !include "MUI2.nsh"
 !include "LogicLib.nsh"
@@ -77,16 +77,13 @@ Section "Dependencies" SecDependencies
     ${If} $0 != 0
         MessageBox MB_YESNO "FFmpeg not found. Do you want to download and install it?" IDNO skipFFmpeg
         DetailPrint "Downloading FFmpeg..."
-        inetc::get "https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-win64-gpl.zip" "$TEMP\ffmpeg.zip" /END
+        NSISdl::download "https://github.com/BtbN/FFmpeg-Builds/releases/latest/ffmpeg-master-latest-win64-gpl.zip" "$TEMP\ffmpeg.zip"
         Pop $R0
-        ${If} $R0 == "OK"
-            nsisunz::Unzip "$TEMP\ffmpeg.zip" "$TEMP\ffmpeg"
+        ${If} $R0 == "success"
+            nsExec::Exec '"powershell -Command "Expand-Archive -Path \"$TEMP\ffmpeg.zip\" -DestinationPath \"$TEMP\ffmpeg\" -Force"'
             CopyFiles "$TEMP\ffmpeg\ffmpeg-master-latest-win64-gpl\bin\ffmpeg.exe" "$INSTDIR"
             CopyFiles "$TEMP\ffmpeg\ffmpeg-master-latest-win64-gpl\bin\ffprobe.exe" "$INSTDIR"
-            
-            ; Add to system PATH
-            EnVar::SetHKLM
-            EnVar::AddValue "PATH" "$INSTDIR"
+            WriteRegExpandStr HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment" "Path" "$INSTDIR;%PATH%"
         ${Else}
             MessageBox MB_OK "Failed to download FFmpeg: $R0"
         ${EndIf}
@@ -108,19 +105,12 @@ Section "Dependencies" SecDependencies
     vgmNotFound:
         MessageBox MB_YESNO "vgmstream-cli not found. Do you want to download and install it?" IDNO skipVGMStream
         DetailPrint "Downloading vgmstream-cli..."
-        inetc::get "https://github.com/vgmstream/vgmstream/releases/latest/download/vgmstream-win64.zip" "$TEMP\vgmstream.zip" /END
+        NSISdl::download "https://github.com/vgmstream/vgmstream/releases/latest/download/vgmstream-win64.zip" "$TEMP\vgmstream.zip"
         Pop $R0
-        ${If} $R0 == "OK"
-            nsisunz::Unzip "$TEMP\vgmstream.zip" "$TEMP\vgmstream"
-            ${If} ${RunningX64}
-                StrCpy $0 "$WINDIR\System32"
-            ${Else}
-                StrCpy $0 "$WINDIR\Sysnative"
-            ${EndIf}
-            ; Copy the executable to the destination folder
-            CopyFiles /SILENT "$TEMP\vgmstream\vgmstream-cli.exe" "$0"
-            ; Copy all DLLs to the destination folder
-            CopyFiles /SILENT "$TEMP\vgmstream\*.dll" "$0"
+        ${If} $R0 == "success"
+            nsExec::Exec '"powershell -Command "Expand-Archive -Path \"$TEMP\vgmstream.zip\" -DestinationPath \"$TEMP\vgmstream\" -Force"'
+            CopyFiles /SILENT "$TEMP\vgmstream\vgmstream-cli.exe" "$INSTDIR"
+            CopyFiles /SILENT "$TEMP\vgmstream\*.dll" "$INSTDIR"
         ${Else}
             MessageBox MB_OK "Failed to download VGMStream CLI: $R0"
         ${EndIf}
@@ -135,12 +125,10 @@ Section "Dependencies" SecDependencies
     ${If} $0 != 0
         MessageBox MB_YESNO "Repak not found. Do you want to download and install it?" IDNO skipRepak
         DetailPrint "Downloading Repak..."
-        inetc::get "https://github.com/trumank/repak/releases/latest/download/repak.exe" "$INSTDIR\repak.exe" /END
+        NSISdl::download "https://github.com/trumank/repak/releases/latest/download/repak.exe" "$INSTDIR\repak.exe"
         Pop $R0
-        ${If} $R0 == "OK"
-            ; Add to system PATH
-            EnVar::SetHKLM
-            EnVar::AddValue "PATH" "$INSTDIR"
+        ${If} $R0 == "success"
+            WriteRegExpandStr HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment" "Path" "$INSTDIR;%PATH%"
         ${Else}
             MessageBox MB_OK "Failed to download Repak: $R0"
         ${EndIf}
@@ -158,11 +146,10 @@ Section "Uninstall"
     Delete "$SMPROGRAMS\${APPNAME}\Uninstall.lnk"
     RMDir "$SMPROGRAMS\${APPNAME}"
     
-    ; Remove from PATH (if added during installation)
-    EnVar::SetHKLM
-    EnVar::DeleteValue "PATH" "$INSTDIR"
-    
-    ; Remove registry entries
+    ReadRegStr $R0 HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment" "Path"
+    StrCpy $R0 "$R0;$INSTDIR"
+    WriteRegExpandStr HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment" "Path" "$R0"
+
     DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPNAME}"
 SectionEnd
 
