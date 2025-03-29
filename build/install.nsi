@@ -44,7 +44,7 @@ Section "Main Application" SecMain
     SetOutPath "$INSTDIR"
     
     ; Copy published files using relative path
-    File /r "output\*"
+    File /r "$EXEDIR\..\output\*"
     
     ; Create uninstaller
     WriteUninstaller "$INSTDIR\Uninstall.exe"
