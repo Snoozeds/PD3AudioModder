@@ -38,12 +38,8 @@ jobs:
         run: |
           Compress-Archive -Path ./*.exe, ./*.dll, ./version.txt -DestinationPath PD3AudioModder.zip -Force
 
-
-      - name: Debug Directory Structure
-        working-directory: .
-        run: Get-ChildItem -Path . -Recurse -Force
-
       - name: Create NSIS Installer
+        working-directory: build
         run: |
           Write-Host "Current Directory: $($PWD.Path)"
           Write-Host "Directory Listing:"; Get-ChildItem
