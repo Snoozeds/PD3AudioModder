@@ -23,7 +23,7 @@ RequestExecutionLevel admin
 
 ; MUI Settings
 !define MUI_ABORTWARNING
-!define MUI_ICON "src\assets\icons\audio.ico"  ; Application icon
+!define MUI_ICON "audio.ico"  ; Application icon
 !define MUI_WELCOMEFINISHPAGE_BITMAP "welcome.bmp" ; Welcome bitmap
 
 !define LicenseFile "licenses.txt"

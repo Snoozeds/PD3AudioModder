@@ -45,7 +45,17 @@ jobs:
 
       - name: Create NSIS Installer
         run: |
-          & "C:\Program Files (x86)\NSIS\makensis.exe" install.nsi
+          Write-Host "Current Directory: $($PWD.Path)"
+          Write-Host "Directory Listing:"; Get-ChildItem
+          $nsiPath = "$($PWD.Path)\install.nsi"
+          Write-Host "NSIS script path: $nsiPath"
+          & "C:\Program Files (x86)\NSIS\makensis.exe" $nsiPath | Tee-Object -FilePath nsis_log.txt
+          Get-Content nsis_log.txt | Select-String -Pattern "Error" -Context 0,1 | ForEach-Object {
+              Write-Host "NSIS Error: $($_.Line)"
+              if ($_.Context.DisplayPostContext.Count -gt 0) {
+                  Write-Host "Context: $($_.Context.DisplayPostContext)"
+              }
+          }
 
       - name: Create Installer ZIP
         working-directory: build
