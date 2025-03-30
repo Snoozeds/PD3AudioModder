@@ -46,6 +46,11 @@ jobs:
         run: |
           Compress-Archive -Path ./*.exe, ./*.dll, ./version.txt -DestinationPath PD3AudioModder.zip -Force
 
+
+      - name: Debug Directory Structure
+        working-directory: .
+        run: dir /s /b
+
       - name: Create NSIS Installer
         run: |
           & "C:\Program Files (x86)\NSIS\makensis.exe" install.nsi
