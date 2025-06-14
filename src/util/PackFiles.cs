@@ -152,7 +152,8 @@ public class PackFiles
         bool compression,
         string packFolderPath,
         string folderPath,
-        string modName
+        string modName,
+        bool autoSort
     )
     {
         try
@@ -160,11 +161,20 @@ public class PackFiles
             UpdateStatus("Starting to pack files...");
 
             // Create the mod folder if it doesn't exist
-            UpdateStatus("Creating mod folder structure...");
             string modFolderPath = Path.Combine(folderPath, modName);
             Directory.CreateDirectory(modFolderPath);
 
+            if (!autoSort)
+            {
+                // Just copy all files from packFolderPath to modFolderPath as-is
+                UpdateStatus("Packing without sorting...");
+                CopyAllFiles(packFolderPath, modFolderPath);
+                UpdateStatus("Files packed without sorting.");
+                return true;
+            }
+
             // Create both Media and Localized paths
+            UpdateStatus("Creating mod folder structure...");
             string localizedFullPath = Path.Combine(modFolderPath, LocalizedPath);
             string mediaFullPath = Path.Combine(modFolderPath, MediaPath);
             Directory.CreateDirectory(localizedFullPath);
@@ -275,6 +285,17 @@ public class PackFiles
         catch (Exception ex)
         {
             throw new Exception($"Error processing files: {ex.Message}");
+        }
+    }
+
+    private static void CopyAllFiles(string sourceDir, string targetDir)
+    {
+        foreach (var filePath in Directory.GetFiles(sourceDir, "*", SearchOption.AllDirectories))
+        {
+            string relativePath = Path.GetRelativePath(sourceDir, filePath);
+            string targetFilePath = Path.Combine(targetDir, relativePath);
+            Directory.CreateDirectory(Path.GetDirectoryName(targetFilePath)!);
+            File.Copy(filePath, targetFilePath, true);
         }
     }
 

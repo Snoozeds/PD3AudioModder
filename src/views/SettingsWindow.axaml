@@ -1,364 +1,749 @@
-<Window xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:local="using:PD3AudioModder"
-        x:Class="PD3AudioModder.SettingsWindow"
-        x:DataType="local:SettingsWindow"
-        Title="Settings"
-        Height="600" Width="800"
-        Background="{DynamicResource BackgroundColor}"
-        Icon="avares://PD3AudioModder/assets/icons/audio.ico"
-        WindowStartupLocation="CenterOwner">
+<Window
+    x:Class="PD3AudioModder.SettingsWindow"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:PD3AudioModder"
+    Title="Settings"
+    Width="800"
+    Height="600"
+    x:DataType="local:SettingsWindow"
+    Background="{DynamicResource BackgroundColor}"
+    Icon="avares://PD3AudioModder/assets/icons/audio.ico"
+    WindowStartupLocation="CenterOwner">
 
-	<Grid Margin="20">
-		<Grid.RowDefinitions>
-			<RowDefinition Height="*"/>
-			<RowDefinition Height="Auto"/>
-		</Grid.RowDefinitions>
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
 
-		<TabControl Grid.Row="0">
-			<!-- General Tab -->
-			<TabItem>
-				<TabItem.Header>
-					<StackPanel Orientation="Horizontal" Spacing="5">
-						<Image Source="{SvgImage avares://PD3AudioModder/assets/icons/tabler-icons/settings.svg}"
-							   Width="28" Height="28"/>
-						<TextBlock Text="General"/>
-					</StackPanel>
-				</TabItem.Header>
-				<ScrollViewer Margin="-20,10,0,0">
-					<StackPanel Margin="20,0">
-						<!-- Sound -->
-						<Border Background="{DynamicResource BorderBackgroundColor}" CornerRadius="12" Padding="20" Margin="0,10,0,20">
-							<StackPanel>
-								<TextBlock Text="Sound" Foreground="{DynamicResource TextColor}" FontSize="20" FontWeight="Bold" Margin="0,0,0,15"/>
+        <TabControl Grid.Row="0">
+            <!--  General Tab  -->
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal" Spacing="5">
+                        <Image
+                            Width="28"
+                            Height="28"
+                            Source="{SvgImage avares://PD3AudioModder/assets/icons/tabler-icons/settings.svg}" />
+                        <TextBlock Text="General" />
+                    </StackPanel>
+                </TabItem.Header>
+                <ScrollViewer Margin="-20,10,0,0">
+                    <StackPanel Margin="20,0">
+                        <!--  Sound  -->
+                        <Border
+                            Margin="0,10,0,20"
+                            Padding="20"
+                            Background="{DynamicResource BorderBackgroundColor}"
+                            CornerRadius="12">
+                            <StackPanel>
+                                <TextBlock
+                                    Margin="0,0,0,15"
+                                    FontSize="20"
+                                    FontWeight="Bold"
+                                    Foreground="{DynamicResource TextColor}"
+                                    Text="Sound" />
 
-								<Grid ColumnDefinitions="*, Auto" Margin="0,0,0,10">
-									<StackPanel Grid.Column="0">
-										<TextBlock Text="Mute Notification Sound" Foreground="{DynamicResource TextColor}" FontSize="16"/>
-										<TextBlock Text="Mutes sound that warning windows play." Foreground="{DynamicResource SettingsTextColor}" FontSize="14"/>
-									</StackPanel>
-									<ToggleSwitch Grid.Column="1" Name="MuteNotificationSoundToggle" Foreground="{DynamicResource TextColor}"/>
-								</Grid>
+                                <Grid Margin="0,0,0,10" ColumnDefinitions="*, Auto">
+                                    <StackPanel Grid.Column="0">
+                                        <TextBlock
+                                            FontSize="16"
+                                            Foreground="{DynamicResource TextColor}"
+                                            Text="Mute Notification Sound" />
+                                        <TextBlock
+                                            FontSize="14"
+                                            Foreground="{DynamicResource SettingsTextColor}"
+                                            Text="Mutes sound that warning windows play." />
+                                    </StackPanel>
+                                    <ToggleSwitch
+                                        Name="MuteNotificationSoundToggle"
+                                        Grid.Column="1"
+                                        Foreground="{DynamicResource TextColor}" />
+                                </Grid>
 
-								<!-- Volume Slider -->
-								<TextBlock Text="Volume" Foreground="{DynamicResource TextColor}" FontSize="16" Margin="0,10,0,0"/>
-								<TextBlock Text="Changes volume of sounds in ID Search tab." Foreground="{DynamicResource SettingsTextColor}" FontSize="14"/>
-								<Grid ColumnDefinitions="*, Auto" Margin="0,0,0,10">
-									<Slider Name="VolumeSlider" Minimum="0" Maximum="100" Value="50"
-											Foreground="{DynamicResource TextColor}" Width="200"
-											HorizontalAlignment="Left"
-											TickFrequency="10"
-											TickPlacement="BottomRight"
-											ValueChanged="OnVolumeChanged"/>
-									<TextBlock Name="VolumeValueText" Text="50%" Foreground="{DynamicResource TextColor}" FontSize="18"
-											   Grid.Column="1" Margin="10,0,0,0" VerticalAlignment="Center"/>
-								</Grid>
-							</StackPanel>
-						</Border>
+                                <!--  Volume Slider  -->
+                                <TextBlock
+                                    Margin="0,10,0,0"
+                                    FontSize="16"
+                                    Foreground="{DynamicResource TextColor}"
+                                    Text="Volume" />
+                                <TextBlock
+                                    FontSize="14"
+                                    Foreground="{DynamicResource SettingsTextColor}"
+                                    Text="Changes volume of sounds in ID Search tab." />
+                                <Grid Margin="0,0,0,10" ColumnDefinitions="*, Auto">
+                                    <Slider
+                                        Name="VolumeSlider"
+                                        Width="200"
+                                        HorizontalAlignment="Left"
+                                        Foreground="{DynamicResource TextColor}"
+                                        Maximum="100"
+                                        Minimum="0"
+                                        TickFrequency="10"
+                                        TickPlacement="BottomRight"
+                                        ValueChanged="OnVolumeChanged"
+                                        Value="50" />
+                                    <TextBlock
+                                        Name="VolumeValueText"
+                                        Grid.Column="1"
+                                        Margin="10,0,0,0"
+                                        VerticalAlignment="Center"
+                                        FontSize="18"
+                                        Foreground="{DynamicResource TextColor}"
+                                        Text="50%" />
+                                </Grid>
+                            </StackPanel>
+                        </Border>
 
-						<!-- File Management -->
-						<Border Background="{DynamicResource BorderBackgroundColor}" CornerRadius="12" Padding="20" Margin="0,0,0,20">
-							<StackPanel>
-								<TextBlock Text="File Management" Foreground="{DynamicResource TextColor}" FontSize="20" FontWeight="Bold" Margin="0,0,0,15"/>
+                        <!--  File Management  -->
+                        <Border
+                            Margin="0,0,0,20"
+                            Padding="20"
+                            Background="{DynamicResource BorderBackgroundColor}"
+                            CornerRadius="12">
+                            <StackPanel>
+                                <TextBlock
+                                    Margin="0,0,0,15"
+                                    FontSize="20"
+                                    FontWeight="Bold"
+                                    Foreground="{DynamicResource TextColor}"
+                                    Text="File Management" />
 
-								<StackPanel Margin="0,0,0,20">
-									<TextBlock Text="Default Export Folder" Foreground="{DynamicResource TextColor}" FontSize="16"/>
-									<TextBlock Text="The folder that files are saved in when 'Use default export folder' is enabled."
-											  Foreground="{DynamicResource SettingsTextColor}" FontSize="14" Margin="0,0,0,10"/>
-									<Grid ColumnDefinitions="*, Auto, Auto">
-										<TextBox Grid.Column="0" Name="ExportFolderTextBox" Background="{DynamicResource BackgroundColor}" Foreground="{DynamicResource TextColor}" Margin="0,0,10,0"/>
-										<Button Grid.Column="1" Content="Browse" Name="ExportFolderBrowseButton"
-												Width="80" Height="30" Background="{DynamicResource ButtonColor}" Foreground="{DynamicResource ButtonTextColor}"
-												FontSize="16" Padding="5" CornerRadius="10" Margin="0,0,5,0"
-												VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
-												Click="HandleBrowseButtonClick"/>
-										<Button Grid.Column="2" Content="Clear" Name="ExportFolderClearButton"
-												Width="80" Height="30" Background="{DynamicResource ButtonColor}" Foreground="{DynamicResource ButtonTextColor}"
-												FontSize="16" Padding="5" CornerRadius="10"
-												VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
-												Click="HandleClearButtonClick"/>
-									</Grid>
-								</StackPanel>
+                                <StackPanel Margin="0,0,0,20">
+                                    <TextBlock
+                                        FontSize="16"
+                                        Foreground="{DynamicResource TextColor}"
+                                        Text="Default Export Folder" />
+                                    <TextBlock
+                                        Margin="0,0,0,10"
+                                        FontSize="14"
+                                        Foreground="{DynamicResource SettingsTextColor}"
+                                        Text="The folder that files are saved in when 'Use default export folder' is enabled." />
+                                    <Grid ColumnDefinitions="*, Auto, Auto">
+                                        <TextBox
+                                            Name="ExportFolderTextBox"
+                                            Grid.Column="0"
+                                            Margin="0,0,10,0"
+                                            Background="{DynamicResource BackgroundColor}"
+                                            Foreground="{DynamicResource TextColor}" />
+                                        <Button
+                                            Name="ExportFolderBrowseButton"
+                                            Grid.Column="1"
+                                            Width="80"
+                                            Height="30"
+                                            Margin="0,0,5,0"
+                                            Padding="5"
+                                            HorizontalContentAlignment="Center"
+                                            VerticalContentAlignment="Center"
+                                            Background="{DynamicResource ButtonColor}"
+                                            Click="HandleBrowseButtonClick"
+                                            Content="Browse"
+                                            CornerRadius="10"
+                                            FontSize="16"
+                                            Foreground="{DynamicResource ButtonTextColor}" />
+                                        <Button
+                                            Name="ExportFolderClearButton"
+                                            Grid.Column="2"
+                                            Width="80"
+                                            Height="30"
+                                            Padding="5"
+                                            HorizontalContentAlignment="Center"
+                                            VerticalContentAlignment="Center"
+                                            Background="{DynamicResource ButtonColor}"
+                                            Click="HandleClearButtonClick"
+                                            Content="Clear"
+                                            CornerRadius="10"
+                                            FontSize="16"
+                                            Foreground="{DynamicResource ButtonTextColor}" />
+                                    </Grid>
+                                </StackPanel>
 
-								<Grid ColumnDefinitions="*, Auto" Margin="0,0,0,10">
-									<StackPanel Grid.Column="0" Margin="0,0,0,20">
-										<TextBlock Text="Use Export Folder By Default" Foreground="{DynamicResource TextColor}" FontSize="16"/>
-										<TextBlock Text="Enables the 'Use default export folder' checkboxes on launch."
-                                                 Foreground="{DynamicResource SettingsTextColor}" FontSize="14"/>
-									</StackPanel>
-									<ToggleSwitch Grid.Column="1" Name="UseExportFolderToggle" Foreground="{DynamicResource TextColor}"
-												  IsCheckedChanged="HandleToggleChanged"/>
-								</Grid>
+                                <Grid Margin="0,0,0,10" ColumnDefinitions="*, Auto">
+                                    <StackPanel Grid.Column="0" Margin="0,0,0,20">
+                                        <TextBlock
+                                            FontSize="16"
+                                            Foreground="{DynamicResource TextColor}"
+                                            Text="Use Export Folder By Default" />
+                                        <TextBlock
+                                            FontSize="14"
+                                            Foreground="{DynamicResource SettingsTextColor}"
+                                            Text="Enables the 'Use default export folder' checkboxes on launch." />
+                                    </StackPanel>
+                                    <ToggleSwitch
+                                        Name="UseExportFolderToggle"
+                                        Grid.Column="1"
+                                        Foreground="{DynamicResource TextColor}"
+                                        IsCheckedChanged="HandleToggleChanged" />
+                                </Grid>
 
-								<Grid ColumnDefinitions="*, Auto" Margin="0,0,0,10">
-									<StackPanel Grid.Column="0" Margin="0,0,0,20">
-										<TextBlock Text="Display files exist warning" Foreground="{DynamicResource TextColor}" FontSize="16"/>
-										<TextBlock Text="Displays a warning window when files already exist inside the export folder."
-                                                 Foreground="{DynamicResource SettingsTextColor}" FontSize="14"/>
-									</StackPanel>
-									<ToggleSwitch Grid.Column="1" Name="DisplayFileExistToggle" Foreground="{DynamicResource TextColor}"
-												  IsCheckedChanged="HandleToggleChanged"/>
-								</Grid>
+                                <Grid Margin="0,0,0,10" ColumnDefinitions="*, Auto">
+                                    <StackPanel Grid.Column="0" Margin="0,0,0,20">
+                                        <TextBlock
+                                            FontSize="16"
+                                            Foreground="{DynamicResource TextColor}"
+                                            Text="Display files exist warning" />
+                                        <TextBlock
+                                            FontSize="14"
+                                            Foreground="{DynamicResource SettingsTextColor}"
+                                            Text="Displays a warning window when files already exist inside the export folder." />
+                                    </StackPanel>
+                                    <ToggleSwitch
+                                        Name="DisplayFileExistToggle"
+                                        Grid.Column="1"
+                                        Foreground="{DynamicResource TextColor}"
+                                        IsCheckedChanged="HandleToggleChanged" />
+                                </Grid>
 
-								<StackPanel Margin="0,0,0,20">
-									<TextBlock Text="Repak Path" Foreground="{DynamicResource TextColor}" FontSize="16"/>
-									<TextBlock Text="repak.exe path that is used in the Pack Files section."
-											  Foreground="{DynamicResource SettingsTextColor}" FontSize="14" Margin="0,0,0,10"/>
-									<Grid ColumnDefinitions="*, Auto, Auto">
-										<TextBox Grid.Column="0" Name="RepakPathTextBox" Background="{DynamicResource BackgroundColor}" Foreground="{DynamicResource TextColor}" Margin="0,0,10,0"/>
-										<Button Grid.Column="1" Content="Browse" Name="RepakPathBrowseButton"
-												Width="80" Height="30" Background="{DynamicResource ButtonColor}" Foreground="{DynamicResource ButtonTextColor}"
-												FontSize="16" Padding="5" CornerRadius="10" Margin="0,0,5,0"
-												VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
-												Click="HandleBrowseButtonClick"/>
-										<Button Grid.Column="2" Content="Clear" Name="RepakPathClearButton"
-												Width="80" Height="30" Background="{DynamicResource ButtonColor}" Foreground="{DynamicResource ButtonTextColor}"
-												FontSize="16" Padding="5" CornerRadius="10"
-												VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
-												Click="HandleClearButtonClick"/>
-									</Grid>
-								</StackPanel>
-							</StackPanel>
-						</Border>
+                                <StackPanel Margin="0,0,0,20">
+                                    <TextBlock
+                                        FontSize="16"
+                                        Foreground="{DynamicResource TextColor}"
+                                        Text="Repak Path" />
+                                    <TextBlock
+                                        Margin="0,0,0,10"
+                                        FontSize="14"
+                                        Foreground="{DynamicResource SettingsTextColor}"
+                                        Text="repak.exe path that is used in the Pack Files section." />
+                                    <Grid ColumnDefinitions="*, Auto, Auto">
+                                        <TextBox
+                                            Name="RepakPathTextBox"
+                                            Grid.Column="0"
+                                            Margin="0,0,10,0"
+                                            Background="{DynamicResource BackgroundColor}"
+                                            Foreground="{DynamicResource TextColor}" />
+                                        <Button
+                                            Name="RepakPathBrowseButton"
+                                            Grid.Column="1"
+                                            Width="80"
+                                            Height="30"
+                                            Margin="0,0,5,0"
+                                            Padding="5"
+                                            HorizontalContentAlignment="Center"
+                                            VerticalContentAlignment="Center"
+                                            Background="{DynamicResource ButtonColor}"
+                                            Click="HandleBrowseButtonClick"
+                                            Content="Browse"
+                                            CornerRadius="10"
+                                            FontSize="16"
+                                            Foreground="{DynamicResource ButtonTextColor}" />
+                                        <Button
+                                            Name="RepakPathClearButton"
+                                            Grid.Column="2"
+                                            Width="80"
+                                            Height="30"
+                                            Padding="5"
+                                            HorizontalContentAlignment="Center"
+                                            VerticalContentAlignment="Center"
+                                            Background="{DynamicResource ButtonColor}"
+                                            Click="HandleClearButtonClick"
+                                            Content="Clear"
+                                            CornerRadius="10"
+                                            FontSize="16"
+                                            Foreground="{DynamicResource ButtonTextColor}" />
+                                    </Grid>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
 
-						<!-- Discord RPC -->
-						<Border Background="{DynamicResource BorderBackgroundColor}" CornerRadius="12" Padding="20" Margin="0,0,0,20">
-							<StackPanel Spacing="10">
-								<TextBlock Text="Discord RPC" Foreground="{DynamicResource TextColor}" FontSize="20" FontWeight="Bold" Margin="0,0,0,-10"/>
-								<TextBlock Text="These settings require a restart to take effect." Foreground="{DynamicResource WarningTextColor}" FontSize="16" Margin="0,0,0,5"/>
+                        <!--  Discord RPC  -->
+                        <Border
+                            Margin="0,0,0,20"
+                            Padding="20"
+                            Background="{DynamicResource BorderBackgroundColor}"
+                            CornerRadius="12">
+                            <StackPanel Spacing="10">
+                                <TextBlock
+                                    Margin="0,0,0,-10"
+                                    FontSize="20"
+                                    FontWeight="Bold"
+                                    Foreground="{DynamicResource TextColor}"
+                                    Text="Discord RPC" />
+                                <TextBlock
+                                    Margin="0,0,0,5"
+                                    FontSize="16"
+                                    Foreground="{DynamicResource WarningTextColor}"
+                                    Text="These settings require a restart to take effect." />
 
-								<Grid ColumnDefinitions="*, Auto" Margin="0,0,0,10">
-									<StackPanel Grid.Column="0">
-										<TextBlock Text="Enable Discord RPC" Foreground="{DynamicResource TextColor}" FontSize="16"/>
-										<TextBlock Text="Shows PD3AudioModder as your current activity in Discord." Foreground="{DynamicResource SettingsTextColor}" FontSize="14"/>
-									</StackPanel>
-									<ToggleSwitch Grid.Column="1" Name="EnableDiscordRPCToggle" Foreground="{DynamicResource TextColor}"/>
-								</Grid>
+                                <Grid Margin="0,0,0,10" ColumnDefinitions="*, Auto">
+                                    <StackPanel Grid.Column="0">
+                                        <TextBlock
+                                            FontSize="16"
+                                            Foreground="{DynamicResource TextColor}"
+                                            Text="Enable Discord RPC" />
+                                        <TextBlock
+                                            FontSize="14"
+                                            Foreground="{DynamicResource SettingsTextColor}"
+                                            Text="Shows PD3AudioModder as your current activity in Discord." />
+                                    </StackPanel>
+                                    <ToggleSwitch
+                                        Name="EnableDiscordRPCToggle"
+                                        Grid.Column="1"
+                                        Foreground="{DynamicResource TextColor}" />
+                                </Grid>
 
-								<Grid ColumnDefinitions="*, Auto" Margin="0,0,0,10">
-									<StackPanel Grid.Column="0">
-										<TextBlock Text="Display Current Tab" Foreground="{DynamicResource TextColor}" FontSize="16"/>
-										<TextBlock Text="Shows which tab you are currently using in the status." Foreground="{DynamicResource SettingsTextColor}" FontSize="14"/>
-									</StackPanel>
-									<ToggleSwitch Grid.Column="1" Name="DisplayCurrentTabToggle" Foreground="{DynamicResource TextColor}"/>
-								</Grid>
+                                <Grid Margin="0,0,0,10" ColumnDefinitions="*, Auto">
+                                    <StackPanel Grid.Column="0">
+                                        <TextBlock
+                                            FontSize="16"
+                                            Foreground="{DynamicResource TextColor}"
+                                            Text="Display Current Tab" />
+                                        <TextBlock
+                                            FontSize="14"
+                                            Foreground="{DynamicResource SettingsTextColor}"
+                                            Text="Shows which tab you are currently using in the status." />
+                                    </StackPanel>
+                                    <ToggleSwitch
+                                        Name="DisplayCurrentTabToggle"
+                                        Grid.Column="1"
+                                        Foreground="{DynamicResource TextColor}" />
+                                </Grid>
 
-								<Grid ColumnDefinitions="*, Auto" Margin="0,0,0,10">
-									<StackPanel Grid.Column="0">
-										<TextBlock Text="Show Mod Name When Packing" Foreground="{DynamicResource TextColor}" FontSize="16"/>
-										<TextBlock Text="Displays the mod name while packing files in the status." Foreground="{DynamicResource SettingsTextColor}" FontSize="14"/>
-									</StackPanel>
-									<ToggleSwitch Grid.Column="1" Name="ShowModNameToggle" Foreground="{DynamicResource TextColor}"/>
-								</Grid>
-							</StackPanel>
-						</Border>
-					</StackPanel>
-				</ScrollViewer>
-			</TabItem>
+                                <Grid Margin="0,0,0,10" ColumnDefinitions="*, Auto">
+                                    <StackPanel Grid.Column="0">
+                                        <TextBlock
+                                            FontSize="16"
+                                            Foreground="{DynamicResource TextColor}"
+                                            Text="Show Mod Name When Packing" />
+                                        <TextBlock
+                                            FontSize="14"
+                                            Foreground="{DynamicResource SettingsTextColor}"
+                                            Text="Displays the mod name while packing files in the status." />
+                                    </StackPanel>
+                                    <ToggleSwitch
+                                        Name="ShowModNameToggle"
+                                        Grid.Column="1"
+                                        Foreground="{DynamicResource TextColor}" />
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
 
-			<!-- Advanced Settings Tab -->
-			<TabItem>
-				<TabItem.Header>
-					<StackPanel Orientation="Horizontal" Spacing="5">
-						<Image Source="{SvgImage avares://PD3AudioModder/assets/icons/tabler-icons/settings-plus.svg}"
-							   Width="28" Height="28"/>
-						<TextBlock Text="Advanced"/>
-					</StackPanel>
-				</TabItem.Header>
-				<ScrollViewer Margin="-20,10,0,0">
-					<StackPanel Margin="20,0">
-						<Border Background="{DynamicResource BorderBackgroundColor}" CornerRadius="12" Padding="20" Margin="0,0,0,20">
-							<StackPanel>
-								<TextBlock Text="Advanced Settings" Foreground="{DynamicResource TextColor}" FontSize="20" FontWeight="Bold"/>
-								<TextBlock Text="Only change if you know what you are doing!" Foreground="{DynamicResource WarningTextColor}" FontSize="16" Margin="0,0,0,15"/>
+            <!--  Advanced Settings Tab  -->
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal" Spacing="5">
+                        <Image
+                            Width="28"
+                            Height="28"
+                            Source="{SvgImage avares://PD3AudioModder/assets/icons/tabler-icons/settings-plus.svg}" />
+                        <TextBlock Text="Advanced" />
+                    </StackPanel>
+                </TabItem.Header>
+                <ScrollViewer Margin="-20,10,0,0">
+                    <StackPanel Margin="20,0">
+                        <Border
+                            Margin="0,0,0,20"
+                            Padding="20"
+                            Background="{DynamicResource BorderBackgroundColor}"
+                            CornerRadius="12">
+                            <StackPanel>
+                                <TextBlock
+                                    FontSize="20"
+                                    FontWeight="Bold"
+                                    Foreground="{DynamicResource TextColor}"
+                                    Text="Advanced Settings" />
+                                <TextBlock
+                                    Margin="0,0,0,15"
+                                    FontSize="16"
+                                    Foreground="{DynamicResource WarningTextColor}"
+                                    Text="Only change if you know what you are doing!" />
 
-								<StackPanel Margin="0,0,0,20">
-									<TextBlock Text="FFmpeg Options" Foreground="{DynamicResource TextColor}" FontSize="16"/>
-									<TextBlock Text="Options used when converting audio files to WAV format."
-                                             Foreground="{DynamicResource SettingsTextColor}" FontSize="14" Margin="0,0,0,10"/>
-									<TextBox Name="FFmpegOptionsTextBox" Background="{DynamicResource BackgroundColor}" Foreground="{DynamicResource TextColor}" Margin="0,0,0,10"
-											 TextChanged="HandleTextChanged"/>
-									<Button Content="Reset" Name="ResetFFmpegOptionsButton"
-                                            Width="80" Height="30" Background="{DynamicResource ButtonColor}" Foreground="{DynamicResource ButtonTextColor}"
-                                            FontSize="16" Padding="5" CornerRadius="10"
-                                            VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
-											Click="HandleClearButtonClick"/>
-								</StackPanel>
+                                <StackPanel Margin="0,0,0,20">
+                                    <TextBlock
+                                        FontSize="16"
+                                        Foreground="{DynamicResource TextColor}"
+                                        Text="FFmpeg Options" />
+                                    <TextBlock
+                                        Margin="0,0,0,10"
+                                        FontSize="14"
+                                        Foreground="{DynamicResource SettingsTextColor}"
+                                        Text="Options used when converting audio files to WAV format." />
+                                    <TextBox
+                                        Name="FFmpegOptionsTextBox"
+                                        Margin="0,0,0,10"
+                                        Background="{DynamicResource BackgroundColor}"
+                                        Foreground="{DynamicResource TextColor}"
+                                        TextChanged="HandleTextChanged" />
+                                    <Button
+                                        Name="ResetFFmpegOptionsButton"
+                                        Width="80"
+                                        Height="30"
+                                        Padding="5"
+                                        HorizontalContentAlignment="Center"
+                                        VerticalContentAlignment="Center"
+                                        Background="{DynamicResource ButtonColor}"
+                                        Click="HandleClearButtonClick"
+                                        Content="Reset"
+                                        CornerRadius="10"
+                                        FontSize="16"
+                                        Foreground="{DynamicResource ButtonTextColor}" />
+                                </StackPanel>
 
-								<StackPanel Margin="0,0,0,20">
-									<TextBlock Text="FFmpeg Path" Foreground="{DynamicResource TextColor}" FontSize="16"/>
-									<TextBlock Text="The app looks in common locations, but you may specify an ffmpeg.exe path here."
-											  Foreground="{DynamicResource SettingsTextColor}" FontSize="14" TextWrapping="Wrap" Margin="0,0,0,10"/>
-									<Grid ColumnDefinitions="*, Auto, Auto">
-										<TextBox Grid.Column="0" Name="FFmpegPathTextBox" Background="{DynamicResource BackgroundColor}" Foreground="{DynamicResource TextColor}" Margin="0,0,10,0"/>
-										<Button Grid.Column="1" Content="Browse" Name="FFmpegPathBrowseButton"
-												Width="80" Height="30" Background="{DynamicResource ButtonColor}" Foreground="{DynamicResource ButtonTextColor}"
-												FontSize="16" Padding="5" CornerRadius="10" Margin="0,0,5,0"
-												VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
-												Click="HandleBrowseButtonClick"/>
-										<Button Grid.Column="2" Content="Clear" Name="FFmpegPathClearButton"
-												Width="80" Height="30" Background="{DynamicResource ButtonColor}" Foreground="{DynamicResource ButtonTextColor}"
-												FontSize="16" Padding="5" CornerRadius="10"
-												VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
-												Click="HandleClearButtonClick"/>
-									</Grid>
-								</StackPanel>
+                                <StackPanel Margin="0,0,0,20">
+                                    <TextBlock
+                                        FontSize="16"
+                                        Foreground="{DynamicResource TextColor}"
+                                        Text="FFmpeg Path" />
+                                    <TextBlock
+                                        Margin="0,0,0,10"
+                                        FontSize="14"
+                                        Foreground="{DynamicResource SettingsTextColor}"
+                                        Text="The app looks in common locations, but you may specify an ffmpeg.exe path here."
+                                        TextWrapping="Wrap" />
+                                    <Grid ColumnDefinitions="*, Auto, Auto">
+                                        <TextBox
+                                            Name="FFmpegPathTextBox"
+                                            Grid.Column="0"
+                                            Margin="0,0,10,0"
+                                            Background="{DynamicResource BackgroundColor}"
+                                            Foreground="{DynamicResource TextColor}" />
+                                        <Button
+                                            Name="FFmpegPathBrowseButton"
+                                            Grid.Column="1"
+                                            Width="80"
+                                            Height="30"
+                                            Margin="0,0,5,0"
+                                            Padding="5"
+                                            HorizontalContentAlignment="Center"
+                                            VerticalContentAlignment="Center"
+                                            Background="{DynamicResource ButtonColor}"
+                                            Click="HandleBrowseButtonClick"
+                                            Content="Browse"
+                                            CornerRadius="10"
+                                            FontSize="16"
+                                            Foreground="{DynamicResource ButtonTextColor}" />
+                                        <Button
+                                            Name="FFmpegPathClearButton"
+                                            Grid.Column="2"
+                                            Width="80"
+                                            Height="30"
+                                            Padding="5"
+                                            HorizontalContentAlignment="Center"
+                                            VerticalContentAlignment="Center"
+                                            Background="{DynamicResource ButtonColor}"
+                                            Click="HandleClearButtonClick"
+                                            Content="Clear"
+                                            CornerRadius="10"
+                                            FontSize="16"
+                                            Foreground="{DynamicResource ButtonTextColor}" />
+                                    </Grid>
+                                </StackPanel>
 
-								<StackPanel Margin="0,0,0,20">
-									<TextBlock Text="Wwise ID Mappings - Media" Foreground="{DynamicResource TextColor}" FontSize="16"/>
-									<TextBlock Text="URL to a .json file that contains all IDs of the files that go in the game's Media folder (used in Pack Files.)"
-											  Foreground="{DynamicResource SettingsTextColor}" FontSize="14" TextWrapping="Wrap" Margin="0,0,0,10"/>
-									<TextBox Name="MediaMappingsTextBox" Background="{DynamicResource BackgroundColor}" Foreground="{DynamicResource TextColor}" Margin="0,0,0,10"
-											 TextChanged="HandleTextChanged"/>
-									<Button Content="Reset" Name="ResetMediaMappingsButton"
-                                            Width="80" Height="30" Background="{DynamicResource ButtonColor}" Foreground="{DynamicResource ButtonTextColor}"
-                                            FontSize="16" Padding="5" CornerRadius="10"
-                                            VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
-											Click="HandleClearButtonClick"/>
-								</StackPanel>
+                                <StackPanel Margin="0,0,0,20">
+                                    <TextBlock
+                                        FontSize="16"
+                                        Foreground="{DynamicResource TextColor}"
+                                        Text="Wwise ID Mappings - Media" />
+                                    <TextBlock
+                                        Margin="0,0,0,10"
+                                        FontSize="14"
+                                        Foreground="{DynamicResource SettingsTextColor}"
+                                        Text="URL to a .json file that contains all IDs of the files that go in the game's Media folder (used in Pack Files when auto sort is enabled.)"
+                                        TextWrapping="Wrap" />
+                                    <TextBox
+                                        Name="MediaMappingsTextBox"
+                                        Margin="0,0,0,10"
+                                        Background="{DynamicResource BackgroundColor}"
+                                        Foreground="{DynamicResource TextColor}"
+                                        TextChanged="HandleTextChanged" />
+                                    <Button
+                                        Name="ResetMediaMappingsButton"
+                                        Width="80"
+                                        Height="30"
+                                        Padding="5"
+                                        HorizontalContentAlignment="Center"
+                                        VerticalContentAlignment="Center"
+                                        Background="{DynamicResource ButtonColor}"
+                                        Click="HandleClearButtonClick"
+                                        Content="Reset"
+                                        CornerRadius="10"
+                                        FontSize="16"
+                                        Foreground="{DynamicResource ButtonTextColor}" />
+                                </StackPanel>
 
-								<StackPanel Margin="0,0,0,20">
-									<TextBlock Text="Wwise ID Mappings - Localized" Foreground="{DynamicResource TextColor}" FontSize="16"/>
-									<TextBlock Text="URL to a .json file that contains all IDs of the files that go in the game's Localized media folder (used in Pack Files.)"
-											  Foreground="{DynamicResource SettingsTextColor}" FontSize="14" TextWrapping="Wrap" Margin="0,0,0,10"/>
-									<TextBox Name="LocalizedMappingsTextBox" Background="{DynamicResource BackgroundColor}" Foreground="{DynamicResource TextColor}" Margin="0,0,0,10"
-											 TextChanged="HandleTextChanged"/>
-									<Button Content="Reset" Name="ResetLocalizedMappingsButton"
-                                            Width="80" Height="30" Background="{DynamicResource ButtonColor}" Foreground="{DynamicResource ButtonTextColor}"
-                                            FontSize="16" Padding="5" CornerRadius="10"
-                                            VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
-											Click="HandleClearButtonClick"/>
-								</StackPanel>
-							</StackPanel>
-						</Border>
-					</StackPanel>
-				</ScrollViewer>
-			</TabItem>
+                                <StackPanel Margin="0,0,0,20">
+                                    <TextBlock
+                                        FontSize="16"
+                                        Foreground="{DynamicResource TextColor}"
+                                        Text="Wwise ID Mappings - Localized" />
+                                    <TextBlock
+                                        Margin="0,0,0,10"
+                                        FontSize="14"
+                                        Foreground="{DynamicResource SettingsTextColor}"
+                                        Text="URL to a .json file that contains all IDs of the files that go in the game's Localized media folder (used in Pack Files when auto sort is enabled.)"
+                                        TextWrapping="Wrap" />
+                                    <TextBox
+                                        Name="LocalizedMappingsTextBox"
+                                        Margin="0,0,0,10"
+                                        Background="{DynamicResource BackgroundColor}"
+                                        Foreground="{DynamicResource TextColor}"
+                                        TextChanged="HandleTextChanged" />
+                                    <Button
+                                        Name="ResetLocalizedMappingsButton"
+                                        Width="80"
+                                        Height="30"
+                                        Padding="5"
+                                        HorizontalContentAlignment="Center"
+                                        VerticalContentAlignment="Center"
+                                        Background="{DynamicResource ButtonColor}"
+                                        Click="HandleClearButtonClick"
+                                        Content="Reset"
+                                        CornerRadius="10"
+                                        FontSize="16"
+                                        Foreground="{DynamicResource ButtonTextColor}" />
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
 
-			<!-- Theme tab -->
-			<TabItem>
-				<TabItem.Header>
-					<StackPanel Orientation="Horizontal" Spacing="5">
-						<Image Source="{SvgImage avares://PD3AudioModder/assets/icons/tabler-icons/brush.svg}"
-							   Width="28" Height="28"/>
-						<TextBlock Text="Theme"/>
-					</StackPanel>
-				</TabItem.Header>
-				<Grid VerticalAlignment="Center" HorizontalAlignment="Center">
-					<StackPanel Spacing="20" MaxWidth="400">
-						<Image Source="{SvgImage avares://PD3AudioModder/assets/icons/tabler-icons/brush.svg}"
-							   Width="80" Height="80" HorizontalAlignment="Center"/>
-						<TextBlock Text="Theming" Foreground="{DynamicResource TextColor}" FontSize="24"
-								 HorizontalAlignment="Center" FontWeight="Bold"/>
-						<Border Background="{DynamicResource BorderBackgroundColor}" CornerRadius="12" Padding="20">
-							<StackPanel Orientation="Vertical">
-								<Button Content="Open theme editor" Name="OpenThemeEditorButton"
-										Width="200" Height="40" Background="{DynamicResource ButtonColor}" Foreground="{DynamicResource ButtonTextColor}"
-										FontSize="16" Padding="10,5" Margin="0,0,0,10" CornerRadius="10"
-										HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
-										Click="ThemeEditorClick"/>
-								<Button Content="Open themes folder" Name="OpenThemeFolderButton"
-										Width="200" Height="40" Background="{DynamicResource ButtonColor}" Foreground="{DynamicResource ButtonTextColor}"
-										FontSize="16" Padding="10,5" CornerRadius="10"
-										HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
-										Click="ThemeFolderClick"/>
-							</StackPanel>
-						</Border>
-					</StackPanel>
-				</Grid>
-			</TabItem>
+            <!--  Theme tab  -->
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal" Spacing="5">
+                        <Image
+                            Width="28"
+                            Height="28"
+                            Source="{SvgImage avares://PD3AudioModder/assets/icons/tabler-icons/brush.svg}" />
+                        <TextBlock Text="Theme" />
+                    </StackPanel>
+                </TabItem.Header>
+                <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <StackPanel MaxWidth="400" Spacing="20">
+                        <Image
+                            Width="80"
+                            Height="80"
+                            HorizontalAlignment="Center"
+                            Source="{SvgImage avares://PD3AudioModder/assets/icons/tabler-icons/brush.svg}" />
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            FontSize="24"
+                            FontWeight="Bold"
+                            Foreground="{DynamicResource TextColor}"
+                            Text="Theming" />
+                        <Border
+                            Padding="20"
+                            Background="{DynamicResource BorderBackgroundColor}"
+                            CornerRadius="12">
+                            <StackPanel Orientation="Vertical">
+                                <Button
+                                    Name="OpenThemeEditorButton"
+                                    Width="200"
+                                    Height="40"
+                                    Margin="0,0,0,10"
+                                    Padding="10,5"
+                                    HorizontalContentAlignment="Center"
+                                    VerticalContentAlignment="Center"
+                                    Background="{DynamicResource ButtonColor}"
+                                    Click="ThemeEditorClick"
+                                    Content="Open theme editor"
+                                    CornerRadius="10"
+                                    FontSize="16"
+                                    Foreground="{DynamicResource ButtonTextColor}" />
+                                <Button
+                                    Name="OpenThemeFolderButton"
+                                    Width="200"
+                                    Height="40"
+                                    Padding="10,5"
+                                    HorizontalContentAlignment="Center"
+                                    VerticalContentAlignment="Center"
+                                    Background="{DynamicResource ButtonColor}"
+                                    Click="ThemeFolderClick"
+                                    Content="Open themes folder"
+                                    CornerRadius="10"
+                                    FontSize="16"
+                                    Foreground="{DynamicResource ButtonTextColor}" />
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
 
-			<!-- Updates tab -->
-			<TabItem>
-				<TabItem.Header>
-					<StackPanel Orientation="Horizontal" Spacing="5">
-						<Image Source="{SvgImage avares://PD3AudioModder/assets/icons/download.svg}"
-							   Width="32" Height="32"/>
-						<TextBlock Text="Updates"/>
-					</StackPanel>
-				</TabItem.Header>
-				<Grid VerticalAlignment="Center" HorizontalAlignment="Center">
-					<StackPanel Spacing="20" MaxWidth="400">
-						<Image Source="{SvgImage avares://PD3AudioModder/assets/icons/download.svg}"
-							   Width="80" Height="80" HorizontalAlignment="Center"/>
-						<TextBlock Text="Software Updates" Foreground="{DynamicResource TextColor}" FontSize="24"
-								 HorizontalAlignment="Center" FontWeight="Bold"/>
-						<Border Background="{DynamicResource BorderBackgroundColor}" CornerRadius="12" Padding="20">
-							<StackPanel Spacing="15">
-								<Grid ColumnDefinitions="*, Auto">
-									<StackPanel Grid.Column="0">
-										<TextBlock Text="Automatic Updates" Foreground="{DynamicResource TextColor}" FontSize="16"/>
-										<TextBlock Text="Check for updates when the application launches."
-												 Foreground="{DynamicResource SettingsTextColor}" FontSize="14" TextWrapping="Wrap"/>
-									</StackPanel>
-									<ToggleSwitch Grid.Column="1" Name="UpdateToggle" Foreground="{DynamicResource TextColor}" HorizontalAlignment="Right" Margin="0,0,30,0"/>
-								</Grid>
-								<Grid ColumnDefinitions="*, Auto">
-									<StackPanel Grid.Column="0" Margin="0,0,20,0">
-										<TextBlock Text="Ask To Update" Foreground="{DynamicResource TextColor}" FontSize="16"/>
-										<TextBlock Text="Asks if you want to update each time, or update automatically."
-												  Foreground="{DynamicResource SettingsTextColor}" FontSize="14" TextWrapping="Wrap"/>
-									</StackPanel>
-									<ToggleSwitch Grid.Column="1" Name="AskUpdateToggle" Foreground="{DynamicResource TextColor}" HorizontalAlignment="Right" Margin="0,0,-10,0" OnContent="Ask" OffContent="Don't ask"/>
-								</Grid>
-								<Button Content="Check for Updates" Name="CheckUpdatesButton"
-										Width="350" Height="40" Background="{DynamicResource ButtonColor}" Foreground="{DynamicResource ButtonTextColor}"
-										FontSize="16" Padding="10,5" CornerRadius="10"
-										HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
-										Click="OnUpdateClick"/>
-							</StackPanel>
-						</Border>
-					</StackPanel>
-				</Grid>
-			</TabItem>
+            <!--  Updates tab  -->
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal" Spacing="5">
+                        <Image
+                            Width="32"
+                            Height="32"
+                            Source="{SvgImage avares://PD3AudioModder/assets/icons/download.svg}" />
+                        <TextBlock Text="Updates" />
+                    </StackPanel>
+                </TabItem.Header>
+                <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <StackPanel MaxWidth="400" Spacing="20">
+                        <Image
+                            Width="80"
+                            Height="80"
+                            HorizontalAlignment="Center"
+                            Source="{SvgImage avares://PD3AudioModder/assets/icons/download.svg}" />
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            FontSize="24"
+                            FontWeight="Bold"
+                            Foreground="{DynamicResource TextColor}"
+                            Text="Software Updates" />
+                        <Border
+                            Padding="20"
+                            Background="{DynamicResource BorderBackgroundColor}"
+                            CornerRadius="12">
+                            <StackPanel Spacing="15">
+                                <Grid ColumnDefinitions="*, Auto">
+                                    <StackPanel Grid.Column="0">
+                                        <TextBlock
+                                            FontSize="16"
+                                            Foreground="{DynamicResource TextColor}"
+                                            Text="Automatic Updates" />
+                                        <TextBlock
+                                            FontSize="14"
+                                            Foreground="{DynamicResource SettingsTextColor}"
+                                            Text="Check for updates when the application launches."
+                                            TextWrapping="Wrap" />
+                                    </StackPanel>
+                                    <ToggleSwitch
+                                        Name="UpdateToggle"
+                                        Grid.Column="1"
+                                        Margin="0,0,30,0"
+                                        HorizontalAlignment="Right"
+                                        Foreground="{DynamicResource TextColor}" />
+                                </Grid>
+                                <Grid ColumnDefinitions="*, Auto">
+                                    <StackPanel Grid.Column="0" Margin="0,0,20,0">
+                                        <TextBlock
+                                            FontSize="16"
+                                            Foreground="{DynamicResource TextColor}"
+                                            Text="Ask To Update" />
+                                        <TextBlock
+                                            FontSize="14"
+                                            Foreground="{DynamicResource SettingsTextColor}"
+                                            Text="Asks if you want to update each time, or update automatically."
+                                            TextWrapping="Wrap" />
+                                    </StackPanel>
+                                    <ToggleSwitch
+                                        Name="AskUpdateToggle"
+                                        Grid.Column="1"
+                                        Margin="0,0,-10,0"
+                                        HorizontalAlignment="Right"
+                                        Foreground="{DynamicResource TextColor}"
+                                        OffContent="Don't ask"
+                                        OnContent="Ask" />
+                                </Grid>
+                                <Button
+                                    Name="CheckUpdatesButton"
+                                    Width="350"
+                                    Height="40"
+                                    Padding="10,5"
+                                    HorizontalContentAlignment="Center"
+                                    VerticalContentAlignment="Center"
+                                    Background="{DynamicResource ButtonColor}"
+                                    Click="OnUpdateClick"
+                                    Content="Check for Updates"
+                                    CornerRadius="10"
+                                    FontSize="16"
+                                    Foreground="{DynamicResource ButtonTextColor}" />
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
 
-			<!-- About tab -->
-			<TabItem>
-				<TabItem.Header>
-					<StackPanel Orientation="Horizontal" Spacing="5">
-						<Image Source="{SvgImage avares://PD3AudioModder/assets/icons/tabler-icons/help.svg}"
-							   Width="28" Height="28"/>
-						<TextBlock Text="About"/>
-					</StackPanel>
-				</TabItem.Header>
-				<Grid VerticalAlignment="Center" HorizontalAlignment="Center">
-					<StackPanel Spacing="20" MaxWidth="400">
-						<Image Source="{SvgImage avares://PD3AudioModder/assets/icons/audio.svg}"
-                               Width="80" Height="80" HorizontalAlignment="Center"/>
-						<TextBlock Text="PD3AudioModder" Foreground="{DynamicResource TextColor}" FontSize="28"
-                                 HorizontalAlignment="Center" FontWeight="Bold"/>
-						<TextBlock Text="{Binding Version}" Foreground="{DynamicResource TextColor}" FontSize="16"
-                                 HorizontalAlignment="Center"/>
-						<TextBlock Text="Created by Snoozeds" Foreground="{DynamicResource TextColor}" FontSize="16"
-                                 HorizontalAlignment="Center"/>
+            <!--  About tab  -->
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal" Spacing="5">
+                        <Image
+                            Width="28"
+                            Height="28"
+                            Source="{SvgImage avares://PD3AudioModder/assets/icons/tabler-icons/help.svg}" />
+                        <TextBlock Text="About" />
+                    </StackPanel>
+                </TabItem.Header>
+                <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <StackPanel MaxWidth="400" Spacing="20">
+                        <Image
+                            Width="80"
+                            Height="80"
+                            HorizontalAlignment="Center"
+                            Source="{SvgImage avares://PD3AudioModder/assets/icons/audio.svg}" />
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            FontSize="28"
+                            FontWeight="Bold"
+                            Foreground="{DynamicResource TextColor}"
+                            Text="PD3AudioModder" />
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            FontSize="16"
+                            Foreground="{DynamicResource TextColor}"
+                            Text="{Binding Version}" />
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            FontSize="16"
+                            Foreground="{DynamicResource TextColor}"
+                            Text="Created by Snoozeds" />
 
-						<StackPanel Spacing="10" Margin="0,20,0,0">
-							<Button Content="View Licenses" Name="ViewLicensesButton"
-                                    Width="250" Height="40" Background="{DynamicResource ButtonColor}" Foreground="{DynamicResource ButtonTextColor}"
-                                    FontSize="16" Padding="10,5" CornerRadius="10"
-                                    HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
-									Click="OnLicensesClick"/>
-							<Button Content="Report Issue" Name="ReportIssueButton"
-                                    Width="250" Height="40" Background="{DynamicResource ButtonColor}" Foreground="{DynamicResource ButtonTextColor}"
-                                    FontSize="16" Padding="10,5" CornerRadius="10"
-                                    HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
-									Click="OnReportIssueClick"/>
-							<Button Content="Donate (ko-fi)" Name="DonateButton"
-                                    Width="250" Height="40" Background="{DynamicResource ButtonColor}" Foreground="{DynamicResource ButtonTextColor}"
-                                    FontSize="16" Padding="10,5" CornerRadius="10"
-                                    HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
-									Click="OnDonateClick"/>
-						</StackPanel>
-					</StackPanel>
-				</Grid>
-			</TabItem>
-		</TabControl>
+                        <StackPanel Margin="0,20,0,0" Spacing="10">
+                            <Button
+                                Name="ViewLicensesButton"
+                                Width="250"
+                                Height="40"
+                                Padding="10,5"
+                                HorizontalContentAlignment="Center"
+                                VerticalContentAlignment="Center"
+                                Background="{DynamicResource ButtonColor}"
+                                Click="OnLicensesClick"
+                                Content="View Licenses"
+                                CornerRadius="10"
+                                FontSize="16"
+                                Foreground="{DynamicResource ButtonTextColor}" />
+                            <Button
+                                Name="ReportIssueButton"
+                                Width="250"
+                                Height="40"
+                                Padding="10,5"
+                                HorizontalContentAlignment="Center"
+                                VerticalContentAlignment="Center"
+                                Background="{DynamicResource ButtonColor}"
+                                Click="OnReportIssueClick"
+                                Content="Report Issue"
+                                CornerRadius="10"
+                                FontSize="16"
+                                Foreground="{DynamicResource ButtonTextColor}" />
+                            <Button
+                                Name="DonateButton"
+                                Width="250"
+                                Height="40"
+                                Padding="10,5"
+                                HorizontalContentAlignment="Center"
+                                VerticalContentAlignment="Center"
+                                Background="{DynamicResource ButtonColor}"
+                                Click="OnDonateClick"
+                                Content="Donate (ko-fi)"
+                                CornerRadius="10"
+                                FontSize="16"
+                                Foreground="{DynamicResource ButtonTextColor}" />
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+        </TabControl>
 
-		<!-- Back Button -->
-		<Button Grid.Row="1" x:Name="BackButton" Content="Back"
-                HorizontalAlignment="Right" Margin="10"
-                Background="{DynamicResource ButtonColor}" Foreground="{DynamicResource ButtonTextColor}" FontSize="16"
-                Padding="10,5" CornerRadius="10"
-				Click="OnBackClick"/>
-	</Grid>
+        <!--  Back Button  -->
+        <Button
+            x:Name="BackButton"
+            Grid.Row="1"
+            Margin="10"
+            Padding="10,5"
+            HorizontalAlignment="Right"
+            Background="{DynamicResource ButtonColor}"
+            Click="OnBackClick"
+            Content="Back"
+            CornerRadius="10"
+            FontSize="16"
+            Foreground="{DynamicResource ButtonTextColor}" />
+    </Grid>
 </Window>

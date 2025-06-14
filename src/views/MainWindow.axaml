@@ -1,557 +1,669 @@
 <Window
-	xmlns="https://github.com/avaloniaui"
-	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-	xmlns:local="using:PD3AudioModder"
-        x:DataType="local:MainWindow"
-        mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="400"
-        x:Class="PD3AudioModder.MainWindow"
-        Title="PD3AudioModder"
-        Height="400"
-        Width="600"
-        Background="{DynamicResource BackgroundColor}"
-        Icon="avares://PD3AudioModder/assets/icons/audio.ico"
-        WindowStartupLocation="CenterScreen"
-        Closing="OnWindowClosing">
-	<DockPanel LastChildFill="True">
-		<!-- Status Bar -->
-		<Grid DockPanel.Dock="Bottom"
-              Height="22"
-              Background="{DynamicResource TertiaryColor}">
-			<StackPanel Orientation="Horizontal"
-                        Margin="5,0">
-				<TextBlock x:Name="StatusTextBlock"
-                          Text="Status: Waiting for input..."
-                          Foreground="{DynamicResource TextColor}"
-                          VerticalAlignment="Center"
-                          FontSize="12"/>
-			</StackPanel>
-			<Image x:Name="BlahajImage"
-					   Source="avares://PD3AudioModder/assets/blahaj.png"
-					   Width="200"
-					   Height="200"
-					   Margin="-20,-100"
-					   HorizontalAlignment="Right"
-					   VerticalAlignment="Top"
-					   IsVisible="False"></Image>
-		</Grid>
-		<!-- Main Content -->
-		<Grid HorizontalAlignment="Stretch">
-			<SplitView x:Name="MainSplitView"
-					  IsPaneOpen="False"
-					  DisplayMode="CompactOverlay"
-					  CompactPaneLength="48"
-					  OpenPaneLength="200"
-					  PaneBackground="{DynamicResource TertiaryColor}">
-				<!-- Hamburger Menu Pane -->
-				<SplitView.Pane>
-					<Grid RowDefinitions="Auto,*">
-						<!-- Hamburger Toggle Button -->
-						<Button x:Name="HamburgerButton"
-                                Grid.Row="0"
-                                Width="48" Height="48"
-                                HorizontalAlignment="Left"
-                                Background="Transparent"
-                                Foreground="{DynamicResource TextColor}"
-                                Padding="12"
-                                Click="OnHamburgerButtonClick">
-							<Image Source="{SvgImage avares://PD3AudioModder/assets/icons/tabler-icons/menu.svg}"
-											   Width="28" Height="28"
-											   HorizontalAlignment="Center"
-											   VerticalAlignment="Center"/>
-						</Button>
-						<StackPanel Grid.Row="1" Spacing="5" Margin="0,5,0,10">
-							<!-- Single File Tab -->
-							<Button x:Name="SingleFileButton"
-                                    Classes="MenuButton"
-                                    Click="OnMenuItemClick"
-                                    Tag="0">
-								<DockPanel LastChildFill="True">
-									<Grid Width="48" DockPanel.Dock="Left">
-										<Image Source="{SvgImage avares://PD3AudioModder/assets/icons/tabler-icons/file.svg}"
-												   Width="28" Height="28"
-												   HorizontalAlignment="Center"
-												   VerticalAlignment="Center"/>
-									</Grid>
-									<TextBlock Text="Single File"
-											   VerticalAlignment="Center"
-											   Margin="4,0,0,0"/>
-								</DockPanel>
-							</Button>
-							<!-- Batch Conversion Tab -->
-							<Button x:Name="BatchButton"
-                                    Classes="MenuButton"
-                                    Click="OnMenuItemClick"
-                                    Tag="1">
-								<DockPanel LastChildFill="True">
-									<Grid Width="48" DockPanel.Dock="Left">
-										<Image Source="{SvgImage avares://PD3AudioModder/assets/icons/tabler-icons/files.svg}"
-											   Width="28" Height="28"
-											   HorizontalAlignment="Center"
-											   VerticalAlignment="Center"/>
-									</Grid>
-									<TextBlock Text="Batch Conversion"
-											   VerticalAlignment="Center"
-											   Margin="4,0,0,0"/>
-								</DockPanel>
-							</Button>
-							<!-- Pack Files Tab -->
-							<Button x:Name="PackFilesButton"
-                                    Classes="MenuButton"
-                                    Click="OnMenuItemClick"
-                                    Tag="2">
-								<DockPanel LastChildFill="True">
-									<Grid Width="48" DockPanel.Dock="Left">
-										<Image Source="{SvgImage avares://PD3AudioModder/assets/icons/tabler-icons/tools.svg}"
-											   Width="28" Height="28"
-											   HorizontalAlignment="Center"
-											   VerticalAlignment="Center"/>
-									</Grid>
-									<TextBlock Text="Pack Files"
-											   VerticalAlignment="Center"
-											   Margin="4,0,0,0"/>
-								</DockPanel>
-							</Button>
-							<!-- ID Search Tab -->
-							<Button x:Name="IDSearchButton"
-                                    Classes="MenuButton"
-                                    Click="OnMenuItemClick"
-                                    Tag="3">
-								<DockPanel LastChildFill="True">
-									<Grid Width="48" DockPanel.Dock="Left">
-										<Image Source="{SvgImage avares://PD3AudioModder/assets/icons/tabler-icons/file-search.svg}"
-											   Width="28" Height="28"
-											   HorizontalAlignment="Center"
-											   VerticalAlignment="Center"/>
-									</Grid>
-									<TextBlock Text="ID Search"
-											   VerticalAlignment="Center"
-											   Margin="4,0,0,0"/>
-								</DockPanel>
-							</Button>
-							<!-- Separator -->
-							<Separator Height="1" Margin="10,10,10,0" Background="{DynamicResource BorderColor}" />
-							<!-- Help Button -->
-							<Button x:Name="HelpButton"
-                                    Classes="MenuButton"
-                                    Click="OnHelpClick">
-								<DockPanel LastChildFill="True">
-									<Grid Width="48" DockPanel.Dock="Left">
-										<Image Source="{SvgImage avares://PD3AudioModder/assets/icons/tabler-icons/help.svg}"
-											   Width="28" Height="28"
-											   HorizontalAlignment="Center"
-											   VerticalAlignment="Center"/>
-									</Grid>
-									<TextBlock Text="Help"
-											   VerticalAlignment="Center"
-											   Margin="4,0,0,0"/>
-								</DockPanel>
-							</Button>
-							<!-- Settings Button -->
-							<Button x:Name="SettingsButton"
-                                    Classes="MenuButton"
-                                    Click="OnSettingsClick">
-								<DockPanel LastChildFill="True">
-									<Grid Width="48" DockPanel.Dock="Left">
-										<Image Source="{SvgImage avares://PD3AudioModder/assets/icons/tabler-icons/settings.svg}"
-											   Width="28" Height="28"
-											   HorizontalAlignment="Center"
-											   VerticalAlignment="Center"/>
-									</Grid>
-									<TextBlock Text="Settings"
-											   VerticalAlignment="Center"
-											   Margin="4,0,0,0"/>
-								</DockPanel>
-							</Button>
-						</StackPanel>
-					</Grid>
-				</SplitView.Pane>
-				<!-- Content Panel -->
-				<TabControl x:Name="MainTabControl">
-					<!-- Single File Tab -->
-					<TabItem Header="Single File" IsVisible="False" Foreground="{DynamicResource TextColor}" FontSize="20">
-						<Grid>
-							<Border Padding="20" HorizontalAlignment="Center" VerticalAlignment="Center">
-								<Grid RowDefinitions="Auto,Auto,Auto,Auto">
-									<!-- Title -->
-									<TextBlock Grid.Row="0"
-                                              Text="Single File"
-                                              HorizontalAlignment="Center"
-                                              FontSize="36"
-                                              Foreground="{DynamicResource TextColor}"
-                                              Margin="10"
-                                              TextWrapping="Wrap"
-                                              MaxWidth="250"/>
-									<!-- Upload Button -->
-									<Button x:Name="UploadButton"
-											Grid.Row="1"
-											Content="Upload Files"
-											HorizontalContentAlignment="Center"
-											VerticalContentAlignment="Center"
-											Width="300"
-											Height="50"
-											Background="{DynamicResource ButtonColor}"
-											Foreground="{DynamicResource ButtonTextColor}"
-											FontSize="20"
-											Padding="15,8"
-											CornerRadius="13"
-											Margin="0,0,0,20"/>
-									<!-- Convert Button -->
-									<Button x:Name="ConvertButton"
-                                            Grid.Row="2"
-                                            Content="Convert Files"
+    x:Class="PD3AudioModder.MainWindow"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:PD3AudioModder"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="PD3AudioModder"
+    Width="600"
+    Height="400"
+    d:DesignHeight="400"
+    d:DesignWidth="600"
+    x:DataType="local:MainWindow"
+    Background="{DynamicResource BackgroundColor}"
+    Closing="OnWindowClosing"
+    Icon="avares://PD3AudioModder/assets/icons/audio.ico"
+    WindowStartupLocation="CenterScreen"
+    mc:Ignorable="d">
+    <DockPanel LastChildFill="True">
+        <!--  Status Bar  -->
+        <Grid
+            Height="22"
+            Background="{DynamicResource TertiaryColor}"
+            DockPanel.Dock="Bottom">
+            <StackPanel Margin="5,0" Orientation="Horizontal">
+                <TextBlock
+                    x:Name="StatusTextBlock"
+                    VerticalAlignment="Center"
+                    FontSize="12"
+                    Foreground="{DynamicResource TextColor}"
+                    Text="Status: Waiting for input..." />
+            </StackPanel>
+            <Image
+                x:Name="BlahajImage"
+                Width="200"
+                Height="200"
+                Margin="-20,-100"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                IsVisible="False"
+                Source="avares://PD3AudioModder/assets/blahaj.png" />
+        </Grid>
+        <!--  Main Content  -->
+        <Grid HorizontalAlignment="Stretch">
+            <SplitView
+                x:Name="MainSplitView"
+                CompactPaneLength="48"
+                DisplayMode="CompactOverlay"
+                IsPaneOpen="False"
+                OpenPaneLength="200"
+                PaneBackground="{DynamicResource TertiaryColor}">
+                <!--  Hamburger Menu Pane  -->
+                <SplitView.Pane>
+                    <Grid RowDefinitions="Auto,*">
+                        <!--  Hamburger Toggle Button  -->
+                        <Button
+                            x:Name="HamburgerButton"
+                            Grid.Row="0"
+                            Width="48"
+                            Height="48"
+                            Padding="12"
+                            HorizontalAlignment="Left"
+                            Background="Transparent"
+                            Click="OnHamburgerButtonClick"
+                            Foreground="{DynamicResource TextColor}">
+                            <Image
+                                Width="28"
+                                Height="28"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Source="{SvgImage avares://PD3AudioModder/assets/icons/tabler-icons/menu.svg}" />
+                        </Button>
+                        <StackPanel
+                            Grid.Row="1"
+                            Margin="0,5,0,10"
+                            Spacing="5">
+                            <!--  Single File Tab  -->
+                            <Button
+                                x:Name="SingleFileButton"
+                                Classes="MenuButton"
+                                Click="OnMenuItemClick"
+                                Tag="0">
+                                <DockPanel LastChildFill="True">
+                                    <Grid Width="48" DockPanel.Dock="Left">
+                                        <Image
+                                            Width="28"
+                                            Height="28"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Source="{SvgImage avares://PD3AudioModder/assets/icons/tabler-icons/file.svg}" />
+                                    </Grid>
+                                    <TextBlock
+                                        Margin="4,0,0,0"
+                                        VerticalAlignment="Center"
+                                        Text="Single File" />
+                                </DockPanel>
+                            </Button>
+                            <!--  Batch Conversion Tab  -->
+                            <Button
+                                x:Name="BatchButton"
+                                Classes="MenuButton"
+                                Click="OnMenuItemClick"
+                                Tag="1">
+                                <DockPanel LastChildFill="True">
+                                    <Grid Width="48" DockPanel.Dock="Left">
+                                        <Image
+                                            Width="28"
+                                            Height="28"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Source="{SvgImage avares://PD3AudioModder/assets/icons/tabler-icons/files.svg}" />
+                                    </Grid>
+                                    <TextBlock
+                                        Margin="4,0,0,0"
+                                        VerticalAlignment="Center"
+                                        Text="Batch Conversion" />
+                                </DockPanel>
+                            </Button>
+                            <!--  Pack Files Tab  -->
+                            <Button
+                                x:Name="PackFilesButton"
+                                Classes="MenuButton"
+                                Click="OnMenuItemClick"
+                                Tag="2">
+                                <DockPanel LastChildFill="True">
+                                    <Grid Width="48" DockPanel.Dock="Left">
+                                        <Image
+                                            Width="28"
+                                            Height="28"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Source="{SvgImage avares://PD3AudioModder/assets/icons/tabler-icons/tools.svg}" />
+                                    </Grid>
+                                    <TextBlock
+                                        Margin="4,0,0,0"
+                                        VerticalAlignment="Center"
+                                        Text="Pack Files" />
+                                </DockPanel>
+                            </Button>
+                            <!--  ID Search Tab  -->
+                            <Button
+                                x:Name="IDSearchButton"
+                                Classes="MenuButton"
+                                Click="OnMenuItemClick"
+                                Tag="3">
+                                <DockPanel LastChildFill="True">
+                                    <Grid Width="48" DockPanel.Dock="Left">
+                                        <Image
+                                            Width="28"
+                                            Height="28"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Source="{SvgImage avares://PD3AudioModder/assets/icons/tabler-icons/file-search.svg}" />
+                                    </Grid>
+                                    <TextBlock
+                                        Margin="4,0,0,0"
+                                        VerticalAlignment="Center"
+                                        Text="ID Search" />
+                                </DockPanel>
+                            </Button>
+                            <!--  Separator  -->
+                            <Separator
+                                Height="1"
+                                Margin="10,10,10,0"
+                                Background="{DynamicResource BorderColor}" />
+                            <!--  Help Button  -->
+                            <Button
+                                x:Name="HelpButton"
+                                Classes="MenuButton"
+                                Click="OnHelpClick">
+                                <DockPanel LastChildFill="True">
+                                    <Grid Width="48" DockPanel.Dock="Left">
+                                        <Image
+                                            Width="28"
+                                            Height="28"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Source="{SvgImage avares://PD3AudioModder/assets/icons/tabler-icons/help.svg}" />
+                                    </Grid>
+                                    <TextBlock
+                                        Margin="4,0,0,0"
+                                        VerticalAlignment="Center"
+                                        Text="Help" />
+                                </DockPanel>
+                            </Button>
+                            <!--  Settings Button  -->
+                            <Button
+                                x:Name="SettingsButton"
+                                Classes="MenuButton"
+                                Click="OnSettingsClick">
+                                <DockPanel LastChildFill="True">
+                                    <Grid Width="48" DockPanel.Dock="Left">
+                                        <Image
+                                            Width="28"
+                                            Height="28"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Source="{SvgImage avares://PD3AudioModder/assets/icons/tabler-icons/settings.svg}" />
+                                    </Grid>
+                                    <TextBlock
+                                        Margin="4,0,0,0"
+                                        VerticalAlignment="Center"
+                                        Text="Settings" />
+                                </DockPanel>
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+                </SplitView.Pane>
+                <!--  Content Panel  -->
+                <TabControl x:Name="MainTabControl">
+                    <!--  Single File Tab  -->
+                    <TabItem
+                        FontSize="20"
+                        Foreground="{DynamicResource TextColor}"
+                        Header="Single File"
+                        IsVisible="False">
+                        <Grid>
+                            <Border
+                                Padding="20"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center">
+                                <Grid RowDefinitions="Auto,Auto,Auto,Auto">
+                                    <!--  Title  -->
+                                    <TextBlock
+                                        Grid.Row="0"
+                                        MaxWidth="250"
+                                        Margin="10"
+                                        HorizontalAlignment="Center"
+                                        FontSize="36"
+                                        Foreground="{DynamicResource TextColor}"
+                                        Text="Single File"
+                                        TextWrapping="Wrap" />
+                                    <!--  Upload Button  -->
+                                    <Button
+                                        x:Name="UploadButton"
+                                        Grid.Row="1"
+                                        Width="300"
+                                        Height="50"
+                                        Margin="0,0,0,20"
+                                        Padding="15,8"
+                                        HorizontalContentAlignment="Center"
+                                        VerticalContentAlignment="Center"
+                                        Background="{DynamicResource ButtonColor}"
+                                        Content="Upload Files"
+                                        CornerRadius="13"
+                                        FontSize="20"
+                                        Foreground="{DynamicResource ButtonTextColor}" />
+                                    <!--  Convert Button  -->
+                                    <Button
+                                        x:Name="ConvertButton"
+                                        Grid.Row="2"
+                                        Width="300"
+                                        Height="50"
+                                        Margin="0,0,0,20"
+                                        Padding="15,8"
+                                        HorizontalContentAlignment="Center"
+                                        VerticalContentAlignment="Center"
+                                        Background="{DynamicResource ButtonColor}"
+                                        Content="Convert Files"
+                                        CornerRadius="13"
+                                        FontSize="20"
+                                        Foreground="{DynamicResource ButtonTextColor}" />
+                                    <!--  Use Default Export Folder  -->
+                                    <CheckBox
+                                        x:Name="UseExportFolder"
+                                        Grid.Row="3"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        HorizontalContentAlignment="Center"
+                                        VerticalContentAlignment="Center"
+                                        Content="Use default export folder"
+                                        FontSize="18"
+                                        Foreground="{DynamicResource TextColor}"
+                                        IsChecked="False"
+                                        ToolTip.ShowOnDisabled="True"
+                                        ToolTip.Tip="{Binding defaultExportFolder}" />
+                                </Grid>
+                            </Border>
+                        </Grid>
+                    </TabItem>
+                    <!--  Multiple Files Tab  -->
+                    <TabItem
+                        FontSize="22"
+                        Foreground="{DynamicResource TextColor}"
+                        Header="Batch Conversion"
+                        IsVisible="False">
+                        <Grid>
+                            <Border
+                                Padding="25"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center">
+                                <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto">
+                                    <!--  Title  -->
+                                    <TextBlock
+                                        Grid.Row="0"
+                                        MaxWidth="375"
+                                        Margin="12"
+                                        HorizontalAlignment="Center"
+                                        FontSize="30"
+                                        Foreground="{DynamicResource TextColor}"
+                                        Text="Batch Conversion"
+                                        TextWrapping="Wrap" />
+                                    <!--  Audio Folder Button  -->
+                                    <Button
+                                        x:Name="SelectAudioFolderButton"
+                                        Grid.Row="1"
+                                        Width="300"
+                                        Height="45"
+                                        Margin="0,0,0,18"
+                                        Padding="12,6"
+                                        HorizontalContentAlignment="Center"
+                                        VerticalContentAlignment="Center"
+                                        Background="{DynamicResource ButtonColor}"
+                                        Content="Select Audio Folder"
+                                        CornerRadius="12"
+                                        FontSize="18"
+                                        Foreground="{DynamicResource ButtonTextColor}" />
+                                    <!--  Game Files Folder Button  -->
+                                    <Button
+                                        x:Name="SelectGameFilesFolderButton"
+                                        Grid.Row="2"
+                                        Width="300"
+                                        Height="45"
+                                        Margin="0,0,0,18"
+                                        Padding="12,6"
+                                        HorizontalContentAlignment="Center"
+                                        VerticalContentAlignment="Center"
+                                        Background="{DynamicResource ButtonColor}"
+                                        Content="Select Game Files Folder"
+                                        CornerRadius="12"
+                                        FontSize="18"
+                                        Foreground="{DynamicResource ButtonTextColor}" />
+                                    <!--  Batch Convert Button  -->
+                                    <Button
+                                        x:Name="BatchConvertButton"
+                                        Grid.Row="3"
+                                        Width="300"
+                                        Height="45"
+                                        Margin="0,0,0,18"
+                                        Padding="12,6"
+                                        HorizontalContentAlignment="Center"
+                                        VerticalContentAlignment="Center"
+                                        Background="{DynamicResource ButtonColor}"
+                                        Content="Start Batch Conversion"
+                                        CornerRadius="12"
+                                        FontSize="18"
+                                        Foreground="{DynamicResource ButtonTextColor}" />
+                                    <!--  Use Default Export Folder  -->
+                                    <CheckBox
+                                        x:Name="BatchUseExportFolder"
+                                        Grid.Row="4"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        HorizontalContentAlignment="Center"
+                                        VerticalContentAlignment="Center"
+                                        Content="Use default export folder"
+                                        FontSize="17"
+                                        Foreground="{DynamicResource TextColor}"
+                                        IsChecked="False"
+                                        ToolTip.ShowOnDisabled="True"
+                                        ToolTip.Tip="{Binding defaultExportFolder}" />
+                                    <!--  Progress Bar  -->
+                                    <ProgressBar
+                                        x:Name="BatchProgressBar"
+                                        Grid.Row="5"
+                                        Width="300"
+                                        Height="22"
+                                        Margin="0,18,0,0"
+                                        Background="{DynamicResource TertiaryColor}"
+                                        CornerRadius="6"
+                                        Foreground="{DynamicResource ButtonColor}"
+                                        Maximum="100"
+                                        Minimum="0"
+                                        Value="0" />
+                                </Grid>
+                            </Border>
+                        </Grid>
+                    </TabItem>
+                    <!--  Pack Files Tab  -->
+                    <TabItem
+                        FontSize="22"
+                        Foreground="{DynamicResource TextColor}"
+                        Header="Pack Files"
+                        IsVisible="False">
+                        <Grid>
+                            <Border Padding="25">
+                                <Grid
+                                    MaxWidth="700"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    RowDefinitions="Auto,Auto,*,Auto">
+                                    <!--  Title Section  -->
+                                    <TextBlock
+                                        Grid.Row="0"
+                                        Margin="0,0,0,20"
+                                        HorizontalAlignment="Center"
+                                        FontSize="36"
+                                        Foreground="{DynamicResource TextColor}"
+                                        Text="Pack Files" />
+                                    <!--  Repak Path Display  -->
+                                    <TextBlock
+                                        x:Name="RepakPathTextBlock"
+                                        Grid.Row="1"
+                                        MaxWidth="600"
+                                        Margin="0,0,0,30"
+                                        HorizontalAlignment="Center"
+                                        FontSize="16"
+                                        Foreground="{DynamicResource TextColor}"
+                                        Text="Repak Path: None"
+                                        TextTrimming="CharacterEllipsis"
+                                        TextWrapping="NoWrap" />
+                                    <Grid
+                                        Grid.Row="2"
+                                        MaxWidth="600"
+                                        ColumnDefinitions="*,20,*"
+                                        RowDefinitions="Auto,Auto">
+                                        <!--  File Selection  -->
+                                        <Button
+                                            x:Name="SelectRepakButton"
+                                            Grid.Row="0"
+                                            Grid.Column="0"
+                                            Height="50"
+                                            MinWidth="180"
+                                            Margin="0,0,0,20"
+                                            Padding="15,8"
                                             HorizontalContentAlignment="Center"
                                             VerticalContentAlignment="Center"
-                                            Width="300"
-                                            Height="50"
                                             Background="{DynamicResource ButtonColor}"
-                                            Foreground="{DynamicResource ButtonTextColor}"
-                                            FontSize="20"
+                                            Content="Select repak.exe"
+                                            CornerRadius="10"
+                                            FontSize="18"
+                                            Foreground="{DynamicResource ButtonTextColor}" />
+                                        <Button
+                                            x:Name="SelectFolderButton"
+                                            Grid.Row="0"
+                                            Grid.Column="2"
+                                            Height="50"
+                                            MinWidth="180"
+                                            Margin="0,0,0,20"
                                             Padding="15,8"
-                                            CornerRadius="13"
-                                            Margin="0,0,0,20"/>
-									<!-- Use Default Export Folder-->
-									<CheckBox x:Name="UseExportFolder"
-                                              Grid.Row="3"
-                                              Content="Use default export folder"
-                                              ToolTip.Tip="{Binding defaultExportFolder}"
-                                              ToolTip.ShowOnDisabled="True"
-                                              IsChecked="False"
-                                              HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"
-                                              HorizontalContentAlignment="Center"
-                                              VerticalContentAlignment="Center"
-                                              FontSize="18"
-                                              Foreground="{DynamicResource TextColor}"/>
-								</Grid>
-							</Border>
-						</Grid>
-					</TabItem>
-					<!-- Multiple Files Tab -->
-					<TabItem Header="Batch Conversion" IsVisible="False" Foreground="{DynamicResource TextColor}" FontSize="22">
-						<Grid>
-							<Border Padding="25" HorizontalAlignment="Center" VerticalAlignment="Center">
-								<Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto">
-									<!-- Title -->
-									<TextBlock Grid.Row="0"
-										  Text="Batch Conversion"
-										  HorizontalAlignment="Center"
-										  FontSize="30"
-										  Foreground="{DynamicResource TextColor}"
-										  Margin="12"
-										  TextWrapping="Wrap"
-										  MaxWidth="375"/>
-									<!-- Audio Folder Button -->
-									<Button x:Name="SelectAudioFolderButton"
-										Grid.Row="1"
-										Content="Select Audio Folder"
-										HorizontalContentAlignment="Center"
-										VerticalContentAlignment="Center"
-										Width="300"
-										Height="45"
-										Background="{DynamicResource ButtonColor}"
-										Foreground="{DynamicResource ButtonTextColor}"
-										FontSize="18"
-										Padding="12,6"
-										CornerRadius="12"
-										Margin="0,0,0,18"/>
-									<!-- Game Files Folder Button -->
-									<Button x:Name="SelectGameFilesFolderButton"
-										Grid.Row="2"
-										Content="Select Game Files Folder"
-										HorizontalContentAlignment="Center"
-										VerticalContentAlignment="Center"
-										Width="300"
-										Height="45"
-										Background="{DynamicResource ButtonColor}"
-										Foreground="{DynamicResource ButtonTextColor}"
-										FontSize="18"
-										Padding="12,6"
-										CornerRadius="12"
-										Margin="0,0,0,18"/>
-									<!-- Batch Convert Button -->
-									<Button x:Name="BatchConvertButton"
-										Grid.Row="3"
-										Content="Start Batch Conversion"
-										HorizontalContentAlignment="Center"
-										VerticalContentAlignment="Center"
-										Width="300"
-										Height="45"
-										Background="{DynamicResource ButtonColor}"
-										Foreground="{DynamicResource ButtonTextColor}"
-										FontSize="18"
-										Padding="12,6"
-										CornerRadius="12"
-										Margin="0,0,0,18"/>
-									<!-- Use Default Export Folder-->
-									<CheckBox x:Name="BatchUseExportFolder"
-										  Grid.Row="4"
-										  Content="Use default export folder"
-										  ToolTip.Tip="{Binding defaultExportFolder}"
-										  ToolTip.ShowOnDisabled="True"
-										  IsChecked="False"
-										  HorizontalAlignment="Center"
-										  VerticalAlignment="Center"
-										  HorizontalContentAlignment="Center"
-										  VerticalContentAlignment="Center"
-										  FontSize="17"
-										  Foreground="{DynamicResource TextColor}"/>
-									<!-- Progress Bar -->
-									<ProgressBar x:Name="BatchProgressBar"
-											Grid.Row="5"
-											Width="300"
-											Height="22"
-											Minimum="0"
-											Maximum="100"
-											Value="0"
-											Foreground="{DynamicResource ButtonColor}"
-											Background="{DynamicResource TertiaryColor}"
-											CornerRadius="6"
-											Margin="0,18,0,0"/>
-								</Grid>
-							</Border>
-						</Grid>
-					</TabItem>
-					<!-- Pack Files Tab -->
-					<TabItem Header="Pack Files" IsVisible="False" Foreground="{DynamicResource TextColor}" FontSize="22">
-						<Grid>
-							<Border Padding="25">
-								<Grid RowDefinitions="Auto,*,Auto,Auto"
-									  MaxWidth="850"
-									  HorizontalAlignment="Center">
-									<!-- Title Section -->
-									<StackPanel Grid.Row="0" Margin="0,0,0,12">
-										<TextBlock Text="Pack Files"
-												   HorizontalAlignment="Center"
-												   FontSize="36"
-												   Foreground="{DynamicResource TextColor}"
-												   Margin="0,0,0,18"/>
-										<TextBlock x:Name="RepakPathTextBlock"
-												   Text="Repak Path: None"
-												   HorizontalAlignment="Center"
-												   FontSize="18"
-												   Foreground="{DynamicResource TextColor}"
-												   TextWrapping="NoWrap"
-												   TextTrimming="CharacterEllipsis"
-												   Margin="0,0,0,24"/>
-									</StackPanel>
-									<!-- Main Content -->
-									<Grid Grid.Row="1"
-										  ColumnDefinitions="*,*"
-										  MaxWidth="650">
-										<!-- Left Column -->
-										<StackPanel Grid.Column="0" Spacing="22" Margin="0,0,12,0">
-											<Button x:Name="SelectRepakButton"
-													Content="Select repak.exe"
-													HorizontalContentAlignment="Center"
-													VerticalContentAlignment="Center"
-													HorizontalAlignment="Stretch"
-													Height="50"
-													Background="{DynamicResource ButtonColor}"
-													Foreground="{DynamicResource ButtonTextColor}"
-													FontSize="18"
-													Padding="18,6"
-													CornerRadius="10"/>
-											<TextBox x:Name="ModNameTextBox"
-													 Text="Mod Name"
-													 HorizontalContentAlignment="Center"
-													 VerticalContentAlignment="Center"
-													 Height="50"
-													 FontSize="18"
-													 Foreground="{DynamicResource TextColor}"
-													 Padding="18,6"
-													 CornerRadius="10"/>
-										</StackPanel>
-										<!-- Right Column -->
-										<StackPanel Grid.Column="1" Spacing="22" Margin="12,0,0,0">
-											<Button x:Name="SelectFolderButton"
-													Content="Select Folder"
-													HorizontalContentAlignment="Center"
-													VerticalContentAlignment="Center"
-													HorizontalAlignment="Stretch"
-													Height="50"
-													Background="{DynamicResource ButtonColor}"
-													Foreground="{DynamicResource ButtonTextColor}"
-													FontSize="18"
-													Padding="18,6"
-													CornerRadius="10"/>
-											<Button x:Name="PackButton"
-													Content="Pack Files"
-													IsEnabled="False"
-													HorizontalContentAlignment="Center"
-													VerticalContentAlignment="Center"
-													HorizontalAlignment="Stretch"
-													Height="50"
-													Background="{DynamicResource ButtonColor}"
-													Foreground="{DynamicResource ButtonTextColor}"
-													FontSize="18"
-													Padding="18,6"
-													CornerRadius="10"/>
-										</StackPanel>
-									</Grid>
-									<!-- Compress Checkbox -->
-									<CheckBox x:Name="CompressCheckBox"
-											  Content="Compress"
-											  IsChecked="True"
-											  HorizontalAlignment="Center"
-											  VerticalAlignment="Center"
-											  FontSize="17"
-											  Foreground="{DynamicResource TextColor}"
-											  Margin="0,35,0,-25"
-											  Grid.Row="2"/>
-									<TextBlock
-										Text="Warning: only use this tab for audio files."
-										Foreground="{DynamicResource WarningTextColor}"
-										HorizontalAlignment="Center"
-										FontSize="17"
-										Margin="0,35,0,0"
-										Grid.Row="3"></TextBlock>
-								</Grid>
-							</Border>
-						</Grid>
-					</TabItem>
-					<!--ID Search Tab-->
-					<TabItem Header="ID Search" IsVisible="False" Foreground="{DynamicResource TextColor}" FontSize="20">
-						<Grid>
-							<Border Padding="20">
-								<Grid RowDefinitions="Auto,Auto,Auto,*"
-									  MaxWidth="800"
-									  HorizontalAlignment="Center">
-									<!-- Title Section -->
-									<StackPanel Grid.Row="0" Margin="0,0,0,10">
-										<TextBlock Text="ID Search"
-												   HorizontalAlignment="Center"
-												   FontSize="28"
-												   Foreground="{DynamicResource TextColor}"
-												   Margin="0,0,0,15"/>
-									</StackPanel>
-									<!-- Search Controls -->
-									<Grid Grid.Row="1" ColumnDefinitions="*, Auto" Margin="0,0,0,15">
-										<TextBox x:Name="SearchTextBox"
-												 Grid.Column="0"
-												 Watermark="Search by ID, MediaName or Folder..."
-												 HorizontalContentAlignment="Center"
-												 VerticalContentAlignment="Center"
-												 Margin="0,0,10,0"
-												 Height="40"
-												 FontSize="16"
-												 Foreground="{DynamicResource TextColor}"
-												 Padding="10,5"
-												 CornerRadius="8"/>
-										<Button x:Name="SearchButton"
-												Grid.Column="1"
-												Content="Search"
-												HorizontalContentAlignment="Center"
-												VerticalContentAlignment="Center"
-												Width="120"
-												Height="40"
-												Background="{DynamicResource ButtonColor}"
-												Foreground="{DynamicResource ButtonTextColor}"
-												FontSize="16"
-												Padding="10,5"
-												CornerRadius="8"/>
-									</Grid>
-									<!-- Load Pak Files Button -->
-									<Button x:Name="LoadPakFilesButton"
-											Grid.Row="2"
-											Content="Load Pak Files"
-											Click="OnLoadPakFilesClick"
-											HorizontalAlignment="Center"
-											HorizontalContentAlignment="Center"
-											VerticalContentAlignment="Center"
-											Width="250"
-											Height="40"
-											Background="{DynamicResource ButtonColor}"
-											Foreground="{DynamicResource ButtonTextColor}"
-											FontSize="16"
-											Padding="10,5"
-											CornerRadius="10"
-											Margin="0,0,0,15"/>
-									<!-- Results Table -->
-									<Border Grid.Row="3"
-											Background="{DynamicResource TertiaryColor}"
-											CornerRadius="8"
-											Padding="5">
-										<DataGrid x:Name="SoundsDataGrid"
-												  ItemsSource="{Binding SoundItems}"
-												  Background="Transparent"
-												  GridLinesVisibility="All"
-												  BorderThickness="0"
-												  Foreground="{DynamicResource TextColor}"
-												  VerticalGridLinesBrush="{DynamicResource BackgroundColor}"
-												  HorizontalGridLinesBrush="{DynamicResource BackgroundColor}"
-												  IsReadOnly="True"
-												  AutoGenerateColumns="False"
-												  CanUserResizeColumns="True"
-												  CanUserReorderColumns="True"
-												  ClipboardCopyMode="ExcludeHeader"
-												  SelectionMode="Extended">
-											<DataGrid.Columns>
-												<DataGridTextColumn Header="ID"
-																	Binding="{Binding SoundId}"
-																	Width="*"/>
-												<DataGridTextColumn Header="MediaName"
-																	Binding="{Binding SoundDescription}"
-																	Width="*"/>
-												<DataGridTextColumn Header="Folder"
-																	Binding="{Binding SoundFolder}"
-																	Width="*"/>
-												<DataGridTemplateColumn Header="Actions"
-																		Width="*"
-																		MaxWidth="100">
-													<DataGridTemplateColumn.CellTemplate>
-														<DataTemplate>
-															<StackPanel Orientation="Vertical" HorizontalAlignment="Center">
-																<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-																	<Button Content="▶"
-																			Command="{Binding PlayCommand}"
-																			CommandParameter="{Binding}"
-																			VerticalAlignment="Center"
-																			VerticalContentAlignment="Center"
-																			HorizontalContentAlignment="Center"
-																			ToolTip.Tip="Play sound"/>
-																	<Button Content="❚❚"
-																			Command="{Binding StopCommand}"
-																			VerticalAlignment="Center"
-																			VerticalContentAlignment="Center"
-																			HorizontalContentAlignment="Center"
-																			Margin="5,0,0,0"
-																			ToolTip.Tip="Stop all sounds"/>
-																</StackPanel>
-															</StackPanel>
-														</DataTemplate>
-													</DataGridTemplateColumn.CellTemplate>
-												</DataGridTemplateColumn>
-											</DataGrid.Columns>
-										</DataGrid>
-									</Border>
-								</Grid>
-							</Border>
-						</Grid>
-					</TabItem>
-				</TabControl>
-			</SplitView>
-		</Grid>
-	</DockPanel>
-	<!-- Styles -->
-	<Window.Styles>
-		<Style Selector="Button.MenuButton">
-			<Setter Property="Background" Value="Transparent"/>
-			<Setter Property="Foreground" Value="{DynamicResource TextColor}"/>
-			<Setter Property="HorizontalAlignment" Value="Stretch"/>
-			<Setter Property="HorizontalContentAlignment" Value="Left"/>
-			<Setter Property="Padding" Value="10,8"/>
-			<Setter Property="CornerRadius" Value="4"/>
-		</Style>
-		<Style Selector="Button.MenuButton:pointerover /template/ ContentPresenter">
-			<Setter Property="Background" Value="{DynamicResource MenuHoverColor}"/>
-		</Style>
-		<Style Selector="Button.MenuButton:pressed /template/ ContentPresenter">
-			<Setter Property="Background" Value="{DynamicResource MenuHoverColor}"/>
-		</Style>
-		<Style Selector="Button.MenuButton.Selected">
-			<Setter Property="Background" Value="{DynamicResource MenuHoverColor}" />
-		</Style>
-	</Window.Styles>
+                                            HorizontalContentAlignment="Center"
+                                            VerticalContentAlignment="Center"
+                                            Background="{DynamicResource ButtonColor}"
+                                            Content="Select Folder"
+                                            CornerRadius="10"
+                                            FontSize="18"
+                                            Foreground="{DynamicResource ButtonTextColor}" />
+                                        <!--  Mod Name and Pack Button  -->
+                                        <TextBox
+                                            x:Name="ModNameTextBox"
+                                            Grid.Row="1"
+                                            Grid.Column="0"
+                                            Height="50"
+                                            MinWidth="180"
+                                            Padding="15,8"
+                                            HorizontalContentAlignment="Center"
+                                            VerticalContentAlignment="Center"
+                                            CornerRadius="10"
+                                            FontSize="18"
+                                            Foreground="{DynamicResource TextColor}"
+                                            Text="Mod Name" />
+                                        <Button
+                                            x:Name="PackButton"
+                                            Grid.Row="1"
+                                            Grid.Column="2"
+                                            Height="50"
+                                            MinWidth="180"
+                                            Padding="15,8"
+                                            HorizontalContentAlignment="Center"
+                                            VerticalContentAlignment="Center"
+                                            Background="{DynamicResource ButtonColor}"
+                                            Content="Pack Files"
+                                            CornerRadius="10"
+                                            FontSize="18"
+                                            Foreground="{DynamicResource ButtonTextColor}"
+                                            IsEnabled="False" />
+                                    </Grid>
+                                    <!--  Options Section  -->
+                                    <StackPanel
+                                        Grid.Row="3"
+                                        Margin="0,30,0,0"
+                                        HorizontalAlignment="Center"
+                                        Orientation="Horizontal"
+                                        Spacing="40">
+                                        <CheckBox
+                                            x:Name="CompressCheckBox"
+                                            Content="Compress"
+                                            FontSize="17"
+                                            Foreground="{DynamicResource TextColor}"
+                                            IsChecked="True"
+                                            ToolTip.ShowOnDisabled="True"
+                                            ToolTip.Tip="Uses zlib compression to reduce the pak's file size." />
+                                        <CheckBox
+                                            x:Name="AutoSortCheckBox"
+                                            Content="Auto sort"
+                                            FontSize="17"
+                                            Foreground="{DynamicResource TextColor}"
+                                            IsChecked="True"
+                                            ToolTip.ShowOnDisabled="True"
+                                            ToolTip.Tip="Automatically create mod structure and sort files. Does not support custom files, other games, or non-audio mods.&#x0a;&#x0a;Disabling this packs the folder as-is." />
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </Grid>
+                    </TabItem>
+                    <!--  ID Search Tab  -->
+                    <TabItem
+                        FontSize="20"
+                        Foreground="{DynamicResource TextColor}"
+                        Header="ID Search"
+                        IsVisible="False">
+                        <Grid>
+                            <Border Padding="20">
+                                <Grid
+                                    MaxWidth="800"
+                                    HorizontalAlignment="Center"
+                                    RowDefinitions="Auto,Auto,Auto,*">
+                                    <!--  Title Section  -->
+                                    <StackPanel Grid.Row="0" Margin="0,0,0,10">
+                                        <TextBlock
+                                            Margin="0,0,0,15"
+                                            HorizontalAlignment="Center"
+                                            FontSize="28"
+                                            Foreground="{DynamicResource TextColor}"
+                                            Text="ID Search" />
+                                    </StackPanel>
+                                    <!--  Search Controls  -->
+                                    <Grid
+                                        Grid.Row="1"
+                                        Margin="0,0,0,15"
+                                        ColumnDefinitions="*, Auto">
+                                        <TextBox
+                                            x:Name="SearchTextBox"
+                                            Grid.Column="0"
+                                            Height="40"
+                                            Margin="0,0,10,0"
+                                            Padding="10,5"
+                                            HorizontalContentAlignment="Center"
+                                            VerticalContentAlignment="Center"
+                                            CornerRadius="8"
+                                            FontSize="16"
+                                            Foreground="{DynamicResource TextColor}"
+                                            Watermark="Search by ID, MediaName or Folder..." />
+                                        <Button
+                                            x:Name="SearchButton"
+                                            Grid.Column="1"
+                                            Width="120"
+                                            Height="40"
+                                            Padding="10,5"
+                                            HorizontalContentAlignment="Center"
+                                            VerticalContentAlignment="Center"
+                                            Background="{DynamicResource ButtonColor}"
+                                            Content="Search"
+                                            CornerRadius="8"
+                                            FontSize="16"
+                                            Foreground="{DynamicResource ButtonTextColor}" />
+                                    </Grid>
+                                    <!--  Load Pak Files Button  -->
+                                    <Button
+                                        x:Name="LoadPakFilesButton"
+                                        Grid.Row="2"
+                                        Width="250"
+                                        Height="40"
+                                        Margin="0,0,0,15"
+                                        Padding="10,5"
+                                        HorizontalAlignment="Center"
+                                        HorizontalContentAlignment="Center"
+                                        VerticalContentAlignment="Center"
+                                        Background="{DynamicResource ButtonColor}"
+                                        Click="OnLoadPakFilesClick"
+                                        Content="Load Pak Files"
+                                        CornerRadius="10"
+                                        FontSize="16"
+                                        Foreground="{DynamicResource ButtonTextColor}" />
+                                    <!--  Results Table  -->
+                                    <Border
+                                        Grid.Row="3"
+                                        Padding="5"
+                                        Background="{DynamicResource TertiaryColor}"
+                                        CornerRadius="8">
+                                        <DataGrid
+                                            x:Name="SoundsDataGrid"
+                                            AutoGenerateColumns="False"
+                                            Background="Transparent"
+                                            BorderThickness="0"
+                                            CanUserReorderColumns="True"
+                                            CanUserResizeColumns="True"
+                                            ClipboardCopyMode="ExcludeHeader"
+                                            Foreground="{DynamicResource TextColor}"
+                                            GridLinesVisibility="All"
+                                            HorizontalGridLinesBrush="{DynamicResource BackgroundColor}"
+                                            IsReadOnly="True"
+                                            ItemsSource="{Binding SoundItems}"
+                                            SelectionMode="Extended"
+                                            VerticalGridLinesBrush="{DynamicResource BackgroundColor}">
+                                            <DataGrid.Columns>
+                                                <DataGridTextColumn
+                                                    Width="*"
+                                                    Binding="{Binding SoundId}"
+                                                    Header="ID" />
+                                                <DataGridTextColumn
+                                                    Width="*"
+                                                    Binding="{Binding SoundDescription}"
+                                                    Header="MediaName" />
+                                                <DataGridTextColumn
+                                                    Width="*"
+                                                    Binding="{Binding SoundFolder}"
+                                                    Header="Folder" />
+                                                <DataGridTemplateColumn
+                                                    Width="*"
+                                                    MaxWidth="100"
+                                                    Header="Actions">
+                                                    <DataGridTemplateColumn.CellTemplate>
+                                                        <DataTemplate>
+                                                            <StackPanel HorizontalAlignment="Center" Orientation="Vertical">
+                                                                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                                                                    <Button
+                                                                        VerticalAlignment="Center"
+                                                                        HorizontalContentAlignment="Center"
+                                                                        VerticalContentAlignment="Center"
+                                                                        Command="{Binding PlayCommand}"
+                                                                        CommandParameter="{Binding}"
+                                                                        Content="▶"
+                                                                        ToolTip.Tip="Play sound" />
+                                                                    <Button
+                                                                        Margin="5,0,0,0"
+                                                                        VerticalAlignment="Center"
+                                                                        HorizontalContentAlignment="Center"
+                                                                        VerticalContentAlignment="Center"
+                                                                        Command="{Binding StopCommand}"
+                                                                        Content="❚❚"
+                                                                        ToolTip.Tip="Stop all sounds" />
+                                                                </StackPanel>
+                                                            </StackPanel>
+                                                        </DataTemplate>
+                                                    </DataGridTemplateColumn.CellTemplate>
+                                                </DataGridTemplateColumn>
+                                            </DataGrid.Columns>
+                                        </DataGrid>
+                                    </Border>
+                                </Grid>
+                            </Border>
+                        </Grid>
+                    </TabItem>
+                </TabControl>
+            </SplitView>
+        </Grid>
+    </DockPanel>
+    <!--  Styles  -->
+    <Window.Styles>
+        <Style Selector="Button.MenuButton">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="{DynamicResource TextColor}" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="HorizontalContentAlignment" Value="Left" />
+            <Setter Property="Padding" Value="10,8" />
+            <Setter Property="CornerRadius" Value="4" />
+        </Style>
+        <Style Selector="Button.MenuButton:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource MenuHoverColor}" />
+        </Style>
+        <Style Selector="Button.MenuButton:pressed /template/ ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource MenuHoverColor}" />
+        </Style>
+        <Style Selector="Button.MenuButton.Selected">
+            <Setter Property="Background" Value="{DynamicResource MenuHoverColor}" />
+        </Style>
+    </Window.Styles>
 </Window>

@@ -310,6 +310,7 @@ namespace PD3AudioModder
         // Pack Files tab
         public string? ModName;
         private bool? CompressionEnabled;
+        private bool? AutoSortEnabled;
         private string? PackFolderPath;
 
         // Status text
@@ -484,6 +485,7 @@ namespace PD3AudioModder
             var ModNameTextBox = this.FindControl<TextBox>("ModNameTextBox")!;
             var selectFolderButton = this.FindControl<Button>("SelectFolderButton")!;
             var compressCheckBox = this.FindControl<CheckBox>("CompressCheckBox")!;
+            var autoSortCheckBox = this.FindControl<CheckBox>("AutoSortCheckBox")!;
             var packButton = this.FindControl<Button>("PackButton")!;
 
             if (_appConfig.RepakPath != null)
@@ -509,6 +511,8 @@ namespace PD3AudioModder
             selectRepakButton.Click += (_, _) => SelectRepakButton_Click(repakPathTextBlock);
             compressCheckBox.IsCheckedChanged += (_, _) =>
                 CompressionEnabled = compressCheckBox.IsChecked;
+            autoSortCheckBox.IsCheckedChanged += (_, _) =>
+                AutoSortEnabled = autoSortCheckBox.IsChecked;
             selectFolderButton.Click += (_, _) => SelectFolderButton_Click(packButton);
             packButton.Click += (_, _) => PackButton_Click(PackFolderPath!);
 
@@ -793,7 +797,10 @@ namespace PD3AudioModder
 
         private async void PackButton_Click(string packFolderPath)
         {
-            await PackFiles.DownloadMappings();
+            if (AutoSortEnabled != false)
+            {
+                await PackFiles.DownloadMappings();
+            }
             if (_appConfig.RepakPath == null)
             {
                 _notificationManager?.Show(
@@ -811,7 +818,8 @@ namespace PD3AudioModder
                 CompressionEnabled ?? false,
                 packFolderPath,
                 Path.GetDirectoryName(packFolderPath)!,
-                ModName ?? "MyPD3Mod"
+                ModName ?? "MyPD3Mod",
+                AutoSortEnabled ?? true
             );
 
             if (packSuccess)
