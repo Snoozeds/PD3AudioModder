@@ -497,7 +497,7 @@
                                             Foreground="{DynamicResource TextColor}"
                                             IsChecked="True"
                                             ToolTip.ShowOnDisabled="True"
-                                            ToolTip.Tip="Automatically create mod structure and sort files. Does not support custom files, other games, or non-audio mods.&#x0a;&#x0a;Disabling this packs the folder as-is." />
+                                            ToolTip.Tip="Automatically create mod structure and sort files. Does not support custom files (files that are not in vanilla), other games, or non-audio mods.&#x0a;&#x0a;Disabling this packs the selected folder as-is." />
                                     </StackPanel>
                                 </Grid>
                             </Border>
