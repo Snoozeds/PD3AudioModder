@@ -244,7 +244,9 @@
                                         Content="Upload Files"
                                         CornerRadius="13"
                                         FontSize="20"
-                                        Foreground="{DynamicResource ButtonTextColor}" />
+                                        Foreground="{DynamicResource ButtonTextColor}"
+                                        ToolTip.ShowOnDisabled="True"
+                                        ToolTip.Tip="Upload .uasset, .ubulk, .uexp, .json files of the vanilla game audio, and a corresponding audio file that you want to replace that sound with. For multiple files, use the Batch Conversion tab." />
                                     <!--  Convert Button  -->
                                     <Button
                                         x:Name="ConvertButton"
@@ -314,7 +316,9 @@
                                         Content="Select Audio Folder"
                                         CornerRadius="12"
                                         FontSize="18"
-                                        Foreground="{DynamicResource ButtonTextColor}" />
+                                        Foreground="{DynamicResource ButtonTextColor}"
+                                        ToolTip.ShowOnDisabled="True"
+                                        ToolTip.Tip="Folder containing audio files that you want to replace the game's files with. Each must have the same name as the vanilla file it is replacing (e.g 170412.mp3)" />
                                     <!--  Game Files Folder Button  -->
                                     <Button
                                         x:Name="SelectGameFilesFolderButton"
@@ -329,7 +333,9 @@
                                         Content="Select Game Files Folder"
                                         CornerRadius="12"
                                         FontSize="18"
-                                        Foreground="{DynamicResource ButtonTextColor}" />
+                                        Foreground="{DynamicResource ButtonTextColor}"
+                                        ToolTip.ShowOnDisabled="True"
+                                        ToolTip.Tip="Folder containing vanilla game files of the audio you want to replace. Must be .uexp, .uasset, .ubulk, and .json for each file." />
                                     <!--  Batch Convert Button  -->
                                     <Button
                                         x:Name="BatchConvertButton"
