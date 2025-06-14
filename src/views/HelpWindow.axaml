@@ -1,119 +1,145 @@
-<Window xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        x:Class="PD3AudioModder.HelpWindow"
-        Title="Help"
-        SizeToContent="WidthAndHeight"
-        Background="{DynamicResource BackgroundColor}"
-        Icon="avares://PD3AudioModder/assets/icons/audio.ico"
-        WindowStartupLocation="CenterOwner">
+<Window
+    x:Class="PD3AudioModder.HelpWindow"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="Help"
+    Background="{DynamicResource BackgroundColor}"
+    Icon="avares://PD3AudioModder/assets/icons/audio.ico"
+    SizeToContent="WidthAndHeight"
+    WindowStartupLocation="CenterOwner">
 
-	<Grid Margin="20">
-		<Grid.RowDefinitions>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="*"/>
-			<RowDefinition Height="Auto"/>
-		</Grid.RowDefinitions>
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
 
-		<StackPanel Orientation="Horizontal"
-					Margin="0,0,0,10"
-					Grid.Row="0">
-			<TextBlock Text="ⓘ"
-					   FontSize="22"
-					   Foreground="{DynamicResource TextColor}"
-					   VerticalAlignment="Center"
-					   HorizontalAlignment="Center"
-					   Margin="0,-3,3,0">
-			</TextBlock>
-			<TextBlock Text="You may also view the guide on how to use PAM "
-					   FontSize="14"
-					   Foreground="{DynamicResource TextColor}"
-					   VerticalAlignment="Center"
-					   HorizontalAlignment="Center"/>
-			<Button Content="Here"
-					Click="GuideClick"
-					FontSize="14"
-					Foreground="{DynamicResource ButtonTextColor}"
-					Background="Transparent"
-					BorderThickness="0"
-					Padding="0"
-					Cursor="Hand"
-					VerticalAlignment="Center"
-					HorizontalAlignment="Center"
-					HorizontalContentAlignment="Center"
-					VerticalContentAlignment="Center"/>
-		</StackPanel>
-		
-		<!-- Single File Section -->
-		<StackPanel x:Name="SingleFileSection" Grid.Row="1" Margin="0,0,0,20" IsVisible="False">
-			<TextBlock Text="Single File"
-                       FontSize="28"
-                       FontWeight="Bold"
-                       Foreground="{DynamicResource TextColor}"
-                       Margin="0,0,0,10"/>
-			<TextBlock Text="To use single file mode, you have to first export the .uexp, .uasset, .ubulk, and .json files of the audio you want to replace from the game. You can do this using FModel.&#x0a;&#x0a;Then, you need the audio file you want to replace the game's sound with, lets say input.mp3.&#x0a;&#x0a;Upload both input.mp3 and the original game files, and then click 'Convert Files'. You will be asked where to save the modified files after conversion is done."
-                       FontSize="16"
-                       Foreground="{DynamicResource TextColor}"
-                       TextWrapping="Wrap"
-                       MaxWidth="800"/>
-		</StackPanel>
-
-		<!-- Batch Conversion Section -->
-		<StackPanel x:Name="BatchConversionSection" Grid.Row="1" IsVisible="False">
-			<TextBlock Text="Batch Conversion"
-                       FontSize="28"
-                       FontWeight="Bold"
-                       Foreground="{DynamicResource TextColor}"
-                       Margin="0,0,0,10"/>
-			<TextBlock Text="To use batch conversion mode, you have to first export the .uexp, .uasset, .ubulk, and .json files of the audio you want to replace from the game. You can do this using FModel.&#x0a;&#x0a;Then, you need audio files for each file you exported from the game. For example, 170412.mp3, and 171486.mp3. These will replace the game files of the same name.&#x0a;&#x0a;Upload the folder containing your audio files (the ones you're using as replacements), then the folder for the exported game files, click 'Start Batch Conversion' and you will be asked where to save modified files."
-                       FontSize="16"
-                       Foreground="{DynamicResource TextColor}"
-                       TextWrapping="Wrap"
-                       MaxWidth="800"/>
-		</StackPanel>
-
-		<!-- Pack Files Section -->
-		<StackPanel x:Name="PackFilesSection"  Grid.Row="1" IsVisible="False">
-			<TextBlock Text="Pack Files"
-                       FontSize="28"
-                       FontWeight="Bold"
-                       Foreground="{DynamicResource TextColor}"
-                       Margin="0,0,0,10"/>
-			<SelectableTextBlock Text="Please note that this function uses another project of mine, PD3WWiseMappings to tell which files go in which folders. If there has been an update to PAYDAY 3 lately, then this may not be fully up to date, and thus some files may be skipped.&#x0a;&#x0a;To use the pack files function, select the path to repak.exe.&#x0a;&#x0a;You can get the exe from:&#x0a;https://github.com/trumank/repak &#x0a;&#x0a;Then, select the folder of processed files that you have.&#x0a;They do not have to be ordered and should all be in one folder.&#x0a;&#x0a;Enter the name that you want your mod to be called, and then click Pack Files.&#x0a;If all goes well, then you should see a success notification and a File Explorer window will open to where the .pak file is located."
-                       FontSize="16"
-                       Foreground="{DynamicResource TextColor}"
-                       TextWrapping="Wrap"
-                       MaxWidth="800"/>
-		</StackPanel>
-
-		<!-- ID Search Section -->
-		<StackPanel x:Name="IDSearchSection"  Grid.Row="1" IsVisible="False">
-			<TextBlock Text="ID Search"
-                       FontSize="28"
-                       FontWeight="Bold"
-                       Foreground="{DynamicResource TextColor}"
-                       Margin="0,0,0,10"/>
-			<SelectableTextBlock Text="To use the ID Search tab, first click 'Load Pak Files', then navigate to wherever PAYDAY 3 is installed.&#x0a;They are usually located in PAYDAY3\PAYDAY3\Content\Paks&#x0a;&#x0a;You can select multiple or just one pak file at once. After a bit of waiting, all the pak files should load. You can then search, sort, and play the audio files.&#x0a;&#x0a;To play audio files, you need vgmstream-cli.exe.&#x0a;The download for this is available at:&#x0a;https://vgmstream.org/&#x0a;&#x0a;Place everything that is in the zip file in the same folder as PD3AudioModder.exe. Read USAGE.md if you'd like, it can de-clutter the folder."
-                       FontSize="16"
-                       Foreground="{DynamicResource TextColor}"
-                       TextWrapping="Wrap"
-                       MaxWidth="800"/>
-		</StackPanel>
-
-		<!-- Close button -->
-		<Button Content="Close"
-                Width="75"
-                Height="40"
-                Background="{DynamicResource ButtonColor}"
-                Foreground="{DynamicResource ButtonTextColor}"
-                FontSize="16"
-                CornerRadius="10"
-                Click="OnCloseClick"
-                VerticalContentAlignment="Center"
+        <StackPanel
+            Grid.Row="0"
+            Margin="0,0,0,10"
+            Orientation="Horizontal">
+            <TextBlock
+                Margin="0,-3,3,0"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontSize="22"
+                Foreground="{DynamicResource TextColor}"
+                Text="ⓘ" />
+            <TextBlock
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontSize="14"
+                Foreground="{DynamicResource TextColor}"
+                Text="You may also view the guide on how to use PAM " />
+            <Button
+                Padding="0"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
                 HorizontalContentAlignment="Center"
-                HorizontalAlignment="Right"
-                Grid.Row="2"
-                Margin="0,10,10,0"/>
-	</Grid>
+                VerticalContentAlignment="Center"
+                Background="Transparent"
+                BorderThickness="0"
+                Click="GuideClick"
+                Content="Here"
+                Cursor="Hand"
+                FontSize="14"
+                Foreground="{DynamicResource ButtonTextColor}" />
+        </StackPanel>
+
+        <!--  Single File Section  -->
+        <StackPanel
+            x:Name="SingleFileSection"
+            Grid.Row="1"
+            Margin="0,0,0,20"
+            IsVisible="False">
+            <TextBlock
+                Margin="0,0,0,10"
+                FontSize="28"
+                FontWeight="Bold"
+                Foreground="{DynamicResource TextColor}"
+                Text="Single File" />
+            <TextBlock
+                MaxWidth="800"
+                FontSize="16"
+                Foreground="{DynamicResource TextColor}"
+                Text="To use single file mode, you have to first export the .uexp, .uasset, .ubulk, and .json files of the audio you want to replace from the game. You can do this using FModel.&#x0a;&#x0a;Then, you need the audio file you want to replace the game's sound with, lets say input.mp3.&#x0a;&#x0a;Upload both input.mp3 and the original game files, and then click 'Convert Files'. You will be asked where to save the modified files after conversion is done."
+                TextWrapping="Wrap" />
+        </StackPanel>
+
+        <!--  Batch Conversion Section  -->
+        <StackPanel
+            x:Name="BatchConversionSection"
+            Grid.Row="1"
+            IsVisible="False">
+            <TextBlock
+                Margin="0,0,0,10"
+                FontSize="28"
+                FontWeight="Bold"
+                Foreground="{DynamicResource TextColor}"
+                Text="Batch Conversion" />
+            <TextBlock
+                MaxWidth="800"
+                FontSize="16"
+                Foreground="{DynamicResource TextColor}"
+                Text="To use batch conversion mode, you have to first export the .uexp, .uasset, .ubulk, and .json files of the audio you want to replace from the game. You can do this using FModel.&#x0a;&#x0a;Then, you need audio files for each file you exported from the game. For example, 170412.mp3, and 171486.mp3. These will replace the game files of the same name.&#x0a;&#x0a;Upload the folder containing your audio files (the ones you're using as replacements), then the folder for the exported game files, click 'Start Batch Conversion' and you will be asked where to save modified files."
+                TextWrapping="Wrap" />
+        </StackPanel>
+
+        <!--  Pack Files Section  -->
+        <StackPanel
+            x:Name="PackFilesSection"
+            Grid.Row="1"
+            IsVisible="False">
+            <TextBlock
+                Margin="0,0,0,10"
+                FontSize="28"
+                FontWeight="Bold"
+                Foreground="{DynamicResource TextColor}"
+                Text="Pack Files" />
+            <SelectableTextBlock
+                MaxWidth="800"
+                FontSize="16"
+                Foreground="{DynamicResource TextColor}"
+                Text="To use the pack files function, select the path to repak.exe.&#x0a;&#x0a;You can get the exe from:&#x0a;https://github.com/trumank/repak &#x0a;&#x0a;Then, select the folder of processed files that you have.&#x0a;&#x0a;If using the auto sort option, you do not have to create the mod structure yourself. Just select the folder with ALL your processed files, and the app will do it for you. Otherwise, do this now. You only need to make the folders like 'PAYDAY3\Content'... etc.&#x0a;&#x0a;Please note that the auto sort function uses another project of mine, PD3WWiseMappings to tell which files go in which folders. If there has been an update to PAYDAY 3 lately, then this may not be fully up to date, and thus some files may be skipped.&#x0a;&#x0a;Enter the name that you want your mod to be called, and then click Pack Files.&#x0a;If all goes well, then you should see a success notification and a File Explorer window will open to where the .pak file is located."
+                TextWrapping="Wrap" />
+        </StackPanel>
+
+        <!--  ID Search Section  -->
+        <StackPanel
+            x:Name="IDSearchSection"
+            Grid.Row="1"
+            IsVisible="False">
+            <TextBlock
+                Margin="0,0,0,10"
+                FontSize="28"
+                FontWeight="Bold"
+                Foreground="{DynamicResource TextColor}"
+                Text="ID Search" />
+            <SelectableTextBlock
+                MaxWidth="800"
+                FontSize="16"
+                Foreground="{DynamicResource TextColor}"
+                Text="To use the ID Search tab, first click 'Load Pak Files', then navigate to wherever PAYDAY 3 is installed.&#x0a;They are usually located in PAYDAY3\PAYDAY3\Content\Paks&#x0a;&#x0a;You can select multiple or just one pak file at once. After a bit of waiting, all the pak files should load. You can then search, sort, and play the audio files.&#x0a;&#x0a;To play audio files, you need vgmstream-cli.exe.&#x0a;The download for this is available at:&#x0a;https://vgmstream.org/&#x0a;&#x0a;Place everything that is in the zip file in the same folder as PD3AudioModder.exe. Read USAGE.md if you'd like, it can de-clutter the folder."
+                TextWrapping="Wrap" />
+        </StackPanel>
+
+        <!--  Close button  -->
+        <Button
+            Grid.Row="2"
+            Width="75"
+            Height="40"
+            Margin="0,10,10,0"
+            HorizontalAlignment="Right"
+            HorizontalContentAlignment="Center"
+            VerticalContentAlignment="Center"
+            Background="{DynamicResource ButtonColor}"
+            Click="OnCloseClick"
+            Content="Close"
+            CornerRadius="10"
+            FontSize="16"
+            Foreground="{DynamicResource ButtonTextColor}" />
+    </Grid>
 </Window>
