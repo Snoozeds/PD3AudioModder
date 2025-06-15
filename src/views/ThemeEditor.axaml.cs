@@ -82,13 +82,6 @@ namespace PD3AudioModder
                     {
                         themeNameText.Text = "Theme: " + selectedThemeName;
                     }
-
-                    var warningOutput = this.FindControl<TextBox>("WarningOutput");
-                    if (warningOutput != null && !_viewModel.isDefaultTheme)
-                    {
-                        warningOutput.Text = $"Theme {selectedThemeName} loaded successfully.";
-                        warningOutput.Foreground = new SolidColorBrush(Colors.Lime);
-                    }
                 }
                 catch (Exception ex)
                 {
@@ -225,9 +218,10 @@ namespace PD3AudioModder
 
         private void LoadTheme()
         {
-            var warningOutput = this.FindControl<TextBox>("WarningOutput")!;
+            var warningOutput = this.FindControl<TextBox>("WarningOutput");
+            if (warningOutput == null) return;
+
             warningOutput.Text = "";
-            warningOutput.Foreground = new SolidColorBrush(Colors.Red);
 
             List<string> missingColors = new List<string>();
             List<string> invalidColors = new List<string>();
@@ -252,27 +246,27 @@ namespace PD3AudioModder
                 }
             }
 
-            if (missingColors.Count > 0 || invalidColors.Count > 0)
+            if (missingColors.Count == 0 && invalidColors.Count == 0)
+            {
+                warningOutput.Text = "Theme loaded successfully.";
+                warningOutput.Foreground = new SolidColorBrush(Colors.Lime);
+            }
+            else
             {
                 StringBuilder errorMessage = new StringBuilder();
 
                 if (missingColors.Count > 0)
                 {
-                    errorMessage.AppendLine($"Missing colors: {string.Join(", ", missingColors)}");
+                    errorMessage.AppendLine($"Colors not defined in INI: {string.Join(", ", missingColors)}");
                 }
 
                 if (invalidColors.Count > 0)
                 {
-                    errorMessage.AppendLine($"Invalid colors: {string.Join(", ", invalidColors)}");
+                    errorMessage.AppendLine($"Invalid colors in INI: {string.Join(", ", invalidColors)}");
                 }
 
                 warningOutput.Text = errorMessage.ToString().TrimEnd();
                 warningOutput.Foreground = new SolidColorBrush(Colors.Red);
-            }
-            else
-            {
-                warningOutput.Text = "Theme loaded successfully.";
-                warningOutput.Foreground = new SolidColorBrush(Colors.Lime);
             }
 
             ApplyTheme();

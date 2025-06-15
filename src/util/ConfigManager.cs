@@ -124,12 +124,7 @@ namespace PD3AudioModder
                     config =>
                         string.IsNullOrEmpty(config.RepakPath) || File.Exists(config.RepakPath)
                 },
-                {
-                    "SaveAesKey",
-                    config =>
-                    config.SaveAesKey == true
-                        || config.SaveAesKey == false
-                },
+                { "SaveAesKey", config => config.SaveAesKey == true || config.SaveAesKey == false },
                 { "FfmpegOptions", config => !string.IsNullOrWhiteSpace(config.FfmpegOptions) },
                 {
                     "FfmpegPath",
