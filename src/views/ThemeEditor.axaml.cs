@@ -46,10 +46,10 @@ namespace PD3AudioModder
                 try
                 {
                     iniParser.Load(themeFilePath);
-                    LoadTheme();
 
                     // Get the theme name from path
                     string selectedThemeName = Path.GetFileNameWithoutExtension(themeFilePath);
+                    LoadTheme(selectedThemeName);
 
                     // Save theme in config
                     AppConfig.Instance.Theme = Path.GetFileName(themeFilePath);
@@ -216,7 +216,7 @@ namespace PD3AudioModder
             }
         }
 
-        private void LoadTheme()
+        private void LoadTheme(string themeName = "")
         {
             var warningOutput = this.FindControl<TextBox>("WarningOutput");
             if (warningOutput == null) return;
@@ -248,7 +248,7 @@ namespace PD3AudioModder
 
             if (missingColors.Count == 0 && invalidColors.Count == 0)
             {
-                warningOutput.Text = "Theme loaded successfully.";
+                warningOutput.Text = $"Theme '{themeName}' loaded successfully.";
                 warningOutput.Foreground = new SolidColorBrush(Colors.Lime);
             }
             else
@@ -371,7 +371,8 @@ namespace PD3AudioModder
                 _viewModel.isDefaultTheme = false;
                 iniParser.Load(result[0]);
 
-                LoadTheme();
+                string selectedThemeName = Path.GetFileNameWithoutExtension(result[0]);
+                LoadTheme(selectedThemeName);
 
                 var INIEditor = this.FindControl<TextBox>("INIEditor");
                 if (INIEditor != null)
@@ -396,7 +397,6 @@ namespace PD3AudioModder
                 _viewModel.isDefaultTheme = false;
 
                 // Update theme selection for combo box
-                string selectedThemeName = Path.GetFileNameWithoutExtension(result[0]);
                 _viewModel.SelectedTheme = selectedThemeName;
 
                 UpdateColorPreviews();
