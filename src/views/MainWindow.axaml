@@ -561,23 +561,38 @@
                                             FontSize="16"
                                             Foreground="{DynamicResource ButtonTextColor}" />
                                     </Grid>
-                                    <!--  Load Pak Files Button  -->
-                                    <Button
-                                        x:Name="LoadPakFilesButton"
+                                    <!--  AES Key & Load Files  -->
+                                    <Grid
                                         Grid.Row="2"
-                                        Width="250"
-                                        Height="40"
                                         Margin="0,0,0,15"
-                                        Padding="10,5"
-                                        HorizontalAlignment="Center"
-                                        HorizontalContentAlignment="Center"
-                                        VerticalContentAlignment="Center"
-                                        Background="{DynamicResource ButtonColor}"
-                                        Click="OnLoadPakFilesClick"
-                                        Content="Load Pak Files"
-                                        CornerRadius="10"
-                                        FontSize="16"
-                                        Foreground="{DynamicResource ButtonTextColor}" />
+                                        ColumnDefinitions="*, Auto">
+                                        <TextBox
+                                            Name="AesKeyTextBox"
+                                            Grid.Column="0"
+                                            Height="40"
+                                            Margin="0,0,10,0"
+                                            Padding="10,5"
+                                            HorizontalContentAlignment="Center"
+                                            VerticalContentAlignment="Center"
+                                            CornerRadius="8"
+                                            FontSize="16"
+                                            Foreground="{DynamicResource TextColor}"
+                                            Watermark="Enter AES Key..." />
+                                        <Button
+                                            x:Name="LoadPakFilesButton"
+                                            Grid.Column="1"
+                                            Width="150"
+                                            Height="40"
+                                            Padding="10,5"
+                                            HorizontalContentAlignment="Center"
+                                            VerticalContentAlignment="Center"
+                                            Background="{DynamicResource ButtonColor}"
+                                            Click="OnLoadPakFilesClick"
+                                            Content="Load Pak Files"
+                                            CornerRadius="8"
+                                            FontSize="16"
+                                            Foreground="{DynamicResource ButtonTextColor}" />
+                                    </Grid>
                                     <!--  Results Table  -->
                                     <Border
                                         Grid.Row="3"

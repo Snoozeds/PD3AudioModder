@@ -323,8 +323,8 @@ namespace PD3AudioModder
         // ID Search tab
         public ObservableCollection<SoundItem> _soundItems = new ObservableCollection<SoundItem>();
         public ObservableCollection<SoundItem> SoundItems => _soundItems;
-        public string pd3InstallFolder;
         public DataGrid? soundsDataGrid;
+        public TextBox? aesKeyTextBox;
 
         // Blahaj EE
         private string keySequence = "";
@@ -519,6 +519,15 @@ namespace PD3AudioModder
             // ID Search Tab
             soundsDataGrid = this.FindControl<DataGrid>("SoundsDataGrid")!;
             InitializeDataGrid(soundsDataGrid);
+
+            // Load AES key from config
+            aesKeyTextBox = this.FindControl<TextBox>("AesKeyTextBox")!;
+            string? loadedKey = AesKey.GetAesKey();
+            if (!string.IsNullOrEmpty(loadedKey))
+            {
+                aesKeyTextBox.Text = loadedKey;
+            }
+
             var searchButton = this.FindControl<Button>("SearchButton")!;
             var searchTextBox = this.FindControl<TextBox>("SearchTextBox")!;
             searchButton.Click += (_, _) => PerformSearch(searchTextBox.Text);
@@ -852,11 +861,7 @@ namespace PD3AudioModder
             else
             {
                 _notificationManager?.Show(
-                    new Notification(
-                        "Warning",
-                        "Packing incomplete.",
-                        NotificationType.Warning
-                    )
+                    new Notification("Warning", "Packing incomplete.", NotificationType.Warning)
                 );
             }
         }
@@ -1115,10 +1120,13 @@ namespace PD3AudioModder
                 }
 
                 var files = await storageProvider.OpenFilePickerAsync(fileOptions);
+                string aesKey =
+                    aesKeyTextBox.Text
+                    ?? "0x27DFBADBB537388ACDE27A7C5F3EBC3721AF0AE0A7602D2D7F8A16548F37D394";
                 if (files != null && files.Count > 0)
                 {
                     // Process selected .pak files
-                    await IDSearcher.ProcessPakFiles(files, this);
+                    await IDSearcher.ProcessPakFiles(files, this, aesKey);
                 }
             }
             catch (Exception ex)

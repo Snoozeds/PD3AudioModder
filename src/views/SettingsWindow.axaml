@@ -243,6 +243,27 @@
                                             Foreground="{DynamicResource ButtonTextColor}" />
                                     </Grid>
                                 </StackPanel>
+
+                                <Grid Margin="0,0,0,10" ColumnDefinitions="*, Auto">
+                                    <StackPanel Grid.Column="0">
+                                        <TextBlock
+                                            FontSize="16"
+                                            Foreground="{DynamicResource TextColor}"
+                                            Text="Save AES Key in config (ID Search)" />
+                                        <TextBlock FontSize="14" Foreground="{DynamicResource SettingsTextColor}">
+                                            <TextBlock.Inlines>
+                                                <Run Text="Saves the AES key to a config file. " />
+                                                <Run FontWeight="Bold" Text="May disable this for security reasons." />
+                                            </TextBlock.Inlines>
+                                        </TextBlock>
+                                    </StackPanel>
+                                    <ToggleSwitch
+                                        Name="SaveAESKeyToggle"
+                                        Grid.Column="1"
+                                        Foreground="{DynamicResource TextColor}"
+                                        IsCheckedChanged="HandleToggleChanged" />
+                                </Grid>
+
                             </StackPanel>
                         </Border>
 

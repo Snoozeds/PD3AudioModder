@@ -17,6 +17,7 @@ namespace PD3AudioModder.util
     public class IDSearcher
     {
         private MainWindow _mainWindow;
+        private static AppConfig _appConfig = AppConfig.Load();
 
         // Command process
         private Process _sharedProcess;
@@ -45,7 +46,7 @@ namespace PD3AudioModder.util
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
                 UseShellExecute = false,
-                CreateNoWindow = false
+                CreateNoWindow = false,
             };
 
             _sharedProcess = new Process { StartInfo = psi };
@@ -65,7 +66,9 @@ namespace PD3AudioModder.util
             _sharedProcess.BeginOutputReadLine();
             _sharedProcess.BeginErrorReadLine();
 
-            _sharedProcess.StandardInput.WriteLine($"cd /d \"{AppDomain.CurrentDomain.BaseDirectory}\"");
+            _sharedProcess.StandardInput.WriteLine(
+                $"cd /d \"{AppDomain.CurrentDomain.BaseDirectory}\""
+            );
             _sharedProcess.StandardInput.Flush();
 
             _isProcessInitialized = true;
@@ -90,12 +93,12 @@ namespace PD3AudioModder.util
 
         public static async Task ProcessPakFiles(
             System.Collections.Generic.IReadOnlyList<Avalonia.Platform.Storage.IStorageFile> files,
-            MainWindow _mainWindow
+            MainWindow _mainWindow,
+            string aesKey
         )
         {
             List<SoundItem> soundItems = new List<SoundItem>();
             IDSearcher sharedSearcher = new IDSearcher(_mainWindow);
-            var aesKey = "0x27DFBADBB537388ACDE27A7C5F3EBC3721AF0AE0A7602D2D7F8A16548F37D394";
 
             try
             {
@@ -116,6 +119,12 @@ namespace PD3AudioModder.util
                     );
                     _provider.Initialize();
                     _provider.SubmitKey(new FGuid(), new FAesKey(aesKey));
+
+                    if (_appConfig.SaveAesKey == true)
+                    {
+                        AesKey.SaveAesKey(aesKey);
+                    }
+
                     Console.WriteLine(
                         $"Provider initialized. Available files: {_provider.Files.Count}"
                     );
@@ -255,10 +264,21 @@ namespace PD3AudioModder.util
                 {
                     _mainWindow._soundItems.Add(item);
                 }
-                _mainWindow.UpdateGlobalStatus(
-                    $"Loaded {soundItems.Count} sound files",
-                    "ID Search"
-                );
+
+                if (soundItems.Count > 0)
+                {
+                    _mainWindow.UpdateGlobalStatus(
+                        $"Loaded {soundItems.Count} sound files",
+                        "ID Search"
+                    );
+                }
+                else
+                {
+                    _mainWindow.UpdateGlobalStatus(
+                        $"Loaded {soundItems.Count} sound files. AES key may be invalid.",
+                        "ID Search"
+                    );
+                }
             });
         }
 
@@ -434,8 +454,12 @@ namespace PD3AudioModder.util
                     }
                     catch (Exception jsonEx)
                     {
-                        Console.WriteLine($"Error extracting JSON for {uassetPath}: {jsonEx.Message}");
-                        ShowWarning($"$\"Error extracting JSON for {{uassetPath}}: {{jsonEx.Message}}\"");
+                        Console.WriteLine(
+                            $"Error extracting JSON for {uassetPath}: {jsonEx.Message}"
+                        );
+                        ShowWarning(
+                            $"$\"Error extracting JSON for {{uassetPath}}: {{jsonEx.Message}}\""
+                        );
                     }
                 }
 
@@ -592,7 +616,9 @@ namespace PD3AudioModder.util
                 await File.WriteAllBytesAsync(tempWemPath, wemData.ToArray());
 
                 // Convert WEM to WAV using vgmstream
-                _sharedProcess.StandardInput.WriteLine($"vgmstream-cli.exe -o \"{tempWavPath}\" \"{tempWemPath}\"");
+                _sharedProcess.StandardInput.WriteLine(
+                    $"vgmstream-cli.exe -o \"{tempWavPath}\" \"{tempWemPath}\""
+                );
                 _sharedProcess.StandardInput.Flush();
 
                 int attempts = 0;

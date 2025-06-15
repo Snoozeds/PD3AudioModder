@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
-using static Org.BouncyCastle.Math.EC.ECCurve;
 
 namespace PD3AudioModder
 {
@@ -12,6 +11,7 @@ namespace PD3AudioModder
         public static readonly bool AutoUpdateEnabled = true;
         public static readonly bool AskToUpdate = true;
         public static readonly string? RepakPath = null;
+        public static readonly bool SaveAesKey = true;
         public static readonly string? FfmpegOptions = "-acodec pcm_s16le -ar 48000 -ac 2";
         public static readonly string? FfmpegPath = null;
         public static readonly string? DefaultExportFolder = null;
@@ -36,6 +36,7 @@ namespace PD3AudioModder
         public bool AutoUpdateEnabled { get; set; } = DefaultConfig.AutoUpdateEnabled;
         public bool? AskToUpdate { get; set; } = DefaultConfig.AskToUpdate;
         public string? RepakPath { get; set; } = DefaultConfig.RepakPath;
+        public bool? SaveAesKey { get; set; } = DefaultConfig.SaveAesKey;
         public string? FfmpegOptions { get; set; } = DefaultConfig.FfmpegOptions;
         public string? FfmpegPath { get; set; } = DefaultConfig.FfmpegPath;
         public string? DefaultExportFolder { get; set; } = DefaultConfig.DefaultExportFolder;
@@ -122,6 +123,12 @@ namespace PD3AudioModder
                     "RepakPath",
                     config =>
                         string.IsNullOrEmpty(config.RepakPath) || File.Exists(config.RepakPath)
+                },
+                {
+                    "SaveAesKey",
+                    config =>
+                    config.SaveAesKey == true
+                        || config.SaveAesKey == false
                 },
                 { "FfmpegOptions", config => !string.IsNullOrWhiteSpace(config.FfmpegOptions) },
                 {
