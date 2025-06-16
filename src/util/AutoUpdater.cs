@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
 using System.Runtime.InteropServices;
+using System.Security.Principal;
 using System.Threading.Tasks;
 using Avalonia.Controls.Notifications;
 
@@ -21,6 +22,99 @@ namespace PD3AudioModder
         {
             _notificationManager = notificationManager;
             _mainWindow = mainWindow;
+        }
+
+        // Check if running with admin privileges
+        private bool IsRunningAsAdmin()
+        {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                using (WindowsIdentity identity = WindowsIdentity.GetCurrent())
+                {
+                    WindowsPrincipal principal = new WindowsPrincipal(identity);
+                    return principal.IsInRole(WindowsBuiltInRole.Administrator);
+                }
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                // Check if running as root or with sudo
+                return Environment.UserName == "root" || !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("SUDO_USER"));
+            }
+            return false;
+        }
+
+        // Check if we can write to the application directory
+        private bool CanWriteToAppDirectory()
+        {
+            try
+            {
+                string testFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "write_test.tmp");
+                File.WriteAllText(testFile, "test");
+                File.Delete(testFile);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        // Restart application with admin privileges
+        private void RestartWithAdminPrivileges()
+        {
+            try
+            {
+                string? currentExePath = Process.GetCurrentProcess().MainModule?.FileName;
+                if (string.IsNullOrEmpty(currentExePath))
+                {
+                    throw new Exception("Failed to get current executable path.");
+                }
+
+                ProcessStartInfo startInfo = new ProcessStartInfo
+                {
+                    FileName = currentExePath,
+                    UseShellExecute = true
+                };
+
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    startInfo.Verb = "runas"; // Request admin privileges on Windows
+                }
+                else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                {
+                    // Use pkexec or gksudo (unmaintained but Linux users are Linux users) for privilege escalation on Linux
+                    if (File.Exists("/usr/bin/pkexec"))
+                    {
+                        startInfo.FileName = "pkexec";
+                        startInfo.Arguments = $"{currentExePath}";
+                    }
+                    else if (File.Exists("/usr/bin/gksudo"))
+                    {
+                        startInfo.FileName = "gksudo";
+                        startInfo.Arguments = $"{currentExePath}";
+                    }
+                    else
+                    {
+                        // Fallback to sudo in terminal
+                        startInfo.FileName = "sudo";
+                        startInfo.Arguments = $"{currentExePath}";
+                    }
+                }
+
+                Process.Start(startInfo);
+                Environment.Exit(0);
+            }
+            catch (Exception ex)
+            {
+                _notificationManager?.Show(
+                    new Notification(
+                        "Error",
+                        $"Failed to restart with admin privileges: {ex.Message}",
+                        NotificationType.Error,
+                        TimeSpan.FromSeconds(10)
+                    )
+                );
+            }
         }
 
         public async Task<(bool available, string newVersion)> CheckForUpdates()
@@ -182,6 +276,25 @@ done";
 
         public async Task DownloadUpdate()
         {
+            // Check if we need admin privileges before starting the update
+            if (!CanWriteToAppDirectory() && !IsRunningAsAdmin())
+            {
+                _notificationManager?.Show(
+                    new Notification(
+                        "Admin Rights Required",
+                        "Administrator privileges are required to update the application. The application will restart with elevated permissions.",
+                        NotificationType.Warning,
+                        TimeSpan.FromSeconds(5)
+                    )
+                );
+
+                // Wait a moment for the user to see the notification
+                await Task.Delay(2000);
+
+                RestartWithAdminPrivileges();
+                return;
+            }
+
             _notificationManager?.Show(
                 new Notification(
                     "Update in Progress",
@@ -191,16 +304,41 @@ done";
                 )
             );
 
-            string url =
-                "https://github.com/Snoozeds/PD3AudioModder/releases/latest/download/PD3AudioModder.zip";
-
-            using (HttpClient client = new HttpClient())
+            try
             {
-                byte[] updateData = await client.GetByteArrayAsync(url);
-                await File.WriteAllBytesAsync(TempUpdatePath, updateData);
-            }
+                string url =
+                    "https://github.com/Snoozeds/PD3AudioModder/releases/latest/download/PD3AudioModder.zip";
 
-            LaunchUpdateProcess();
+                using (HttpClient client = new HttpClient())
+                {
+                    byte[] updateData = await client.GetByteArrayAsync(url);
+                    await File.WriteAllBytesAsync(TempUpdatePath, updateData);
+                }
+
+                LaunchUpdateProcess();
+            }
+            catch (UnauthorizedAccessException)
+            {
+                _notificationManager?.Show(
+                    new Notification(
+                        "Permission Error",
+                        "Unable to write update file. Please run as administrator or check file permissions.",
+                        NotificationType.Error,
+                        TimeSpan.FromSeconds(10)
+                    )
+                );
+            }
+            catch (Exception ex)
+            {
+                _notificationManager?.Show(
+                    new Notification(
+                        "Update Error",
+                        $"Failed to download update: {ex.Message}",
+                        NotificationType.Error,
+                        TimeSpan.FromSeconds(10)
+                    )
+                );
+            }
         }
     }
 }
