@@ -28,16 +28,35 @@ namespace PD3AudioModder.util
             _mainWindow = mainWindow;
         }
 
+        // Used for finding vgmstream path
+        private static string _cachedVgmstreamPath = null;
+        private string GetVgmstreamPath()
+        {
+            if (_cachedVgmstreamPath != null)
+                return _cachedVgmstreamPath;
+
+            var (path, errorMessage) = VgmstreamPathFinder.GetVgmstreamPathWithFallback();
+
+            if (path != null)
+            {
+                _cachedVgmstreamPath = path;
+                return path;
+            }
+
+            // If not found, show error and return null
+            ShowWarning(errorMessage);
+            return null;
+        }
+
         // Reusable command window so Windows Defender doesn't think PAM is a trojan :D
         private void InitializeSharedProcess()
         {
             if (_isProcessInitialized && _sharedProcess != null && !_sharedProcess.HasExited)
                 return;
 
-            string vgmstreamPath = Path.Combine(
-                AppDomain.CurrentDomain.BaseDirectory,
-                "vgmstream-cli.exe"
-            );
+            string vgmstreamPath = GetVgmstreamPath();
+            if (string.IsNullOrEmpty(vgmstreamPath))
+                return;
 
             ProcessStartInfo psi = new ProcessStartInfo
             {
@@ -67,7 +86,7 @@ namespace PD3AudioModder.util
             _sharedProcess.BeginErrorReadLine();
 
             _sharedProcess.StandardInput.WriteLine(
-                $"cd /d \"{AppDomain.CurrentDomain.BaseDirectory}\""
+                $"cd /d \"{Path.GetDirectoryName(vgmstreamPath)}\""
             );
             _sharedProcess.StandardInput.Flush();
 
@@ -298,21 +317,12 @@ namespace PD3AudioModder.util
             string uexpPath = Path.ChangeExtension(soundItem.UbulkPath, ".uexp");
             string uassetPath = Path.ChangeExtension(soundItem.UbulkPath, ".uasset");
 
-            string vgmstreamPath = Path.Combine(
-                AppDomain.CurrentDomain.BaseDirectory,
-                "vgmstream-cli.exe"
-            );
+            string vgmstreamPath = GetVgmstreamPath();
+            if (string.IsNullOrEmpty(vgmstreamPath))
+                return; // Error already shown in GetVgmstreamPath
 
             try
             {
-                if (!File.Exists(vgmstreamPath))
-                {
-                    ShowWarning(
-                        "vgmstream command line not found!\nPlease download it from\nhttps://vgmstream.org/downloads\nand place it (and all the DLLs) in the same folder as this app."
-                    );
-                    return;
-                }
-
                 byte[] wemData = Array.Empty<byte>();
 
                 // Try getting ubulk data first
@@ -491,18 +501,9 @@ namespace PD3AudioModder.util
                 return;
             }
 
-            string vgmstreamPath = Path.Combine(
-                AppDomain.CurrentDomain.BaseDirectory,
-                "vgmstream-cli.exe"
-            );
-
-            if (!File.Exists(vgmstreamPath))
-            {
-                ShowWarning(
-                    "vgmstream command line not found!\nPlease download it from\nhttps://vgmstream.org/downloads\nand place it (and all the DLLs) in the same folder as this app."
-                );
-                return;
-            }
+            string vgmstreamPath = GetVgmstreamPath();
+            if (string.IsNullOrEmpty(vgmstreamPath))
+                return; // Error already shown in GetVgmstreamPath
 
             // Initialize shared command prompt window so that PAM doesn't get falsely flagged as a trojan/spam command windows
             InitializeSharedProcess();
@@ -616,8 +617,9 @@ namespace PD3AudioModder.util
                 await File.WriteAllBytesAsync(tempWemPath, wemData.ToArray());
 
                 // Convert WEM to WAV using vgmstream
+                string vgmstreamExe = Path.GetFileName(vgmstreamPath);
                 _sharedProcess.StandardInput.WriteLine(
-                    $"vgmstream-cli.exe -o \"{tempWavPath}\" \"{tempWemPath}\""
+                    $"{vgmstreamExe} -o \"{tempWavPath}\" \"{tempWemPath}\""
                 );
                 _sharedProcess.StandardInput.Flush();
 

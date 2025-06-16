@@ -219,7 +219,8 @@ namespace PD3AudioModder
         private void LoadTheme(string themeName = "")
         {
             var warningOutput = this.FindControl<TextBox>("WarningOutput");
-            if (warningOutput == null) return;
+            if (warningOutput == null)
+                return;
 
             warningOutput.Text = "";
 
@@ -257,12 +258,16 @@ namespace PD3AudioModder
 
                 if (missingColors.Count > 0)
                 {
-                    errorMessage.AppendLine($"Colors not defined in INI: {string.Join(", ", missingColors)}");
+                    errorMessage.AppendLine(
+                        $"Colors not defined in INI: {string.Join(", ", missingColors)}"
+                    );
                 }
 
                 if (invalidColors.Count > 0)
                 {
-                    errorMessage.AppendLine($"Invalid colors in INI: {string.Join(", ", invalidColors)}");
+                    errorMessage.AppendLine(
+                        $"Invalid colors in INI: {string.Join(", ", invalidColors)}"
+                    );
                 }
 
                 warningOutput.Text = errorMessage.ToString().TrimEnd();
