@@ -166,6 +166,139 @@ SettingsTextColor=#FFFF99
 MenuHoverColor=#990000
 SystemAccentColor=#FFCC00"
                 },
+                {
+                    "Forest.ini",
+                    @"
+[Theme]
+BackgroundColor=#1B2F1B
+TextColor=#E8F5E8
+ButtonColor=#2E7D32
+ButtonTextColor=#FFFFFF
+SecondaryButtonColor=#4CAF50
+SecondaryButtonTextColor=#FFFFFF
+BorderColor=#388E3C
+TertiaryColor=#1B5E20
+BorderBackgroundColor=#263326
+WarningTextColor=#FFC107
+SettingsTextColor=#81C784
+MenuHoverColor=#43A047
+SystemAccentColor=#66BB6A
+"
+                },
+                {
+                    "Ocean.ini",
+                    @"
+[Theme]
+BackgroundColor=#0C4160
+TextColor=#E0F7FA
+ButtonColor=#006064
+ButtonTextColor=#E0F7FA
+SecondaryButtonColor=#00ACC1
+SecondaryButtonTextColor=#FFFFFF
+BorderColor=#0097A7
+TertiaryColor=#004D5C
+BorderBackgroundColor=#155A75
+WarningTextColor=#FFC107
+SettingsTextColor=#4DD0E1
+MenuHoverColor=#00838F
+SystemAccentColor=#26C6DA
+"
+                },
+                {
+                    "Cyberpunk.ini",
+                    @"
+[Theme]
+BackgroundColor=#0F0F23
+TextColor=#00FF9F
+ButtonColor=#FF0080
+ButtonTextColor=#000000
+SecondaryButtonColor=#00FFFF
+SecondaryButtonTextColor=#000000
+BorderColor=#FF0080
+TertiaryColor=#1A0033
+BorderBackgroundColor=#1F1F3A
+WarningTextColor=#FFFF00
+SettingsTextColor=#B300FF
+MenuHoverColor=#FF3399
+SystemAccentColor=#00FFFF
+"
+                },
+                {
+                    "Monokai.ini",
+                    @"
+[Theme]
+BackgroundColor=#272822
+TextColor=#F8F8F2
+ButtonColor=#A6E22E
+ButtonTextColor=#272822
+SecondaryButtonColor=#66D9EF
+SecondaryButtonTextColor=#272822
+BorderColor=#75715E
+TertiaryColor=#3E3D32
+BorderBackgroundColor=#383830
+WarningTextColor=#F92672
+SettingsTextColor=#75715E
+MenuHoverColor=#49483E
+SystemAccentColor=#AE81FF
+"
+                },
+                {
+                    "Lavender.ini",
+                    @"
+[Theme]
+BackgroundColor=#2E2A3D
+TextColor=#E6E0F0
+ButtonColor=#7C4DFF
+ButtonTextColor=#FFFFFF
+SecondaryButtonColor=#B39DDB
+SecondaryButtonTextColor=#2E2A3D
+BorderColor=#9575CD
+TertiaryColor=#3A3550
+BorderBackgroundColor=#3F3A5A
+WarningTextColor=#FFB74D
+SettingsTextColor=#B39DDB
+MenuHoverColor=#651FFF
+SystemAccentColor=#8C9EFF
+"
+                },
+                {
+                    "Midnight.ini",
+                    @"
+[Theme]
+BackgroundColor=#0D1117
+TextColor=#C9D1D9
+ButtonColor=#238636
+ButtonTextColor=#FFFFFF
+SecondaryButtonColor=#21262D
+SecondaryButtonTextColor=#C9D1D9
+BorderColor=#30363D
+TertiaryColor=#161B22
+BorderBackgroundColor=#21262D
+WarningTextColor=#F85149
+SettingsTextColor=#7D8590
+MenuHoverColor=#2F81F7
+SystemAccentColor=#58A6FF
+"
+                },
+                {
+                    "Retro.ini",
+                    @"
+[Theme]
+BackgroundColor=#2A1810
+TextColor=#F4E4BC
+ButtonColor=#D2691E
+ButtonTextColor=#F4E4BC
+SecondaryButtonColor=#8B4513
+SecondaryButtonTextColor=#F4E4BC
+BorderColor=#CD853F
+TertiaryColor=#3E2723
+BorderBackgroundColor=#4A2C2A
+WarningTextColor=#FFD700
+SettingsTextColor=#DEB887
+MenuHoverColor=#A0522D
+SystemAccentColor=#F4A460
+"
+                },
             };
 
             foreach (var theme in defaultThemes)
