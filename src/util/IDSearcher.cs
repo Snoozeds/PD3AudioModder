@@ -30,6 +30,7 @@ namespace PD3AudioModder.util
 
         // Used for finding vgmstream path
         private static string _cachedVgmstreamPath = null;
+
         private string GetVgmstreamPath()
         {
             if (_cachedVgmstreamPath != null)

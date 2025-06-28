@@ -12,27 +12,41 @@ namespace PD3AudioModder.util
         /// <returns>Full path to vgmstream-cli.exe if found, null otherwise</returns>
         public static string FindVgmstreamPath()
         {
-            string[] searchDirectories = {
+            string[] searchDirectories =
+            {
                 AppDomain.CurrentDomain.BaseDirectory,
-                
                 // System directories
                 Environment.GetFolderPath(Environment.SpecialFolder.System), // System32
-                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Windows), "SysWOW64"),
-                
+                Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.Windows),
+                    "SysWOW64"
+                ),
                 // Program Files directories
                 Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
                 Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86),
-                
                 // Common installation subdirectories in Program Files
-                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "vgmstream"),
-                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "vgmstream"),
-                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), "VGMStream"),
-                Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86), "VGMStream"),
+                Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
+                    "vgmstream"
+                ),
+                Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86),
+                    "vgmstream"
+                ),
+                Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
+                    "VGMStream"
+                ),
+                Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86),
+                    "VGMStream"
+                ),
             };
 
             // Also check PATH environment variable directories
             string pathEnv = Environment.GetEnvironmentVariable("PATH") ?? "";
-            var pathDirectories = pathEnv.Split(Path.PathSeparator, StringSplitOptions.RemoveEmptyEntries)
+            var pathDirectories = pathEnv
+                .Split(Path.PathSeparator, StringSplitOptions.RemoveEmptyEntries)
                 .Where(dir => !string.IsNullOrWhiteSpace(dir) && Directory.Exists(dir))
                 .ToArray();
 
@@ -76,13 +90,14 @@ namespace PD3AudioModder.util
                 return (vgmstreamPath, null);
             }
 
-            string errorMessage = "vgmstream-cli.exe not found!\n" +
-                                 "Please download it from https://vgmstream.org/downloads\n" +
-                                 "and place it in one of these locations:\n" +
-                                 $"• Application directory: {AppDomain.CurrentDomain.BaseDirectory}\n" +
-                                 $"• System32: {Environment.GetFolderPath(Environment.SpecialFolder.System)}\n" +
-                                 $"• Program Files: {Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)}\\vgmstream\\\n" +
-                                 "• Or add it to your system PATH";
+            string errorMessage =
+                "vgmstream-cli.exe not found!\n"
+                + "Please download it from https://vgmstream.org/downloads\n"
+                + "and place it in one of these locations:\n"
+                + $"• Application directory: {AppDomain.CurrentDomain.BaseDirectory}\n"
+                + $"• System32: {Environment.GetFolderPath(Environment.SpecialFolder.System)}\n"
+                + $"• Program Files: {Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)}\\vgmstream\\\n"
+                + "• Or add it to your system PATH";
 
             return (null, errorMessage);
         }

@@ -38,7 +38,8 @@ namespace PD3AudioModder
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
                 // Check if running as root or with sudo
-                return Environment.UserName == "root" || !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("SUDO_USER"));
+                return Environment.UserName == "root"
+                    || !string.IsNullOrEmpty(Environment.GetEnvironmentVariable("SUDO_USER"));
             }
             return false;
         }
@@ -48,7 +49,10 @@ namespace PD3AudioModder
         {
             try
             {
-                string testFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "write_test.tmp");
+                string testFile = Path.Combine(
+                    AppDomain.CurrentDomain.BaseDirectory,
+                    "write_test.tmp"
+                );
                 File.WriteAllText(testFile, "test");
                 File.Delete(testFile);
                 return true;
@@ -73,7 +77,7 @@ namespace PD3AudioModder
                 ProcessStartInfo startInfo = new ProcessStartInfo
                 {
                     FileName = currentExePath,
-                    UseShellExecute = true
+                    UseShellExecute = true,
                 };
 
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
