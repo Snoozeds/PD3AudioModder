@@ -414,7 +414,8 @@
                                         Foreground="{DynamicResource TextColor}"
                                         Text="Repak Path: None"
                                         TextTrimming="CharacterEllipsis"
-                                        TextWrapping="NoWrap" />
+                                        TextWrapping="NoWrap"
+                                        ToolTip.Tip="Repak Path: None" />
                                     <Grid
                                         Grid.Row="2"
                                         MaxWidth="600"

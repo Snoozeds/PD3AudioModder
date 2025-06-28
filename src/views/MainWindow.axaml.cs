@@ -491,6 +491,7 @@ namespace PD3AudioModder
             if (_appConfig.RepakPath != null)
             {
                 repakPathTextBlock.Text = "Repak path: " + _appConfig.RepakPath;
+                ToolTip.SetTip(repakPathTextBlock, _appConfig.RepakPath);
             }
 
             var mainTabControl = this.FindControl<TabControl>("MainTabControl")!;
@@ -786,6 +787,7 @@ namespace PD3AudioModder
             if (files.Count > 0)
             {
                 repakPathTextBlock.Text = "Repak path: " + files[0].Path.LocalPath;
+                ToolTip.SetTip(repakPathTextBlock, files[0].Path.LocalPath);
                 _appConfig.RepakPath = files[0].Path.LocalPath;
                 _appConfig.Save();
             }
