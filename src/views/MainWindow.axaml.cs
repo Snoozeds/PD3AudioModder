@@ -810,7 +810,7 @@ namespace PD3AudioModder
             {
                 await PackFiles.DownloadMappings();
             }
-            if (_appConfig.RepakPath == null)
+            if (_appConfig.RepakPath == null || _appConfig.RepakPath == "")
             {
                 _notificationManager?.Show(
                     new Notification(
