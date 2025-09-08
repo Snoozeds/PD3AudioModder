@@ -9,6 +9,9 @@ using Avalonia.Controls.Notifications;
 
 namespace PD3AudioModder
 {
+    /// <summary>
+    /// Class to handle automatic updates for the application.
+    /// </summary>
     public class AutoUpdater
     {
         private const string VersionUrl =
@@ -121,6 +124,10 @@ namespace PD3AudioModder
             }
         }
 
+        /// <summary>
+        /// Checks for updates by comparing the local version with the latest version from GitHub.
+        /// </summary>
+        /// <returns></returns>
         public async Task<(bool available, string newVersion)> CheckForUpdates()
         {
             if (System.Diagnostics.Debugger.IsAttached)
@@ -154,6 +161,10 @@ namespace PD3AudioModder
             }
         }
 
+        /// <summary>
+        /// Gets the current version of the application from the version file.
+        /// </summary>
+        /// <returns></returns>
         public string GetCurrentVersion()
         {
             try
@@ -173,6 +184,11 @@ namespace PD3AudioModder
             }
         }
 
+        /// <summary>
+        /// Starts the update process.
+        /// </summary>
+        /// <exception cref="Exception"></exception>
+        /// <exception cref="NotSupportedException"></exception>
         public void LaunchUpdateProcess()
         {
             string currentProcessId = Process.GetCurrentProcess().Id.ToString();
@@ -278,6 +294,10 @@ done";
             }
         }
 
+        /// <summary>
+        /// Downloads the update and initiates the update process.
+        /// </summary>
+        /// <returns></returns>
         public async Task DownloadUpdate()
         {
             // Check if we need admin privileges before starting the update

@@ -38,7 +38,10 @@ namespace PD3AudioModder.util
             return null;
         }
 
-        // Save the pak directory to registry
+        /// <summary>
+        /// Saves the pak directory to registry
+        /// </summary>
+        /// <param name="directory">The directory to save</param>
         public static void SavePakDirectory(string directory)
         {
             try
@@ -54,7 +57,10 @@ namespace PD3AudioModder.util
             }
         }
 
-        // Get the stored audio save directory or null if not set
+        /// <summary>
+        /// Gets the stored audio save directory or null if not set
+        /// </summary>
+        /// <returns></returns>
         public static string GetAudioSaveDirectory()
         {
             try
@@ -78,7 +84,10 @@ namespace PD3AudioModder.util
             return null;
         }
 
-        // Save the audio save directory to registry
+        /// <summary>
+        /// Saves the audio save directory to registry
+        /// </summary>
+        /// <param name="directory">The directory to save</param>
         public static void SaveAudioSaveDirectory(string directory)
         {
             try
@@ -94,7 +103,10 @@ namespace PD3AudioModder.util
             }
         }
 
-        // Get the stored export directory or null if not set
+        /// <summary>
+        /// Gets the stored export directory or null if not set
+        /// </summary>
+        /// <returns></returns>
         public static string GetExportDirectory()
         {
             try
@@ -116,7 +128,10 @@ namespace PD3AudioModder.util
             return null;
         }
 
-        // Save the export directory to registry
+        /// <summary>
+        /// Saves the export directory to registry
+        /// </summary>
+        /// <param name="directory">The directory to save</param>
         public static void SaveExportDirectory(string directory)
         {
             try

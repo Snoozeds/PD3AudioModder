@@ -8,9 +8,15 @@ using Newtonsoft.Json;
 
 namespace PD3AudioModder.util
 {
+    /// <summary>
+    /// Handles AES key storage and retrieval.
+    /// </summary>
     internal class AesKey
     {
-        // Save provided aes key so user doesn't have to re-enter it each time in ID Search tab.
+        /// <summary>
+        /// Saves the AES key to a JSON file in the user's AppData directory.
+        /// </summary>
+        /// <param name="aesKey"></param>
         public static void SaveAesKey(string aesKey)
         {
             try
@@ -40,6 +46,10 @@ namespace PD3AudioModder.util
             }
         }
 
+        /// <summary>
+        /// Gets the AES key from the JSON file in the user's AppData directory.
+        /// </summary>
+        /// <returns></returns>
         public static string? GetAesKey()
         {
             try

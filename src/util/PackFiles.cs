@@ -8,6 +8,9 @@ using Avalonia.Threading;
 using Newtonsoft.Json.Linq;
 using PD3AudioModder;
 
+/// <summary>
+/// Class to handle packing files into the correct structure for PD3 using mappings.
+/// </summary>
 public class PackFiles
 {
     private static readonly string LocalizedPath =
@@ -70,6 +73,11 @@ public class PackFiles
         }
     }
 
+    /// <summary>
+    /// Downloads the latest mapping files from the configured URLs.
+    /// </summary>
+    /// <returns></returns>
+    /// <exception cref="Exception"></exception>
     public static async Task DownloadMappings()
     {
         string LocalizedMappings = AppConfig.Instance.WwiseLocalizedMappingsURL;
@@ -147,6 +155,17 @@ public class PackFiles
         }
     }
 
+    /// <summary>
+    /// Packs files into the correct structure based on mappings (optional).
+    /// </summary>
+    /// <param name="repakPath">The path to repak.exe</param>
+    /// <param name="compression">Whether to use compression</param>
+    /// <param name="packFolderPath">The folder containing files to pack</param>
+    /// <param name="folderPath">The output folder path</param>
+    /// <param name="modName">The name of the mod</param>
+    /// <param name="autoSort">Whether to auto-sort files based on mappings</param>
+    /// <returns></returns>
+    /// <exception cref="Exception"></exception>
     public static bool Pack(
         string repakPath,
         bool compression,
@@ -299,6 +318,14 @@ public class PackFiles
         }
     }
 
+    /// <summary>
+    /// Uses repak.exe to pack the mod folder into the correct format.
+    /// </summary>
+    /// <param name="repakPath">The path to repak.exe</param>
+    /// <param name="compression">Whether to use compression</param>
+    /// <param name="folderPath">The output folder path</param>
+    /// <param name="modName">The name of the mod</param>
+    /// <returns></returns>
     public static async Task Repak(
         string repakPath,
         bool compression,

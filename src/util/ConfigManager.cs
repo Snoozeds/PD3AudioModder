@@ -5,6 +5,9 @@ using Newtonsoft.Json;
 
 namespace PD3AudioModder
 {
+    /// <summary>
+    /// The default config values (also used as fallbacks).
+    /// </summary>
     public static class DefaultConfig
     {
         public static string Theme = "Default.ini";
@@ -28,6 +31,9 @@ namespace PD3AudioModder
         public static readonly int Volume = 50;
     }
 
+    /// <summary>
+    /// Class to manage the app's config.
+    /// </summary>
     public class AppConfig
     {
         private static AppConfig? _instance;
@@ -205,6 +211,10 @@ namespace PD3AudioModder
             }
         }
 
+        /// <summary>
+        /// Loads the config from the JSON file in the user's AppData directory.
+        /// </summary>
+        /// <returns></returns>
         public static AppConfig Load()
         {
             try
@@ -246,6 +256,9 @@ namespace PD3AudioModder
             return new AppConfig();
         }
 
+        /// <summary>
+        /// Saves the current config to the JSON file in the user's AppData directory.
+        /// </summary>
         public void Save()
         {
             try

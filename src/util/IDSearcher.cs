@@ -14,6 +14,9 @@ using Newtonsoft.Json.Linq;
 
 namespace PD3AudioModder.util
 {
+    /// <summary>
+    /// Class for the ID Search tab.
+    /// </summary>
     public class IDSearcher
     {
         private MainWindow _mainWindow;
@@ -94,6 +97,9 @@ namespace PD3AudioModder.util
             _isProcessInitialized = true;
         }
 
+        /// <summary>
+        /// Cleans up the shared command process.
+        /// </summary>
         public void CleanupSharedProcess()
         {
             if (_sharedProcess != null && !_sharedProcess.HasExited)
@@ -111,6 +117,13 @@ namespace PD3AudioModder.util
         private WaveOutEvent _outputDevice;
         private AudioFileReader _audioFile;
 
+        /// <summary>
+        /// Processes the selected .pak files to extract sound data.
+        /// </summary>
+        /// <param name="files">The selected .pak files.</param>
+        /// <param name="_mainWindow">Reference to the main window for UI updates.</param>
+        /// <param name="aesKey">The AES key for decryption.</param>
+        /// <returns></returns>
         public static async Task ProcessPakFiles(
             System.Collections.Generic.IReadOnlyList<Avalonia.Platform.Storage.IStorageFile> files,
             MainWindow _mainWindow,
@@ -302,6 +315,10 @@ namespace PD3AudioModder.util
             });
         }
 
+        /// <summary>
+        /// Plays the sound associated with the given SoundItem.
+        /// </summary>
+        /// <param name="soundItem">The SoundItem to play.</param>
         public async void PlaySound(SoundItem soundItem)
         {
             StopAudio();
@@ -396,6 +413,9 @@ namespace PD3AudioModder.util
             }
         }
 
+        /// <summary>
+        /// Stops audio playback and cleans up resources.
+        /// </summary>
         public void StopAudio()
         {
             if (_outputDevice != null)
@@ -412,6 +432,12 @@ namespace PD3AudioModder.util
             }
         }
 
+        /// <summary>
+        /// Exports the sound files (.uasset, .ubulk, .uexp, .json) associated with the given SoundItem to the selected path.
+        /// </summary>
+        /// <param name="soundItem">The SoundItem to export.</param>
+        /// <param name="selectedPath">The destination folder path.</param>
+        /// <returns></returns>
         public async Task ExportSound(SoundItem soundItem, string selectedPath)
         {
             if (_provider == null)
@@ -494,6 +520,12 @@ namespace PD3AudioModder.util
             }
         }
 
+        /// <summary>
+        /// Saves the sound associated with the given SoundItem as a WAV file to the specified folder.
+        /// </summary>
+        /// <param name="soundItem">The SoundItem to save.</param>
+        /// <param name="saveFolder">The destination folder path.</param>
+        /// <returns></returns>
         public async Task SaveSound(SoundItem soundItem, string saveFolder)
         {
             if (_provider == null)

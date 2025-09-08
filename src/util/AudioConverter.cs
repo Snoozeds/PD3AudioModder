@@ -8,6 +8,9 @@ using System.Text;
 using System.Threading.Tasks;
 using PD3AudioModder;
 
+/// <summary>
+/// Handles audio conversion using FFmpeg.
+/// </summary>
 public class AudioConverter
 {
     private static AppConfig _config = AppConfig.Load();
@@ -76,6 +79,11 @@ public class AudioConverter
         );
     }
 
+    /// <summary>
+    /// Gets the full ffmpeg path from the system PATH.
+    /// </summary>
+    /// <param name="command"></param>
+    /// <returns></returns>
     private static string? GetCommandPath(string command)
     {
         string[] paths =
@@ -92,6 +100,9 @@ public class AudioConverter
         return null;
     }
 
+    /// <summary>
+    /// Converts an audio file to WAV format using FFmpeg.
+    /// </summary>
     public static async Task ConvertToWAV(string inputPath, string outputPath)
     {
         if (string.IsNullOrEmpty(inputPath))
@@ -165,6 +176,15 @@ public class AudioConverter
         }
     }
 
+    /// <summary>
+    /// Batch converts multiple audio files to WAV format using FFmpeg.
+    /// </summary>
+    /// <param name="inputPaths"></param>
+    /// <param name="outputDirectory"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentException"></exception>
+    /// <exception cref="Exception"></exception>
+    /// <exception cref="FileNotFoundException"></exception>
     public static async Task BatchConvertToWAV(string[] inputPaths, string outputDirectory)
     {
         if (inputPaths == null || inputPaths.Length == 0)

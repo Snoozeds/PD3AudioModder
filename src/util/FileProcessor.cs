@@ -8,12 +8,18 @@ using Newtonsoft.Json;
 
 namespace PD3AudioModder.util
 {
+    /// <summary>
+    /// Class to represent the result of checking for existing files.
+    /// </summary>
     public class FileCheckResult
     {
         public bool ShouldProceed { get; set; }
         public bool YesToAll { get; set; }
     }
 
+    /// <summary>
+    /// Class to handle file processing for single file conversion.
+    /// </summary>
     internal class FileProcessor
     {
         private readonly MainWindow? _mainWindow;
@@ -32,7 +38,12 @@ namespace PD3AudioModder.util
             }
         }
 
-        // Task for checking if files exist when exporting, and if they do display a warning dialog.
+        /// <summary>
+        /// Task to check for existing files in the target directory and prompt the user if they exist.
+        /// </summary>
+        /// <param name="saveDirectory">The directory to check.</param>
+        /// <param name="baseFileName">The base filename to check for (without extension).</param>
+        /// <returns></returns>
         public async Task<FileCheckResult> CheckExistingFiles(
             string saveDirectory,
             string baseFileName
@@ -64,6 +75,20 @@ namespace PD3AudioModder.util
             return new FileCheckResult { ShouldProceed = true, YesToAll = false };
         }
 
+        /// <summary>
+        /// Process the uploaded files, convert audio, modify sizes, and save outputs.
+        /// </summary>
+        /// <param name="uploadedAudioPath">The path to the uploaded audio file.</param>
+        /// <param name="uploadedUbulkPath">The path to the uploaded ubulk file.</param>
+        /// <param name="uploadedUexpPath">The path to the uploaded uexp file.</param>
+        /// <param name="uploadedUassetPath">The path to the uploaded uasset file (optional).</param>
+        /// <param name="uploadedJsonPath">The path to the uploaded JSON file (optional).</param>
+        /// <param name="tempDirectory">The path to the temp directory.</param>
+        /// <param name="useDefaultExportPath">True to use default export path, false to prompt user.</param>
+        /// <param name="statusTextBlock">The TextBlock to update status messages.</param>
+        /// <param name="convertButton">Reference to the convert button to enable/disable.</param>
+        /// <param name="ParentWindow">Reference to the parent window for dialogs.</param>
+        /// <returns></returns>
         public async Task ProcessFiles(
             string uploadedAudioPath,
             string uploadedUbulkPath,
@@ -294,6 +319,15 @@ namespace PD3AudioModder.util
             }
         }
 
+        /// <summary>
+        /// Update the state of the convert button based on whether all required files are uploaded.
+        /// </summary>
+        /// <param name="uploadedAudioPath"></param>
+        /// <param name="uploadedUbulkPath"></param>
+        /// <param name="uploadedUexpPath"></param>
+        /// <param name="uploadedUassetPath"></param>
+        /// <param name="uploadedJsonPath"></param>
+        /// <param name="convertButton"></param>
         public void UpdateConvertButtonState(
             string uploadedAudioPath,
             string uploadedUbulkPath,
@@ -319,6 +353,11 @@ namespace PD3AudioModder.util
             }
         }
 
+        /// <summary>
+        /// Gets the original file's size from the JSON file.
+        /// </summary>
+        /// <param name="jsonFile"></param>
+        /// <returns></returns>
         public long GetOldSizeFromJson(string jsonFile)
         {
             try
@@ -343,6 +382,12 @@ namespace PD3AudioModder.util
             }
         }
 
+        /// <summary>
+        /// Modifies the size value in the uexp file from oldSize to newSize to properly mod the audio.
+        /// </summary>
+        /// <param name="uexpFilePath"></param>
+        /// <param name="oldSize"></param>
+        /// <param name="newSize"></param>
         public void ModifyUexpSize(string uexpFilePath, long oldSize, long newSize)
         {
             byte[] uexpData = File.ReadAllBytes(uexpFilePath);

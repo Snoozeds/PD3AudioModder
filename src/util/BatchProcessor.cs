@@ -9,6 +9,9 @@ using Avalonia.Threading;
 
 namespace PD3AudioModder.util
 {
+    /// <summary>
+    /// Class to handle batch processing of audio and game files.
+    /// </summary>
     internal class BatchProcessor
     {
         private readonly MainWindow? _mainWindow;
@@ -47,9 +50,11 @@ namespace PD3AudioModder.util
             }
         }
 
+        /// <summary>
+        /// Updates the enabled state of the specified button based on the validity of the provided folder paths.
+        /// </summary>
+        /// <param name="batchConvertButton">The button whose enabled state will be updated. If null, no action is performed.</param>
         public void UpdateButtonStates(
-            string audioFolderPath,
-            string gameFilesFolderPath,
             Button batchConvertButton
         )
         {
@@ -62,6 +67,16 @@ namespace PD3AudioModder.util
             }
         }
 
+        /// <summary>
+        /// Processes a batch of audio and game files.
+        /// </summary>
+        /// <param name="tempDirectory">The app's temp directory.</param>
+        /// <param name="useDefaultExportPath">Whether to use the default export path or not (user settings.)</param>
+        /// <param name="statusTextBlock">Reference to status text block.</param>
+        /// <param name="progressBar">Reference to progress bar.</param>
+        /// <param name="batchConvertButton">Reference to the batch convert button.</param>
+        /// <param name="parentWindow">Reference to the parent window.</param>
+        /// <returns></returns>
         public async Task ProcessBatch(
             string tempDirectory,
             bool useDefaultExportPath,
@@ -441,6 +456,10 @@ namespace PD3AudioModder.util
             }
         }
 
+        /// <summary>
+        /// Sets the audio folder path for input audio files.
+        /// </summary>
+        /// <param name="path"></param>
         public void SetAudioFolderPath(string path)
         {
             _audioFolderPath = path;
@@ -450,6 +469,10 @@ namespace PD3AudioModder.util
             }
         }
 
+        /// <summary>
+        /// Sets the game files folder path for .ubulk, .uexp, .uasset, and .json files.
+        /// </summary>
+        /// <param name="path"></param>
         public void SetGameFilesFolderPath(string path)
         {
             _gameFilesFolderPath = path;

@@ -3,6 +3,9 @@ using System.Reflection;
 using NAudio.Vorbis;
 using NAudio.Wave;
 
+/// <summary>
+/// Class to handle audio playback using NAudio.
+/// </summary>
 public class AudioPlayer : IDisposable
 {
     private WaveOutEvent? outputDevice;
@@ -15,6 +18,10 @@ public class AudioPlayer : IDisposable
         outputDevice.PlaybackStopped += OnPlaybackStopped;
     }
 
+    /// <summary>
+    /// Plays an audio resource.
+    /// </summary>
+    /// <param name="resourceName"></param>
     public void PlaySound(string resourceName)
     {
         if (isPlaying)
@@ -46,6 +53,9 @@ public class AudioPlayer : IDisposable
         }
     }
 
+    /// <summary>
+    /// Stops audio playback.
+    /// </summary>
     public void Stop()
     {
         if (isPlaying)

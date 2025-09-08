@@ -3,12 +3,18 @@ using DiscordRPC;
 
 namespace PD3AudioModder
 {
+    /// <summary>
+    /// Class to handle Discord Rich Presence integration.
+    /// </summary>
     internal class DiscordRPC
     {
         private AppConfig? _appConfig;
         private DiscordRpcClient? client;
         private RichPresence? presence;
 
+        /// <summary>
+        /// Initializes the Discord RPC client.
+        /// </summary>
         public void Initialize()
         {
             _appConfig = AppConfig.Load();
@@ -49,6 +55,11 @@ namespace PD3AudioModder
             };
         }
 
+        /// <summary>
+        /// Updates the Discord Rich Presence status.
+        /// </summary>
+        /// <param name="currentTab">The tab the user is currently in.</param>
+        /// <param name="modName">The name of the mod being worked on.</param>
         public void UpdatePresence(TabControl currentTab, string modName)
         {
             _appConfig = AppConfig.Load();
@@ -102,6 +113,9 @@ namespace PD3AudioModder
             }
         }
 
+        /// <summary>
+        /// Disposes the Discord RPC client.
+        /// </summary>
         public void Dispose()
         {
             if (client != null && !client.IsDisposed)
