@@ -54,7 +54,11 @@ namespace PD3AudioModder.util
         /// Updates the enabled state of the specified button based on the validity of the provided folder paths.
         /// </summary>
         /// <param name="batchConvertButton">The button whose enabled state will be updated. If null, no action is performed.</param>
+        /// <param name="audioFolderPath">The path to the audio folder.</param>
+        /// <param name="gameFilesFolderPath">The path to the game files folder.</param>
         public void UpdateButtonStates(
+            string audioFolderPath,
+            string gameFilesFolderPath,
             Button batchConvertButton
         )
         {
