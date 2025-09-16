@@ -77,7 +77,7 @@ Section "Dependencies" SecDependencies
     ${If} $0 != 0
         MessageBox MB_YESNO "FFmpeg not found. Do you want to download and install it?" IDNO skipFFmpeg
         DetailPrint "Downloading FFmpeg..."
-        NSISdl::download "https://github.com/BtbN/FFmpeg-Builds/releases/latest/ffmpeg-master-latest-win64-gpl.zip" "$TEMP\ffmpeg.zip"
+        NSISdl::download "https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-win64-gpl.zip" "$TEMP\ffmpeg.zip"
         Pop $R0
         ${If} $R0 == "success"
             nsExec::Exec '"powershell -Command "Expand-Archive -Path \"$TEMP\ffmpeg.zip\" -DestinationPath \"$TEMP\ffmpeg\" -Force"'
@@ -125,9 +125,11 @@ Section "Dependencies" SecDependencies
     ${If} $0 != 0
         MessageBox MB_YESNO "Repak not found. Do you want to download and install it?" IDNO skipRepak
         DetailPrint "Downloading Repak..."
-        NSISdl::download "https://github.com/trumank/repak/releases/latest/download/repak.exe" "$INSTDIR\repak.exe"
+        NSISdl::download "https://github.com/trumank/repak/releases/download/v0.2.2/repak_cli-x86_64-pc-windows-msvc.zip" "$TEMP\repak.zip"
         Pop $R0
         ${If} $R0 == "success"
+            nsExec::Exec '"powershell -Command "Expand-Archive -Path \"$TEMP\repak.zip\" -DestinationPath \"$TEMP\repak\" -Force"'
+            CopyFiles "$TEMP\repak\repak.exe" "$INSTDIR"
             WriteRegExpandStr HKLM "SYSTEM\CurrentControlSet\Control\Session Manager\Environment" "Path" "$INSTDIR;%PATH%"
         ${Else}
             MessageBox MB_OK "Failed to download Repak: $R0"
