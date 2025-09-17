@@ -22,10 +22,21 @@
             <TabItem>
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal" Spacing="5">
-                        <Image
-                            Width="28"
-                            Height="28"
-                            Source="{SvgImage avares://PD3AudioModder/assets/icons/tabler-icons/settings.svg}" />
+                        <!--  Settings icon from tabler.io (MIT)  -->
+                        <Grid
+                            Width="24"
+                            Height="24"
+                            Margin="3"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center">
+                            <Path
+                                Data="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"
+                                Stretch="Uniform"
+                                Stroke="{DynamicResource ButtonColor}"
+                                StrokeJoin="Round"
+                                StrokeLineCap="Round"
+                                StrokeThickness="2.5" />
+                        </Grid>
                         <TextBlock Text="General" />
                     </StackPanel>
                 </TabItem.Header>
@@ -346,10 +357,33 @@
             <TabItem>
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal" Spacing="5">
-                        <Image
-                            Width="28"
-                            Height="28"
-                            Source="{SvgImage avares://PD3AudioModder/assets/icons/tabler-icons/settings-plus.svg}" />
+                        <!--  Settings-Plus icon from tabler.io (MIT)  -->
+                        <Viewbox Width="32" Height="32">
+                            <Canvas Width="24" Height="24">
+                                <Path
+                                    Data="M12.483 20.935c-.862 .239 -1.898 -.178 -2.158 -1.252a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.08 .262 1.496 1.308 1.247 2.173"
+                                    Stroke="{DynamicResource ButtonColor}"
+                                    StrokeJoin="Round"
+                                    StrokeLineCap="Round"
+                                    StrokeThickness="2.5" />
+                                <Path
+                                    Data="M16 19h6"
+                                    Stroke="{DynamicResource ButtonColor}"
+                                    StrokeLineCap="Round"
+                                    StrokeThickness="2.5" />
+                                <Path
+                                    Data="M19 16v6"
+                                    Stroke="{DynamicResource ButtonColor}"
+                                    StrokeLineCap="Round"
+                                    StrokeThickness="2.5" />
+                                <Path
+                                    Data="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"
+                                    Stroke="{DynamicResource ButtonColor}"
+                                    StrokeJoin="Round"
+                                    StrokeLineCap="Round"
+                                    StrokeThickness="2.5" />
+                            </Canvas>
+                        </Viewbox>
                         <TextBlock Text="Advanced" />
                     </StackPanel>
                 </TabItem.Header>
@@ -526,20 +560,35 @@
             <TabItem>
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal" Spacing="5">
-                        <Image
-                            Width="28"
-                            Height="28"
-                            Source="{SvgImage avares://PD3AudioModder/assets/icons/tabler-icons/brush.svg}" />
+                        <!--  Brush icon from tabler.io (MIT)  -->
+                        <Viewbox Width="28" Height="28">
+                            <Canvas Width="24" Height="24">
+                                <Path
+                                    Data="M3 21v-4a4 4 0 1 1 4 4h-4 M21 3a16 16 0 0 0 -12.8 10.2 M21 3a16 16 0 0 1 -10.2 12.8 M10.6 9a9 9 0 0 1 4.4 4.4"
+                                    Fill=""
+                                    Stroke="{DynamicResource ButtonColor}"
+                                    StrokeJoin="Round"
+                                    StrokeLineCap="Round"
+                                    StrokeThickness="2.5" />
+                            </Canvas>
+                        </Viewbox>
                         <TextBlock Text="Theme" />
                     </StackPanel>
                 </TabItem.Header>
                 <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
                     <StackPanel MaxWidth="400" Spacing="20">
-                        <Image
-                            Width="80"
-                            Height="80"
-                            HorizontalAlignment="Center"
-                            Source="{SvgImage avares://PD3AudioModder/assets/icons/tabler-icons/brush.svg}" />
+                        <!--  Brush icon from tabler.io (MIT)  -->
+                        <Viewbox Width="80" Height="80">
+                            <Canvas Width="24" Height="24">
+                                <Path
+                                    Data="M3 21v-4a4 4 0 1 1 4 4h-4 M21 3a16 16 0 0 0 -12.8 10.2 M21 3a16 16 0 0 1 -10.2 12.8 M10.6 9a9 9 0 0 1 4.4 4.4"
+                                    Fill=""
+                                    Stroke="{DynamicResource ButtonColor}"
+                                    StrokeJoin="Round"
+                                    StrokeLineCap="Round"
+                                    StrokeThickness="2.5" />
+                            </Canvas>
+                        </Viewbox>
                         <TextBlock
                             HorizontalAlignment="Center"
                             FontSize="24"
@@ -588,20 +637,21 @@
             <TabItem>
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal" Spacing="5">
-                        <Image
-                            Width="32"
-                            Height="32"
-                            Source="{SvgImage avares://PD3AudioModder/assets/icons/download.svg}" />
+                        <Viewbox Width="32" Height="32">
+                            <Canvas Width="16" Height="16">
+                                <Path Data="M7 10.586 L7 2 L9 2 L9 10.586 L12.293 7.293 L13.707 8.707 L8 14.414 L2.293 8.707 L3.707 7.293 Z" Fill="{DynamicResource ButtonColor}" />
+                            </Canvas>
+                        </Viewbox>
                         <TextBlock Text="Updates" />
                     </StackPanel>
                 </TabItem.Header>
                 <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
                     <StackPanel MaxWidth="400" Spacing="20">
-                        <Image
-                            Width="80"
-                            Height="80"
-                            HorizontalAlignment="Center"
-                            Source="{SvgImage avares://PD3AudioModder/assets/icons/download.svg}" />
+                        <Viewbox Width="80" Height="80">
+                            <Canvas Width="16" Height="16">
+                                <Path Data="M7 10.586 L7 2 L9 2 L9 10.586 L12.293 7.293 L13.707 8.707 L8 14.414 L2.293 8.707 L3.707 7.293 Z" Fill="{DynamicResource ButtonColor}" />
+                            </Canvas>
+                        </Viewbox>
                         <TextBlock
                             HorizontalAlignment="Center"
                             FontSize="24"
@@ -676,10 +726,18 @@
             <TabItem>
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal" Spacing="5">
-                        <Image
-                            Width="28"
-                            Height="28"
-                            Source="{SvgImage avares://PD3AudioModder/assets/icons/tabler-icons/help.svg}" />
+                        <!--  Help icon from tabler.io (MIT)  -->
+                        <Viewbox Width="28" Height="28">
+                            <Canvas Width="24" Height="24">
+                                <Path
+                                    Data="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0 M12 17l0 .01 M12 13.5a1.5 1.5 0 0 1 1 -1.5a2.6 2.6 0 1 0 -3 -4"
+                                    Fill=""
+                                    Stroke="{DynamicResource ButtonColor}"
+                                    StrokeJoin="Round"
+                                    StrokeLineCap="Round"
+                                    StrokeThickness="2.5" />
+                            </Canvas>
+                        </Viewbox>
                         <TextBlock Text="About" />
                     </StackPanel>
                 </TabItem.Header>

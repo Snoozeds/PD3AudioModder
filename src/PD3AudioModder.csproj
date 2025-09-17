@@ -19,15 +19,6 @@
     <None Remove="assets\icons\audio.ico" />
     <None Remove="assets\icons\audio.svg" />
     <None Remove="assets\icons\download.svg" />
-    <None Remove="assets\icons\tabler-icons\brush.svg" />
-    <None Remove="assets\icons\tabler-icons\file-search.svg" />
-    <None Remove="assets\icons\tabler-icons\file.svg" />
-    <None Remove="assets\icons\tabler-icons\files.svg" />
-    <None Remove="assets\icons\tabler-icons\help.svg" />
-    <None Remove="assets\icons\tabler-icons\menu.svg" />
-    <None Remove="assets\icons\tabler-icons\settings-plus.svg" />
-    <None Remove="assets\icons\tabler-icons\settings.svg" />
-    <None Remove="assets\icons\tabler-icons\tools.svg" />
     <None Remove="assets\sounds\error.ogg" />
     <None Remove="assets\twemoji\26a0.svg" />
   </ItemGroup>
@@ -36,15 +27,6 @@
     <AvaloniaResource Include="assets\icons\audio.ico" />
     <AvaloniaResource Include="assets\icons\audio.svg" />
     <AvaloniaResource Include="assets\icons\download.svg" />
-    <AvaloniaResource Include="assets\icons\tabler-icons\brush.svg" />
-    <AvaloniaResource Include="assets\icons\tabler-icons\file-search.svg" />
-    <AvaloniaResource Include="assets\icons\tabler-icons\file.svg" />
-    <AvaloniaResource Include="assets\icons\tabler-icons\files.svg" />
-    <AvaloniaResource Include="assets\icons\tabler-icons\help.svg" />
-    <AvaloniaResource Include="assets\icons\tabler-icons\menu.svg" />
-    <AvaloniaResource Include="assets\icons\tabler-icons\settings-plus.svg" />
-    <AvaloniaResource Include="assets\icons\tabler-icons\settings.svg" />
-    <AvaloniaResource Include="assets\icons\tabler-icons\tools.svg" />
     <AvaloniaResource Include="assets\twemoji\26a0.svg" />
   </ItemGroup>
 

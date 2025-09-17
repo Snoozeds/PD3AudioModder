@@ -65,12 +65,16 @@
                             Background="Transparent"
                             Click="OnHamburgerButtonClick"
                             Foreground="{DynamicResource TextColor}">
-                            <Image
+                            <!--  Menu icon from tabler.io (MIT)  -->
+                            <Path
                                 Width="28"
                                 Height="28"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                Source="{SvgImage avares://PD3AudioModder/assets/icons/tabler-icons/menu.svg}" />
+                                Data="M4 8l16 0 M4 16l16 0"
+                                Stretch="Uniform"
+                                Stroke="{DynamicResource ButtonColor}"
+                                StrokeJoin="Round"
+                                StrokeLineCap="Round"
+                                StrokeThickness="2.5" />
                         </Button>
                         <StackPanel Grid.Row="1" Margin="0,0,0,10">
                             <!--  Single File Tab  -->
@@ -80,20 +84,29 @@
                                 Click="OnMenuItemClick"
                                 Tag="0">
                                 <DockPanel LastChildFill="True">
-                                    <Grid Width="48" DockPanel.Dock="Left">
-                                        <Image
-                                            Width="28"
-                                            Height="28"
+                                    <!--  File icon from tabler.io (MIT)  -->
+                                    <Grid
+                                        Width="24"
+                                        Height="24"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center">
+                                        <Path
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Center"
-                                            Source="{SvgImage avares://PD3AudioModder/assets/icons/tabler-icons/file.svg}" />
+                                            Data="M14 3v4a1 1 0 0 0 1 1h4 M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z"
+                                            Stretch="Uniform"
+                                            Stroke="{DynamicResource ButtonColor}"
+                                            StrokeJoin="Round"
+                                            StrokeLineCap="Round"
+                                            StrokeThickness="2.5" />
                                     </Grid>
                                     <TextBlock
-                                        Margin="4,0,0,0"
+                                        Margin="10,0,0,0"
                                         VerticalAlignment="Center"
                                         Text="Single File" />
                                 </DockPanel>
                             </Button>
+
                             <!--  Batch Conversion Tab  -->
                             <Button
                                 x:Name="BatchButton"
@@ -101,20 +114,28 @@
                                 Click="OnMenuItemClick"
                                 Tag="1">
                                 <DockPanel LastChildFill="True">
-                                    <Grid Width="48" DockPanel.Dock="Left">
-                                        <Image
-                                            Width="28"
-                                            Height="28"
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Center"
-                                            Source="{SvgImage avares://PD3AudioModder/assets/icons/tabler-icons/files.svg}" />
+                                    <!--  Files icon from tabler.io (MIT)  -->
+                                    <Grid
+                                        Width="24"
+                                        Height="24"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center">
+                                        <Path
+                                            Margin="2,0,0,0"
+                                            Data="M15 3v4a1 1 0 0 0 1 1h4 M18 17h-7a2 2 0 0 1 -2 -2v-10a2 2 0 0 1 2 -2h4l5 5v7a2 2 0 0 1 -2 2z M16 17v2a2 2 0 0 1 -2 2h-7a2 2 0 0 1 -2 -2v-10a2 2 0 0 1 2 -2h2"
+                                            Stretch="Uniform"
+                                            Stroke="{DynamicResource ButtonColor}"
+                                            StrokeJoin="Round"
+                                            StrokeLineCap="Round"
+                                            StrokeThickness="2.5" />
                                     </Grid>
                                     <TextBlock
-                                        Margin="4,0,0,0"
+                                        Margin="10,0,0,0"
                                         VerticalAlignment="Center"
                                         Text="Batch Conversion" />
                                 </DockPanel>
                             </Button>
+
                             <!--  Pack Files Tab  -->
                             <Button
                                 x:Name="PackFilesButton"
@@ -122,20 +143,27 @@
                                 Click="OnMenuItemClick"
                                 Tag="2">
                                 <DockPanel LastChildFill="True">
-                                    <Grid Width="48" DockPanel.Dock="Left">
-                                        <Image
-                                            Width="28"
-                                            Height="28"
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Center"
-                                            Source="{SvgImage avares://PD3AudioModder/assets/icons/tabler-icons/tools.svg}" />
+                                    <!--  Tools icon from tabler.io (MIT)  -->
+                                    <Grid
+                                        Width="24"
+                                        Height="24"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center">
+                                        <Path
+                                            Data="M3 21h4l13 -13a1.5 1.5 0 0 0 -4 -4l-13 13v4 M14.5 5.5l4 4 M12 8l-5 -5l-4 4l5 5 M7 8l-1.5 1.5 M16 12l5 5l-4 4l-5 -5 M16 17l-1.5 1.5"
+                                            Stretch="Uniform"
+                                            Stroke="{DynamicResource ButtonColor}"
+                                            StrokeJoin="Round"
+                                            StrokeLineCap="Round"
+                                            StrokeThickness="2.5" />
                                     </Grid>
                                     <TextBlock
-                                        Margin="4,0,0,0"
+                                        Margin="10,0,0,0"
                                         VerticalAlignment="Center"
                                         Text="Pack Files" />
                                 </DockPanel>
                             </Button>
+
                             <!--  ID Search Tab  -->
                             <Button
                                 x:Name="IDSearchButton"
@@ -143,61 +171,83 @@
                                 Click="OnMenuItemClick"
                                 Tag="3">
                                 <DockPanel LastChildFill="True">
-                                    <Grid Width="48" DockPanel.Dock="Left">
-                                        <Image
-                                            Width="28"
-                                            Height="28"
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Center"
-                                            Source="{SvgImage avares://PD3AudioModder/assets/icons/tabler-icons/file-search.svg}" />
+                                    <!--  File Search icon from tabler.io (MIT)  -->
+                                    <Grid
+                                        Width="24"
+                                        Height="24"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center">
+                                        <Path
+                                            Margin="2,0,0,0"
+                                            Data="M14 3v4a1 1 0 0 0 1 1h4 M12 21h-5a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v4.5 M16.5 17.5m-2.5 0a2.5 2.5 0 1 0 5 0a2.5 2.5 0 1 0 -5 0 M18.5 19.5l2.5 2.5"
+                                            Stretch="Uniform"
+                                            Stroke="{DynamicResource ButtonColor}"
+                                            StrokeJoin="Round"
+                                            StrokeLineCap="Round"
+                                            StrokeThickness="2.5" />
                                     </Grid>
                                     <TextBlock
-                                        Margin="4,0,0,0"
+                                        Margin="10,0,0,0"
                                         VerticalAlignment="Center"
                                         Text="ID Search" />
                                 </DockPanel>
                             </Button>
+
                             <!--  Separator  -->
                             <Separator
                                 Height="1"
                                 Margin="10,10,10,0"
                                 Background="{DynamicResource BorderColor}" />
+
                             <!--  Help Button  -->
                             <Button
                                 x:Name="HelpButton"
                                 Classes="MenuButton"
                                 Click="OnHelpClick">
                                 <DockPanel LastChildFill="True">
-                                    <Grid Width="48" DockPanel.Dock="Left">
-                                        <Image
-                                            Width="28"
-                                            Height="28"
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Center"
-                                            Source="{SvgImage avares://PD3AudioModder/assets/icons/tabler-icons/help.svg}" />
+                                    <!--  Help icon from tabler.io (MIT)  -->
+                                    <Grid
+                                        Width="24"
+                                        Height="24"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center">
+                                        <Path
+                                            Data="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0 M12 17l0 .01 M12 13.5a1.5 1.5 0 0 1 1 -1.5a2.6 2.6 0 1 0 -3 -4"
+                                            Stretch="Uniform"
+                                            Stroke="{DynamicResource ButtonColor}"
+                                            StrokeJoin="Round"
+                                            StrokeLineCap="Round"
+                                            StrokeThickness="2.5" />
                                     </Grid>
                                     <TextBlock
-                                        Margin="4,0,0,0"
+                                        Margin="10,0,0,0"
                                         VerticalAlignment="Center"
                                         Text="Help" />
                                 </DockPanel>
                             </Button>
+
                             <!--  Settings Button  -->
                             <Button
                                 x:Name="SettingsButton"
                                 Classes="MenuButton"
                                 Click="OnSettingsClick">
                                 <DockPanel LastChildFill="True">
-                                    <Grid Width="48" DockPanel.Dock="Left">
-                                        <Image
-                                            Width="28"
-                                            Height="28"
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Center"
-                                            Source="{SvgImage avares://PD3AudioModder/assets/icons/tabler-icons/settings.svg}" />
+                                    <!--  Settings icon from tabler.io (MIT)  -->
+                                    <Grid
+                                        Width="24"
+                                        Height="24"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center">
+                                        <Path
+                                            Data="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"
+                                            Stretch="Uniform"
+                                            Stroke="{DynamicResource ButtonColor}"
+                                            StrokeJoin="Round"
+                                            StrokeLineCap="Round"
+                                            StrokeThickness="2.5" />
                                     </Grid>
                                     <TextBlock
-                                        Margin="4,0,0,0"
+                                        Margin="10,0,0,0"
                                         VerticalAlignment="Center"
                                         Text="Settings" />
                                 </DockPanel>
