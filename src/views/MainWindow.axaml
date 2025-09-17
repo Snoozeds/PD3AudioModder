@@ -555,17 +555,19 @@
                                     x:Name="SearchTextBox"
                                     Grid.Column="0"
                                     Height="50"
+                                    MinWidth="300"
                                     Margin="0,0,15,0"
                                     Padding="15,8"
+                                    HorizontalContentAlignment="Center"
                                     VerticalContentAlignment="Center"
                                     CornerRadius="10"
                                     FontSize="18"
                                     Foreground="{DynamicResource TextColor}"
-                                    Watermark="Search by ID, MediaName or Folder..." />
+                                    Watermark="ID, MediaName or Folder..." />
                                 <Button
                                     x:Name="SearchButton"
                                     Grid.Column="1"
-                                    Width="140"
+                                    Width="170"
                                     Height="50"
                                     Padding="15,8"
                                     HorizontalContentAlignment="Center"
@@ -587,12 +589,15 @@
                                     Name="AesKeyTextBox"
                                     Grid.Column="0"
                                     Height="50"
+                                    MinWidth="300"
                                     Margin="0,0,15,0"
                                     Padding="15,8"
+                                    HorizontalContentAlignment="Center"
                                     VerticalContentAlignment="Center"
                                     CornerRadius="10"
                                     FontSize="18"
                                     Foreground="{DynamicResource TextColor}"
+                                    ToolTip.Tip="Leave blank to use PAYDAY 3's key (default), or the saved AES key"
                                     Watermark="Enter AES Key..." />
                                 <Button
                                     x:Name="LoadPakFilesButton"
