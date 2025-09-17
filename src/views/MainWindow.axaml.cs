@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia.Controls;
 using Avalonia.Controls.Notifications;
+using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Avalonia.Platform.Storage;
@@ -320,6 +321,9 @@ namespace PD3AudioModder
         // Discord RPC
         private readonly DiscordRPC _discordRPC;
 
+        // Hotkey manager
+        private readonly HotkeyManager _hotkeyManager;
+
         // ID Search tab
         public ObservableCollection<SoundItem> _soundItems = new ObservableCollection<SoundItem>();
         public ObservableCollection<SoundItem> SoundItems => _soundItems;
@@ -372,6 +376,10 @@ namespace PD3AudioModder
             // Discord RPC
             _discordRPC = new DiscordRPC();
             _discordRPC.Initialize();
+
+            // Initialize hotkey manager
+            _hotkeyManager = new HotkeyManager(this);
+            RegisterHotkeys();
 
             PackFiles.Initialize(this);
 
@@ -1259,6 +1267,85 @@ namespace PD3AudioModder
             }
         }
 
+        private void RegisterHotkeys()
+        {
+            // Tab hotkeys
+            _hotkeyManager.RegisterHotkey(Key.D1, KeyModifiers.Control, () => SwitchToTab(0)); // Single File
+            _hotkeyManager.RegisterHotkey(Key.D2, KeyModifiers.Control, () => SwitchToTab(1)); // Batch Conversion
+            _hotkeyManager.RegisterHotkey(Key.D3, KeyModifiers.Control, () => SwitchToTab(2)); // Pack Files
+            _hotkeyManager.RegisterHotkey(Key.D4, KeyModifiers.Control, () => SwitchToTab(3)); // ID Search
+
+            // Numpad keys for direct tabs
+            _hotkeyManager.RegisterHotkey(Key.NumPad1, KeyModifiers.Control, () => SwitchToTab(0)); // Single File
+            _hotkeyManager.RegisterHotkey(Key.NumPad2, KeyModifiers.Control, () => SwitchToTab(1)); // Batch Conversion
+            _hotkeyManager.RegisterHotkey(Key.NumPad3, KeyModifiers.Control, () => SwitchToTab(2)); // Pack Files
+            _hotkeyManager.RegisterHotkey(Key.NumPad4, KeyModifiers.Control, () => SwitchToTab(3)); // ID Search
+        }
+
+        private void SwitchToTab(int tabIndex)
+        {
+            var tabControl = this.FindControl<TabControl>("MainTabControl");
+            if (tabControl != null && tabIndex >= 0 && tabIndex < tabControl.ItemCount)
+            {
+                tabControl.SelectedIndex = tabIndex;
+
+                // Update hamburger menu button selection
+                var menuButtons = new[]
+                {
+                    this.FindControl<Button>("SingleFileButton"),
+                    this.FindControl<Button>("BatchButton"),
+                    this.FindControl<Button>("PackFilesButton"),
+                    this.FindControl<Button>("IDSearchButton"),
+                };
+
+                ClearMenuButtonSelection();
+                if (tabIndex < menuButtons.Length && menuButtons[tabIndex] != null)
+                {
+                    menuButtons[tabIndex].Classes.Add("Selected");
+                }
+
+                // Update current tab for status text
+                if (tabControl.SelectedItem is TabItem tabItem && tabItem.Header is string header)
+                {
+                    currentTab = header;
+
+                    // Update global status based on current tab
+                    switch (currentTab)
+                    {
+                        case "Single File":
+                            globalStatusTextBlock!.Text = "Status: Waiting for input...";
+                            break;
+                        case "Batch Conversion":
+                            globalStatusTextBlock!.Text = "Status: Waiting for input...";
+                            break;
+                        case "Pack Files":
+                            globalStatusTextBlock!.Text = "Status: Ready to pack files...";
+                            break;
+                        case "ID Search":
+                            globalStatusTextBlock!.Text = "Status: Ready to search IDs...";
+                            break;
+                    }
+
+                    // Update Discord RPC
+                    if (!String.IsNullOrEmpty(ModName))
+                    {
+                        _discordRPC.UpdatePresence(tabControl, ModName);
+                    }
+                }
+
+                // Auto collapse menu when in compact mode
+                var splitView = this.FindControl<Avalonia.Controls.SplitView>("MainSplitView");
+                if (
+                    splitView != null
+                    && splitView.DisplayMode
+                        == Avalonia.Controls.SplitViewDisplayMode.CompactOverlay
+                )
+                {
+                    splitView.IsPaneOpen = false;
+                }
+            }
+        }
+
         // Blahaj EE
         private void MainWindow_KeyDown(object sender, Avalonia.Input.KeyEventArgs e)
         {
@@ -1306,6 +1393,7 @@ namespace PD3AudioModder
         private void OnWindowClosing(object sender, WindowClosingEventArgs e)
         {
             _discordRPC.Dispose();
+            _hotkeyManager.Dispose();
         }
     }
 }
