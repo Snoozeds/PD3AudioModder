@@ -434,6 +434,7 @@
                                                 CornerRadius="12"
                                                 FontSize="18"
                                                 Foreground="{DynamicResource TextColor}"
+                                                MaxLength="128"
                                                 Text="Mod Name"
                                                 TextWrapping="Wrap" />
                                             <Button
