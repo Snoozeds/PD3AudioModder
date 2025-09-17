@@ -37,7 +37,7 @@ namespace PD3AudioModder
             // Set version texts
             this.FindControl<TextBlock>("CurrentVersionText")!.Text = string.Format(
                 "Current version: {0}",
-                currentVersion
+                displayVersion
             );
             this.FindControl<TextBlock>("VersionText")!.Text = string.Format(
                 "New version: {0}",
