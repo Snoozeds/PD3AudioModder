@@ -24,6 +24,17 @@ namespace PD3AudioModder
         public UpdateDialog(string currentVersion, string newVersion)
         {
             InitializeComponent();
+
+            // Theme colours
+            var textColor = this.FindResource("TextColor") as Color? ?? Color.Parse("#BBE1FA");
+            var warningColor =
+                this.FindResource("WarningTextColor") as Color? ?? Color.Parse("#E6C400");
+
+            // Version display
+            string displayVersion =
+                currentVersion == "0.0.0" ? "0.0.0 (version.txt missing?)" : currentVersion;
+
+            // Set version texts
             this.FindControl<TextBlock>("CurrentVersionText")!.Text = string.Format(
                 "Current version: {0}",
                 currentVersion
@@ -34,10 +45,15 @@ namespace PD3AudioModder
             );
 
             // Load the commit history between versions
-            LoadCommitHistory(currentVersion, newVersion);
+            LoadCommitHistory(currentVersion, newVersion, textColor, warningColor);
         }
 
-        private async void LoadCommitHistory(string currentVersion, string newVersion)
+        private async void LoadCommitHistory(
+            string currentVersion,
+            string newVersion,
+            Color textColor,
+            Color warningColor
+        )
         {
             var commitsPanel = this.FindControl<StackPanel>("CommitsPanel")!;
             commitsPanel.Children.Clear();
@@ -46,7 +62,7 @@ namespace PD3AudioModder
             var loadingText = new SelectableTextBlock
             {
                 Text = "Loading changes...",
-                Foreground = new SolidColorBrush(Color.Parse("#BBE1FA")),
+                Foreground = new SolidColorBrush(textColor),
                 FontSize = 14,
                 TextWrapping = TextWrapping.Wrap,
             };
@@ -57,12 +73,11 @@ namespace PD3AudioModder
                 // Set up GitHub API request
                 string url =
                     $"https://api.github.com/repos/Snoozeds/PD3AudioModder/compare/{currentVersion}...{newVersion}";
-
                 _httpClient.DefaultRequestHeaders.UserAgent.Add(
                     new ProductInfoHeaderValue("PD3AudioModder", "1.0")
                 );
-
                 var response = await _httpClient.GetStringAsync(url);
+
                 using var doc = JsonDocument.Parse(response);
                 var root = doc.RootElement;
 
@@ -72,7 +87,7 @@ namespace PD3AudioModder
                 var headerText = new SelectableTextBlock
                 {
                     Text = $"Changes since {currentVersion}:",
-                    Foreground = new SolidColorBrush(Color.Parse("#BBE1FA")),
+                    Foreground = new SolidColorBrush(textColor),
                     FontSize = 14,
                     FontWeight = FontWeight.Bold,
                     Margin = new Thickness(0, 0, 0, 5),
@@ -91,9 +106,9 @@ namespace PD3AudioModder
                             && commitInfo.TryGetProperty("message", out var message)
                         )
                         {
-                            string commitMessage = message.GetString() ?? "Unknown commit";
                             // Get only the first line of commit message
-                            commitMessage = commitMessage.Split('\n')[0].Trim();
+                            string commitMessage =
+                                message.GetString()?.Split('\n')[0].Trim() ?? "Unknown commit";
 
                             // Skip commits that edit version.txt
                             if (
@@ -113,7 +128,7 @@ namespace PD3AudioModder
                             var commitText = new TextBlock
                             {
                                 Text = $"• {commitMessage}",
-                                Foreground = new SolidColorBrush(Color.Parse("#BBE1FA")),
+                                Foreground = new SolidColorBrush(textColor),
                                 FontSize = 14,
                                 TextWrapping = TextWrapping.Wrap,
                                 Margin = new Thickness(0, 0, 0, 5),
@@ -128,7 +143,7 @@ namespace PD3AudioModder
                         var noChangesText = new SelectableTextBlock
                         {
                             Text = "No changes found between these versions.",
-                            Foreground = new SolidColorBrush(Color.Parse("#BBE1FA")),
+                            Foreground = new SolidColorBrush(textColor),
                             FontSize = 14,
                             TextWrapping = TextWrapping.Wrap,
                         };
@@ -140,7 +155,7 @@ namespace PD3AudioModder
                     var errorText = new SelectableTextBlock
                     {
                         Text = "No commits found between these versions.",
-                        Foreground = new SolidColorBrush(Color.Parse("#BBE1FA")),
+                        Foreground = new SolidColorBrush(textColor),
                         FontSize = 14,
                         TextWrapping = TextWrapping.Wrap,
                     };
@@ -153,7 +168,7 @@ namespace PD3AudioModder
                 var errorText = new SelectableTextBlock
                 {
                     Text = $"Could not load changes: {ex.Message}",
-                    Foreground = new SolidColorBrush(Color.Parse("#FF6B6B")),
+                    Foreground = new SolidColorBrush(warningColor),
                     FontSize = 14,
                     TextWrapping = TextWrapping.Wrap,
                 };
