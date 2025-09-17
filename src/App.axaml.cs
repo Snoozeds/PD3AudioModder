@@ -145,7 +145,7 @@ TertiaryColor=#44475A
 BorderBackgroundColor=#383A59
 WarningTextColor=#FFB86C
 SettingsTextColor=#6272A4
-MenuHoverColor=#BD93F9
+MenuHoverColor=#6272A4
 SystemAccentColor=#FF79C6"
                 },
                 {
