@@ -1,4 +1,5 @@
-﻿using Avalonia.Controls;
+﻿using System;
+using Avalonia.Controls;
 using DiscordRPC;
 
 namespace PD3AudioModder
@@ -18,7 +19,8 @@ namespace PD3AudioModder
         public void Initialize()
         {
             _appConfig = AppConfig.Load();
-            if (client == null && _appConfig.RPCEnabled != false)
+
+            if (_appConfig.RPCEnabled == true && client == null)
             {
                 client = new DiscordRpcClient("1342384719043756032");
                 client.Initialize();
@@ -64,12 +66,13 @@ namespace PD3AudioModder
         {
             _appConfig = AppConfig.Load();
 
-            if (_appConfig!.RPCEnabled)
+            if (_appConfig!.RPCEnabled == true)
             {
                 if (client == null || client.IsDisposed)
                 {
-                    client = new DiscordRpcClient("1342384719043756032");
-                    client.Initialize();
+                    Initialize();
+                    if (client == null)
+                        return;
                 }
                 presence = new RichPresence()
                 {
@@ -101,8 +104,19 @@ namespace PD3AudioModder
                     && modName != "Mod Name"
                 )
                 {
-                    presence.Details = $"Modding: {modName}";
+                    string details = $"Modding: {modName}";
+
+                    // Fix crash when Discord RPC details are too long.
+                    if (details.Length > 128)
+                    {
+                        int maxLen = 128 - "Modding: ".Length - 3;
+                        modName = modName.Substring(0, maxLen) + "...";
+                        details = $"Modding: {modName}";
+                    }
+
+                    presence.Details = details;
                 }
+
                 client.SetPresence(presence);
             }
             else if (client != null && !client.IsDisposed)
