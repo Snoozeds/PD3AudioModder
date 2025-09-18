@@ -13,17 +13,58 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Cache .NET packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json', '**/*.csproj', '**/*.props', '**/*.targets') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
+      - name: Cache Scoop
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~\scoop
+            ~\AppData\Local\scoop
+          key: ${{ runner.os }}-scoop-${{ hashFiles('**/scoop.json') }}-nsis
+          restore-keys: |
+            ${{ runner.os }}-scoop-
 
       - name: Install Scoop
         run: |
-          Invoke-WebRequest -useb get.scoop.sh | Invoke-Expression
+          if (-not (Get-Command scoop -ErrorAction SilentlyContinue)) {
+            Invoke-WebRequest -useb get.scoop.sh | Invoke-Expression
+          }
           echo "$HOME\scoop\shims" >> $env:GITHUB_PATH
 
       - name: Install NSIS via Scoop
         run: |
-          scoop bucket add extras
-          scoop install extras/nsis
+          if (-not (Get-Command makensis -ErrorAction SilentlyContinue)) {
+            scoop bucket add extras
+            scoop install extras/nsis
+          }
+
+      - name: Restore .NET dependencies
+        run: dotnet restore ./src/PD3AudioModder.csproj
+
+      - name: Cache build output
+        uses: actions/cache@v4
+        with:
+          path: |
+            ./src/bin
+            ./src/obj
+          key: ${{ runner.os }}-build-${{ hashFiles('src/**/*.cs', 'src/**/*.csproj') }}-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ hashFiles('src/**/*.cs', 'src/**/*.csproj') }}-
+            ${{ runner.os }}-build-
 
       - name: Build PD3AudioModder
         run: |
