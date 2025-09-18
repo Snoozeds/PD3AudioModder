@@ -110,7 +110,7 @@ namespace PD3AudioModder
                             string commitMessage =
                                 message.GetString()?.Split('\n')[0].Trim() ?? "Unknown commit";
 
-                            // Skip commits that edit version.txt
+                            // Skip unnecesary commits
                             if (
                                 commitMessage.Contains(
                                     "Update version.txt",
@@ -118,6 +118,14 @@ namespace PD3AudioModder
                                 )
                                 || commitMessage.Contains(
                                     "Revert version.txt",
+                                    StringComparison.OrdinalIgnoreCase
+                                )
+                                || commitMessage.Contains(
+                                    "Update README.md",
+                                    StringComparison.OrdinalIgnoreCase
+                                )
+                                || commitMessage.Contains(
+                                    "Merge branch 'main' of https://github.com/Snoozeds/PD3AudioModder",
                                     StringComparison.OrdinalIgnoreCase
                                 )
                             )
@@ -137,6 +145,10 @@ namespace PD3AudioModder
                             commitCount++;
                         }
                     }
+
+                    // Update commit count text
+                    var commitCountText = this.FindControl<TextBlock>("CommitCount")!;
+                    commitCountText.Text = $"{commitCount} commits since last update.";
 
                     if (commitCount == 0)
                     {
