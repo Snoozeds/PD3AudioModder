@@ -473,7 +473,8 @@
                             FontSize="16"
                             Foreground="Lime"
                             IsReadOnly="True"
-                            Text="" />
+                            Text=""
+                            TextWrapping="Wrap" />
                     </DockPanel>
                 </Border>
             </Grid>
