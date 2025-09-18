@@ -477,7 +477,7 @@ namespace PD3AudioModder
             Process.Start(
                 new ProcessStartInfo
                 {
-                    FileName = "https://ko-fi.com/snoozeds",
+                    FileName = "https://snoozeds.com/support",
                     UseShellExecute = true,
                 }
             );

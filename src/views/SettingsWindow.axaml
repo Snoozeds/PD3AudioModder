@@ -801,7 +801,7 @@
                                 VerticalContentAlignment="Center"
                                 Background="{DynamicResource ButtonColor}"
                                 Click="OnDonateClick"
-                                Content="Donate (ko-fi)"
+                                Content="Donate"
                                 CornerRadius="10"
                                 FontSize="16"
                                 Foreground="{DynamicResource ButtonTextColor}" />
