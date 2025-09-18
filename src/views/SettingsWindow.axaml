@@ -365,23 +365,23 @@
                                     Stroke="{DynamicResource ButtonColor}"
                                     StrokeJoin="Round"
                                     StrokeLineCap="Round"
-                                    StrokeThickness="2.5" />
+                                    StrokeThickness="2" />
                                 <Path
                                     Data="M16 19h6"
                                     Stroke="{DynamicResource ButtonColor}"
                                     StrokeLineCap="Round"
-                                    StrokeThickness="2.5" />
+                                    StrokeThickness="2" />
                                 <Path
                                     Data="M19 16v6"
                                     Stroke="{DynamicResource ButtonColor}"
                                     StrokeLineCap="Round"
-                                    StrokeThickness="2.5" />
+                                    StrokeThickness="2" />
                                 <Path
                                     Data="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"
                                     Stroke="{DynamicResource ButtonColor}"
                                     StrokeJoin="Round"
                                     StrokeLineCap="Round"
-                                    StrokeThickness="2.5" />
+                                    StrokeThickness="2" />
                             </Canvas>
                         </Viewbox>
                         <TextBlock Text="Advanced" />
@@ -569,7 +569,7 @@
                                     Stroke="{DynamicResource ButtonColor}"
                                     StrokeJoin="Round"
                                     StrokeLineCap="Round"
-                                    StrokeThickness="2.5" />
+                                    StrokeThickness="2" />
                             </Canvas>
                         </Viewbox>
                         <TextBlock Text="Theme" />
@@ -735,7 +735,7 @@
                                     Stroke="{DynamicResource ButtonColor}"
                                     StrokeJoin="Round"
                                     StrokeLineCap="Round"
-                                    StrokeThickness="2.5" />
+                                    StrokeThickness="2" />
                             </Canvas>
                         </Viewbox>
                         <TextBlock Text="About" />
