@@ -22,6 +22,7 @@ namespace PD3AudioModder
         private iniParser iniParser;
 
         private readonly ThemeEditorViewModel _viewModel;
+        private readonly Random _random = new Random(); // Used for random color generation
 
         public ThemeEditor()
         {
@@ -170,19 +171,42 @@ namespace PD3AudioModder
 
         private void UpdateIniEditor()
         {
-            var INIEditor = this.FindControl<TextBox>("INIEditor");
-            if (INIEditor != null)
+            var iniEditor = this.FindControl<TextBox>("INIEditor");
+            if (iniEditor == null) return;
+
+            var colorPickers = new Dictionary<string, string>
             {
-                StringBuilder sb = new StringBuilder();
-                sb.AppendLine("[Theme]");
+                { "BackgroundColor", GetColorFromPicker("BackgroundColorPicker") },
+                { "TextColor", GetColorFromPicker("TextColorPicker") },
+                { "ButtonColor", GetColorFromPicker("ButtonColorPicker") },
+                { "ButtonTextColor", GetColorFromPicker("ButtonTextColorPicker") },
+                { "SecondaryButtonColor", GetColorFromPicker("SecondaryButtonColorPicker") },
+                { "SecondaryButtonTextColor", GetColorFromPicker("SecondaryButtonTextColorPicker") },
+                { "BorderColor", GetColorFromPicker("BorderColorPicker") },
+                { "TertiaryColor", GetColorFromPicker("TertiaryColorPicker") },
+                { "BorderBackgroundColor", GetColorFromPicker("BorderBackgroundColorPicker") },
+                { "WarningTextColor", GetColorFromPicker("WarningTextColorPicker") },
+                { "SettingsTextColor", GetColorFromPicker("SettingsTextColorPicker") },
+                { "MenuHoverColor", GetColorFromPicker("MenuHoverColorPicker") },
+                { "SystemAccentColor", GetColorFromPicker("SystemAccentColorPicker") }
+            };
 
-                foreach (var kvp in themeColors)
-                {
-                    sb.AppendLine($"{kvp.Key}={ColorToHexString(kvp.Value)}");
-                }
-
-                INIEditor.Text = sb.ToString();
+            var iniContent = "[Theme]\n";
+            foreach (var kvp in colorPickers)
+            {
+                iniContent += $"{kvp.Key}={kvp.Value}\n";
             }
+
+            iniEditor.Text = iniContent;
+        }
+
+        private string GetColorFromPicker(string pickerName)
+        {
+            var picker = this.FindControl<ColorPicker>(pickerName);
+            if (picker == null) return "#FF000000";
+
+            var color = picker.Color;
+            return $"#{color.A:X2}{color.R:X2}{color.G:X2}{color.B:X2}";
         }
 
         private void LoadIniIntoTextBox()
@@ -331,6 +355,33 @@ namespace PD3AudioModder
         private string ColorToHexString(Color color)
         {
             return $"#{color.R:X2}{color.G:X2}{color.B:X2}";
+        }
+
+        private Color HSVToColor(double hue, double saturation, double value)
+        {
+            int hi = Convert.ToInt32(Math.Floor(hue / 60)) % 6;
+            double f = hue / 60 - Math.Floor(hue / 60);
+
+            value = value * 255;
+            byte v = Convert.ToByte(value);
+            byte p = Convert.ToByte(value * (1 - saturation));
+            byte q = Convert.ToByte(value * (1 - f * saturation));
+            byte t = Convert.ToByte(value * (1 - (1 - f) * saturation));
+
+            return hi switch
+            {
+                0 => Color.FromRgb(v, t, p),
+                1 => Color.FromRgb(q, v, p),
+                2 => Color.FromRgb(p, v, t),
+                3 => Color.FromRgb(p, q, v),
+                4 => Color.FromRgb(t, p, v),
+                _ => Color.FromRgb(v, p, q),
+            };
+        }
+
+        private double RandomDouble(double min, double max)
+        {
+            return min + (_random.NextDouble() * (max - min));
         }
 
         private void NewTheme_Click(object? sender, RoutedEventArgs e)
@@ -534,5 +585,68 @@ namespace PD3AudioModder
                 }
             }
         }
+
+        private void OnRandomizeColorsClick(object? sender, RoutedEventArgs e)
+        {
+            // Generate random colors for all color pickers
+            var colorPickers = new Dictionary<string, ColorPicker>
+            {
+                { "BackgroundColorPicker", this.FindControl<ColorPicker>("BackgroundColorPicker")! },
+                { "TextColorPicker", this.FindControl<ColorPicker>("TextColorPicker")! },
+                { "ButtonColorPicker", this.FindControl<ColorPicker>("ButtonColorPicker")! },
+                { "ButtonTextColorPicker", this.FindControl<ColorPicker>("ButtonTextColorPicker")! },
+                { "SecondaryButtonColorPicker", this.FindControl<ColorPicker>("SecondaryButtonColorPicker")! },
+                { "SecondaryButtonTextColorPicker", this.FindControl<ColorPicker>("SecondaryButtonTextColorPicker")! },
+                { "BorderColorPicker", this.FindControl<ColorPicker>("BorderColorPicker")! },
+                { "TertiaryColorPicker", this.FindControl<ColorPicker>("TertiaryColorPicker")! },
+                { "BorderBackgroundColorPicker", this.FindControl<ColorPicker>("BorderBackgroundColorPicker")! },
+                { "WarningTextColorPicker", this.FindControl<ColorPicker>("WarningTextColorPicker")! },
+                { "SettingsTextColorPicker", this.FindControl<ColorPicker>("SettingsTextColorPicker")! },
+                { "MenuHoverColorPicker", this.FindControl<ColorPicker>("MenuHoverColorPicker")! },
+                { "SystemAccentColorPicker", this.FindControl<ColorPicker>("SystemAccentColorPicker")! }
+            };
+
+            // Generate a color scheme
+            var baseHue = _random.NextDouble() * 360; // Random base hue
+            var colors = GenerateColorScheme(baseHue);
+
+            // Apply colors to pickers
+            var colorNames = new List<string>(colors.Keys);
+            int colorIndex = 0;
+
+            foreach (var picker in colorPickers.Values)
+            {
+                if (picker != null && colorIndex < colorNames.Count)
+                {
+                    picker.Color = colors[colorNames[colorIndex]];
+                    colorIndex++;
+                }
+            }
+
+            // Update the INI editor
+            UpdateIniEditor();
+        }
+
+        private Dictionary<string, Color> GenerateColorScheme(double baseHue)
+        {
+            var colors = new Dictionary<string, Color>();
+
+            colors["Background"] = HSVToColor(baseHue, RandomDouble(0.1, 0.6), RandomDouble(0.05, 0.25));
+            colors["Text"] = HSVToColor(baseHue, RandomDouble(0.0, 0.3), RandomDouble(0.8, 1.0));
+            colors["Button"] = HSVToColor(baseHue, RandomDouble(0.4, 0.9), RandomDouble(0.3, 0.7));
+            colors["ButtonText"] = HSVToColor(baseHue, RandomDouble(0.0, 0.2), RandomDouble(0.9, 1.0));
+            colors["SecondaryButton"] = HSVToColor(baseHue, RandomDouble(0.2, 0.7), RandomDouble(0.4, 0.8));
+            colors["SecondaryButtonText"] = HSVToColor(baseHue, RandomDouble(0.0, 0.3), RandomDouble(0.1, 0.3));
+            colors["Border"] = HSVToColor(baseHue, RandomDouble(0.3, 0.8), RandomDouble(0.4, 0.8));
+            colors["Tertiary"] = HSVToColor(baseHue, RandomDouble(0.2, 0.6), RandomDouble(0.15, 0.4));
+            colors["BorderBackground"] = HSVToColor(baseHue, RandomDouble(0.1, 0.5), RandomDouble(0.1, 0.3));
+            colors["WarningText"] = HSVToColor(RandomDouble(20, 50), RandomDouble(0.6, 1.0), RandomDouble(0.8, 1.0));
+            colors["SettingsText"] = HSVToColor(baseHue, RandomDouble(0.1, 0.4), RandomDouble(0.5, 0.8));
+            colors["MenuHover"] = HSVToColor(baseHue, RandomDouble(0.3, 0.8), RandomDouble(0.4, 0.7));
+            colors["SystemAccent"] = HSVToColor(baseHue, RandomDouble(0.5, 1.0), RandomDouble(0.6, 0.9));
+
+            return colors;
+        }
+
     }
 }
