@@ -547,6 +547,21 @@ namespace PD3AudioModder
                 // Save the theme file
                 File.WriteAllText(filePath, INIEditor.Text);
 
+                // Load the saved file to parse
+                iniParser.Load(filePath);
+
+                // Parse and apply theme from INI content
+                bool parseSuccessful = ParseIniEditorContent(INIEditor.Text);
+
+                // Update color pickers to match new theme colors
+                UpdateColorPickers();
+
+                // Apply theme to the UI
+                ApplyTheme();
+
+                // Update color previews
+                UpdateColorPreviews();
+
                 // Set theme in config
                 AppConfig.Instance.Theme = fileName;
                 AppConfig.Instance.Save();
@@ -568,11 +583,14 @@ namespace PD3AudioModder
                     _viewModel.SelectedTheme = themeName;
                 }
 
-                var warningOutput = this.FindControl<TextBox>("WarningOutput");
-                if (warningOutput != null)
+                if (parseSuccessful)
                 {
-                    warningOutput.Text = $"Theme '{themeName}' saved successfully.";
-                    warningOutput.Foreground = new SolidColorBrush(Colors.Lime);
+                    var warningOutput = this.FindControl<TextBox>("WarningOutput");
+                    if (warningOutput != null)
+                    {
+                        warningOutput.Text = $"Theme '{themeName}' saved successfully.";
+                        warningOutput.Foreground = new SolidColorBrush(Colors.Lime);
+                    }
                 }
             }
             catch (Exception ex)
@@ -582,6 +600,132 @@ namespace PD3AudioModder
                 {
                     warningOutput.Text = $"Error saving theme: {ex.Message}";
                     warningOutput.Foreground = new SolidColorBrush(Colors.Red);
+                }
+            }
+        }
+
+        private bool ParseIniEditorContent(string iniContent)
+        {
+            var warningOutput = this.FindControl<TextBox>("WarningOutput");
+            List<string> missingColors = new List<string>();
+            List<string> invalidColors = new List<string>();
+
+            var lines = iniContent.Split('\n');
+            bool inThemeSection = false;
+
+            foreach (var line in lines)
+            {
+                var trimmedLine = line.Trim();
+
+                // Check for [Theme] section
+                if (trimmedLine.Equals("[Theme]", StringComparison.OrdinalIgnoreCase))
+                {
+                    inThemeSection = true;
+                    continue;
+                }
+
+                // Parse
+                if (inThemeSection && trimmedLine.Contains('='))
+                {
+                    var parts = trimmedLine.Split('=', 2);
+                    if (parts.Length == 2)
+                    {
+                        string key = parts[0].Trim();
+                        string value = parts[1].Trim();
+
+                        if (themeColors.ContainsKey(key))
+                        {
+                            try
+                            {
+                                themeColors[key] = ParseColor(value);
+                            }
+                            catch (Exception)
+                            {
+                                invalidColors.Add($"{key} ({value})");
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Check for missing colors
+            var parsedKeys = new HashSet<string>();
+
+            // Parse again to track which keys were actually found
+            inThemeSection = false;
+            foreach (var line in lines)
+            {
+                var trimmedLine = line.Trim();
+
+                if (trimmedLine.Equals("[Theme]", StringComparison.OrdinalIgnoreCase))
+                {
+                    inThemeSection = true;
+                    continue;
+                }
+
+                if (inThemeSection && trimmedLine.Contains('='))
+                {
+                    var parts = trimmedLine.Split('=', 2);
+                    if (parts.Length == 2)
+                    {
+                        string key = parts[0].Trim();
+                        if (themeColors.ContainsKey(key))
+                        {
+                            parsedKeys.Add(key);
+                        }
+                    }
+                }
+            }
+
+            // Find missing colors
+            foreach (var key in themeColors.Keys)
+            {
+                if (!parsedKeys.Contains(key))
+                {
+                    missingColors.Add(key);
+                }
+            }
+
+            // Update warning output
+            if (warningOutput != null)
+            {
+                if (missingColors.Count == 0 && invalidColors.Count == 0)
+                {
+                    warningOutput.Text = "Theme applied successfully.";
+                    warningOutput.Foreground = new SolidColorBrush(Colors.Lime);
+                }
+                else
+                {
+                    StringBuilder errorMessage = new StringBuilder();
+
+                    if (missingColors.Count > 0)
+                    {
+                        errorMessage.AppendLine($"Missing colors in INI: {string.Join(", ", missingColors)}");
+                    }
+
+                    if (invalidColors.Count > 0)
+                    {
+                        errorMessage.AppendLine($"Invalid colors in INI: {string.Join(", ", invalidColors)}");
+                    }
+
+                    warningOutput.Text = errorMessage.ToString().TrimEnd();
+                    warningOutput.Foreground = new SolidColorBrush(Colors.Red);
+                }
+            }
+
+            // Return true if parsing successful
+            return missingColors.Count == 0 && invalidColors.Count == 0;
+        }
+
+        private void UpdateColorPickers()
+        {
+            // Update all color pickers to match the current theme colors
+            foreach (var colorKey in themeColors.Keys)
+            {
+                var colorPicker = this.FindControl<ColorPicker>($"{colorKey}Picker");
+                if (colorPicker != null)
+                {
+                    colorPicker.Color = themeColors[colorKey];
                 }
             }
         }
