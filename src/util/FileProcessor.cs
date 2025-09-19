@@ -2,6 +2,7 @@
 using System.IO;
 using System.Threading.Tasks;
 using Avalonia.Controls;
+using Avalonia.Controls.Notifications;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using Newtonsoft.Json;
@@ -24,10 +25,12 @@ namespace PD3AudioModder.util
     {
         private readonly MainWindow? _mainWindow;
         private AppConfig? _appConfig;
+        private WindowNotificationManager _notificationManager;
 
         public FileProcessor(MainWindow mainWindow)
         {
             _mainWindow = mainWindow;
+            _notificationManager = mainWindow._notificationManager!;
         }
 
         public void UpdateStatus(string message)
@@ -261,6 +264,15 @@ namespace PD3AudioModder.util
 
                     UpdateStatus(
                         $"Conversion completed successfully! Files saved to {saveDirectory}"
+                    );
+
+                    _notificationManager?.Show(
+                        new Notification(
+                            "Export Complete",
+                            $"Conversion completed successfully!\nFiles saved to {saveDirectory}",
+                            NotificationType.Success,
+                            TimeSpan.FromSeconds(5)
+                        )
                     );
                 }
                 else

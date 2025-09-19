@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Avalonia.Controls;
+using Avalonia.Controls.Notifications;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 
@@ -15,6 +16,7 @@ namespace PD3AudioModder.util
     internal class BatchProcessor
     {
         private readonly MainWindow? _mainWindow;
+        private WindowNotificationManager _notificationManager;
         private AppConfig? _appConfig;
         private readonly FileProcessor _fileProcessor;
         private string _audioFolderPath = string.Empty;
@@ -29,6 +31,7 @@ namespace PD3AudioModder.util
         public BatchProcessor(MainWindow mainWindow)
         {
             _mainWindow = mainWindow;
+            _notificationManager = _mainWindow._notificationManager!;
             _fileProcessor = new FileProcessor(_mainWindow);
         }
 
@@ -253,6 +256,15 @@ namespace PD3AudioModder.util
                         statusTextBlock,
                         progressBar,
                         100
+                    );
+
+                    _notificationManager?.Show(
+                        new Notification(
+                            "Export Complete",
+                            $"Batch conversion completed!\nProcessed {filesToProcess.Count} files",
+                            NotificationType.Success,
+                            TimeSpan.FromSeconds(2)
+                        )
                     );
                 }
                 else
