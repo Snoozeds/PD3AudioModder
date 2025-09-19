@@ -1,59 +1,91 @@
-<Application xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             x:Class="PD3AudioModder.App"
-             RequestedThemeVariant="Default">
-             <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
+<Application
+    x:Class="PD3AudioModder.App"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    RequestedThemeVariant="Default">
+    <!--  "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options.  -->
 
-	<Application.Resources>
-		<ResourceDictionary>
-			<ResourceDictionary.ThemeDictionaries>
-				<!-- Default Theme -->
-				<ResourceDictionary x:Key="Default">
-					<Color x:Key="BackgroundColor">#1B262C</Color> <!-- Default background colour for every window. -->
-					<Color x:Key="TextColor">#BBE1FA</Color> <!-- General text -->
-					<Color x:Key="ButtonColor">#3282B8</Color> <!-- General buttons -->
-					<Color x:Key="ButtonTextColor">#ffffff</Color> <!-- General buttons -->
-					<Color x:Key="SecondaryButtonColor">#BBE1FA</Color> <!-- Used in the update dialog. -->
-					<Color x:Key="SecondaryButtonTextColor">#1B262C</Color> <!-- Used in the update dialog. -->
-					<Color x:Key="BorderColor">#3282B8</Color> <!-- Used in the licenses window. -->
-					<Color x:Key="TertiaryColor">#0F4C75</Color> <!-- Used for the status bar, sidebar, displaying changes in update dialog. -->
-					<Color x:Key="BorderBackgroundColor">#2C3E50</Color> <!-- Used in the settings window (background of sections.) -->
-					<Color x:Key="WarningTextColor">#E6C400</Color> <!-- Used in the settings window (advanced options.) -->
-					<Color x:Key="SettingsTextColor">#8B9DA7</Color> <!-- Used for the descriptions in the settings window. -->
-					<Color x:Key="MenuHoverColor">#275e83</Color> <!-- Used when hovering over a button in the hamburger menu. -->
-					<Color x:Key="SystemAccentColor">#3ca1e6</Color>
-				</ResourceDictionary>
-			</ResourceDictionary.ThemeDictionaries>
-		</ResourceDictionary>
-		<SolidColorBrush x:Key="SystemAccentBrush" Color="{DynamicResource SystemAccentColor}"/>
-	</Application.Resources>
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.ThemeDictionaries>
+                <!--  Default Theme  -->
+                <ResourceDictionary x:Key="Default">
+                    <!--  Default background colour for every window.  -->
+                    <Color x:Key="BackgroundColor">#1B262C</Color>
+                    <!--  General text  -->
+                    <Color x:Key="TextColor">#BBE1FA</Color>
+                    <!--  General buttons  -->
+                    <Color x:Key="ButtonColor">#3282B8</Color>
+                    <!--  General buttons  -->
+                    <Color x:Key="ButtonTextColor">#ffffff</Color>
+                    <!--  Used in the update dialog.  -->
+                    <Color x:Key="SecondaryButtonColor">#BBE1FA</Color>
+                    <!--  Used in the update dialog.  -->
+                    <Color x:Key="SecondaryButtonTextColor">#1B262C</Color>
+                    <!--  Used in the licenses window.  -->
+                    <Color x:Key="BorderColor">#3282B8</Color>
+                    <!--  Used for the status bar, sidebar, displaying changes in update dialog.  -->
+                    <Color x:Key="TertiaryColor">#0F4C75</Color>
+                    <!--  Used in the settings window (background of sections.)  -->
+                    <Color x:Key="BorderBackgroundColor">#2C3E50</Color>
+                    <!--  Used in the settings window (advanced options.)  -->
+                    <Color x:Key="WarningTextColor">#E6C400</Color>
+                    <!--  Used for the descriptions in the settings window.  -->
+                    <Color x:Key="SettingsTextColor">#8B9DA7</Color>
+                    <!--  Used when hovering over a button in the hamburger menu.  -->
+                    <Color x:Key="MenuHoverColor">#275e83</Color>
+                    <Color x:Key="SystemAccentColor">#3ca1e6</Color>
+                </ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>
+        </ResourceDictionary>
+        <SolidColorBrush x:Key="SystemAccentBrush" Color="{DynamicResource SystemAccentColor}" />
+    </Application.Resources>
 
-	<!-- https://github.com/AvaloniaUI/Avalonia/pull/11097#issue-1679291634 -->
-	<Application.Styles>
+    <Application.Styles>
 
-		<StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml" />
-		<StyleInclude Source="avares://Avalonia.Controls.ColorPicker/Themes/Fluent/Fluent.xaml" />
+        <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml" />
+        <StyleInclude Source="avares://Avalonia.Controls.ColorPicker/Themes/Fluent/Fluent.xaml" />
 
-		<Style Selector="ContextMenu">
-			<Setter Property="Background" Value="{DynamicResource TertiaryColor}"/>
-			<Setter Property="BorderBrush" Value="{DynamicResource BorderColor}"/>
-		</Style>
+        <Style Selector="ContextMenu">
+            <Setter Property="Background" Value="{DynamicResource TertiaryColor}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}" />
+        </Style>
 
-		<Style Selector="MenuItem">
-			<Setter Property="Foreground" Value="{DynamicResource TextColor}"/>
-		</Style>
+        <Style Selector="MenuItem">
+            <Setter Property="Foreground" Value="{DynamicResource TextColor}" />
+        </Style>
 
-		<Style Selector="ScrollBar Thumb">
-			<Setter Property="CornerRadius" Value="5"/>
-		</Style>
+        <Style Selector="ScrollBar Thumb">
+            <Setter Property="CornerRadius" Value="5" />
+        </Style>
 
-		<FluentTheme>
-			<FluentTheme.Palettes>
-				<ColorPaletteResources x:Key="Light"
-					Accent="#3ca1e6" />
-				<ColorPaletteResources x:Key="Dark"
-                    Accent="#3ca1e6" />
-			</FluentTheme.Palettes>
-		</FluentTheme>
+        <!--  Notifications  -->
+        <Style Selector="NotificationCard">
+            <Setter Property="Background" Value="{DynamicResource BackgroundColor}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}" />
+            <Setter Property="Foreground" Value="{DynamicResource TextColor}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="6" />
+        </Style>
+
+        <Style Selector="NotificationCard /template/ Border#PART_HeaderBorder">
+            <Setter Property="Background" Value="{DynamicResource TertiaryColor}" />
+        </Style>
+
+        <Style Selector="NotificationCard TextBlock.NotificationCardHeaderTextBlock">
+            <Setter Property="Foreground" Value="{DynamicResource TextColor}" />
+        </Style>
+
+        <Style Selector="NotificationCard TextBlock.NotificationCardContentTextBlock">
+            <Setter Property="Foreground" Value="{DynamicResource TextColor}" />
+        </Style>
+
+        <!--  https://github.com/AvaloniaUI/Avalonia/pull/11097#issue-1679291634  -->
+        <FluentTheme>
+            <FluentTheme.Palettes>
+                <ColorPaletteResources x:Key="Light" Accent="#3ca1e6" />
+                <ColorPaletteResources x:Key="Dark" Accent="#3ca1e6" />
+            </FluentTheme.Palettes>
+        </FluentTheme>
     </Application.Styles>
 </Application>

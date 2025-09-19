@@ -172,7 +172,8 @@ namespace PD3AudioModder
         private void UpdateIniEditor()
         {
             var iniEditor = this.FindControl<TextBox>("INIEditor");
-            if (iniEditor == null) return;
+            if (iniEditor == null)
+                return;
 
             var colorPickers = new Dictionary<string, string>
             {
@@ -181,14 +182,17 @@ namespace PD3AudioModder
                 { "ButtonColor", GetColorFromPicker("ButtonColorPicker") },
                 { "ButtonTextColor", GetColorFromPicker("ButtonTextColorPicker") },
                 { "SecondaryButtonColor", GetColorFromPicker("SecondaryButtonColorPicker") },
-                { "SecondaryButtonTextColor", GetColorFromPicker("SecondaryButtonTextColorPicker") },
+                {
+                    "SecondaryButtonTextColor",
+                    GetColorFromPicker("SecondaryButtonTextColorPicker")
+                },
                 { "BorderColor", GetColorFromPicker("BorderColorPicker") },
                 { "TertiaryColor", GetColorFromPicker("TertiaryColorPicker") },
                 { "BorderBackgroundColor", GetColorFromPicker("BorderBackgroundColorPicker") },
                 { "WarningTextColor", GetColorFromPicker("WarningTextColorPicker") },
                 { "SettingsTextColor", GetColorFromPicker("SettingsTextColorPicker") },
                 { "MenuHoverColor", GetColorFromPicker("MenuHoverColorPicker") },
-                { "SystemAccentColor", GetColorFromPicker("SystemAccentColorPicker") }
+                { "SystemAccentColor", GetColorFromPicker("SystemAccentColorPicker") },
             };
 
             var iniContent = "[Theme]\n";
@@ -203,7 +207,8 @@ namespace PD3AudioModder
         private string GetColorFromPicker(string pickerName)
         {
             var picker = this.FindControl<ColorPicker>(pickerName);
-            if (picker == null) return "#FF000000";
+            if (picker == null)
+                return "#FF000000";
 
             var color = picker.Color;
             return $"#{color.A:X2}{color.R:X2}{color.G:X2}{color.B:X2}";
@@ -700,12 +705,16 @@ namespace PD3AudioModder
 
                     if (missingColors.Count > 0)
                     {
-                        errorMessage.AppendLine($"Missing colors in INI: {string.Join(", ", missingColors)}");
+                        errorMessage.AppendLine(
+                            $"Missing colors in INI: {string.Join(", ", missingColors)}"
+                        );
                     }
 
                     if (invalidColors.Count > 0)
                     {
-                        errorMessage.AppendLine($"Invalid colors in INI: {string.Join(", ", invalidColors)}");
+                        errorMessage.AppendLine(
+                            $"Invalid colors in INI: {string.Join(", ", invalidColors)}"
+                        );
                     }
 
                     warningOutput.Text = errorMessage.ToString().TrimEnd();
@@ -735,19 +744,43 @@ namespace PD3AudioModder
             // Generate random colors for all color pickers
             var colorPickers = new Dictionary<string, ColorPicker>
             {
-                { "BackgroundColorPicker", this.FindControl<ColorPicker>("BackgroundColorPicker")! },
+                {
+                    "BackgroundColorPicker",
+                    this.FindControl<ColorPicker>("BackgroundColorPicker")!
+                },
                 { "TextColorPicker", this.FindControl<ColorPicker>("TextColorPicker")! },
                 { "ButtonColorPicker", this.FindControl<ColorPicker>("ButtonColorPicker")! },
-                { "ButtonTextColorPicker", this.FindControl<ColorPicker>("ButtonTextColorPicker")! },
-                { "SecondaryButtonColorPicker", this.FindControl<ColorPicker>("SecondaryButtonColorPicker")! },
-                { "SecondaryButtonTextColorPicker", this.FindControl<ColorPicker>("SecondaryButtonTextColorPicker")! },
+                {
+                    "ButtonTextColorPicker",
+                    this.FindControl<ColorPicker>("ButtonTextColorPicker")!
+                },
+                {
+                    "SecondaryButtonColorPicker",
+                    this.FindControl<ColorPicker>("SecondaryButtonColorPicker")!
+                },
+                {
+                    "SecondaryButtonTextColorPicker",
+                    this.FindControl<ColorPicker>("SecondaryButtonTextColorPicker")!
+                },
                 { "BorderColorPicker", this.FindControl<ColorPicker>("BorderColorPicker")! },
                 { "TertiaryColorPicker", this.FindControl<ColorPicker>("TertiaryColorPicker")! },
-                { "BorderBackgroundColorPicker", this.FindControl<ColorPicker>("BorderBackgroundColorPicker")! },
-                { "WarningTextColorPicker", this.FindControl<ColorPicker>("WarningTextColorPicker")! },
-                { "SettingsTextColorPicker", this.FindControl<ColorPicker>("SettingsTextColorPicker")! },
+                {
+                    "BorderBackgroundColorPicker",
+                    this.FindControl<ColorPicker>("BorderBackgroundColorPicker")!
+                },
+                {
+                    "WarningTextColorPicker",
+                    this.FindControl<ColorPicker>("WarningTextColorPicker")!
+                },
+                {
+                    "SettingsTextColorPicker",
+                    this.FindControl<ColorPicker>("SettingsTextColorPicker")!
+                },
                 { "MenuHoverColorPicker", this.FindControl<ColorPicker>("MenuHoverColorPicker")! },
-                { "SystemAccentColorPicker", this.FindControl<ColorPicker>("SystemAccentColorPicker")! }
+                {
+                    "SystemAccentColorPicker",
+                    this.FindControl<ColorPicker>("SystemAccentColorPicker")!
+                },
             };
 
             // Generate a color scheme
@@ -775,22 +808,61 @@ namespace PD3AudioModder
         {
             var colors = new Dictionary<string, Color>();
 
-            colors["Background"] = HSVToColor(baseHue, RandomDouble(0.1, 0.6), RandomDouble(0.05, 0.25));
+            colors["Background"] = HSVToColor(
+                baseHue,
+                RandomDouble(0.1, 0.6),
+                RandomDouble(0.05, 0.25)
+            );
             colors["Text"] = HSVToColor(baseHue, RandomDouble(0.0, 0.3), RandomDouble(0.8, 1.0));
             colors["Button"] = HSVToColor(baseHue, RandomDouble(0.4, 0.9), RandomDouble(0.3, 0.7));
-            colors["ButtonText"] = HSVToColor(baseHue, RandomDouble(0.0, 0.2), RandomDouble(0.9, 1.0));
-            colors["SecondaryButton"] = HSVToColor(baseHue, RandomDouble(0.2, 0.7), RandomDouble(0.4, 0.8));
-            colors["SecondaryButtonText"] = HSVToColor(baseHue, RandomDouble(0.0, 0.3), RandomDouble(0.1, 0.3));
+            colors["ButtonText"] = HSVToColor(
+                baseHue,
+                RandomDouble(0.0, 0.2),
+                RandomDouble(0.9, 1.0)
+            );
+            colors["SecondaryButton"] = HSVToColor(
+                baseHue,
+                RandomDouble(0.2, 0.7),
+                RandomDouble(0.4, 0.8)
+            );
+            colors["SecondaryButtonText"] = HSVToColor(
+                baseHue,
+                RandomDouble(0.0, 0.3),
+                RandomDouble(0.1, 0.3)
+            );
             colors["Border"] = HSVToColor(baseHue, RandomDouble(0.3, 0.8), RandomDouble(0.4, 0.8));
-            colors["Tertiary"] = HSVToColor(baseHue, RandomDouble(0.2, 0.6), RandomDouble(0.15, 0.4));
-            colors["BorderBackground"] = HSVToColor(baseHue, RandomDouble(0.1, 0.5), RandomDouble(0.1, 0.3));
-            colors["WarningText"] = HSVToColor(RandomDouble(20, 50), RandomDouble(0.6, 1.0), RandomDouble(0.8, 1.0));
-            colors["SettingsText"] = HSVToColor(baseHue, RandomDouble(0.1, 0.4), RandomDouble(0.5, 0.8));
-            colors["MenuHover"] = HSVToColor(baseHue, RandomDouble(0.3, 0.8), RandomDouble(0.4, 0.7));
-            colors["SystemAccent"] = HSVToColor(baseHue, RandomDouble(0.5, 1.0), RandomDouble(0.6, 0.9));
+            colors["Tertiary"] = HSVToColor(
+                baseHue,
+                RandomDouble(0.2, 0.6),
+                RandomDouble(0.15, 0.4)
+            );
+            colors["BorderBackground"] = HSVToColor(
+                baseHue,
+                RandomDouble(0.1, 0.5),
+                RandomDouble(0.1, 0.3)
+            );
+            colors["WarningText"] = HSVToColor(
+                RandomDouble(20, 50),
+                RandomDouble(0.6, 1.0),
+                RandomDouble(0.8, 1.0)
+            );
+            colors["SettingsText"] = HSVToColor(
+                baseHue,
+                RandomDouble(0.1, 0.4),
+                RandomDouble(0.5, 0.8)
+            );
+            colors["MenuHover"] = HSVToColor(
+                baseHue,
+                RandomDouble(0.3, 0.8),
+                RandomDouble(0.4, 0.7)
+            );
+            colors["SystemAccent"] = HSVToColor(
+                baseHue,
+                RandomDouble(0.5, 1.0),
+                RandomDouble(0.6, 0.9)
+            );
 
             return colors;
         }
-
     }
 }
