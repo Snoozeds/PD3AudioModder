@@ -34,9 +34,9 @@ You may find instructions on how to use the app by clicking on the "Help" button
 
 | Single File Mode | Batch Conversion Mode |
 | ---------------- | --------------------- |
-| [![Single File Mode](https://storage.modworkshop.net/mods/images/FYzn1R17R2a1XoOP7PpyfGi90TwxEL8Y0NUKUK7M.webp)](https://storage.modworkshop.net/mods/images/FYzn1R17R2a1XoOP7PpyfGi90TwxEL8Y0NUKUK7M.webp) | [![Batch Conversion Mode](https://storage.modworkshop.net/mods/images/qkdGccNtI8GBDHQl464tOywBgcipxxqMPKRW9r6t.webp)](https://storage.modworkshop.net/mods/images/qkdGccNtI8GBDHQl464tOywBgcipxxqMPKRW9r6t.webp) |
+| [![Single File Mode](/wiki/assets/img/single_file.png)](/wiki/assets/img/single_file.png) | [![Batch Conversion Mode](/wiki/assets/img/batch_conversion.png)](/wiki/assets/img/batch_conversion.png) |
 
-| Pack Files | Settings Window |
-| ---------- | --------------- |
-| [![Pack Files](https://storage.modworkshop.net/mods/images/abGhtMICsljNk4KZDzH9Yzft2bl7zWSCQGlenCOU.webp)](https://storage.modworkshop.net/mods/images/abGhtMICsljNk4KZDzH9Yzft2bl7zWSCQGlenCOU.webp) | [![Settings Window](https://storage.modworkshop.net/mods/images/SgLqorP4g3aWUk3FB3ShGDNW632Zx9Wl44pZIjyO.webp)](https://storage.modworkshop.net/mods/images/SgLqorP4g3aWUk3FB3ShGDNW632Zx9Wl44pZIjyO.webp) |
+| Pack Files | Settings Window | Theme Editor |
+| ---------- | --------------- |--------------|
+| [![Pack Files](/wiki/assets/img/pack_files.png)](/wiki/assets/img/pack_files.png) | [![Settings Window](/wiki/assets/img/settings.png)](/wiki/assets/img/settings.png) | [![Theme Editor](/wiki/assets/img/theme_editor.png)](/wiki/assets/img/theme_editor.png)
 
